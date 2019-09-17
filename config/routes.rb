@@ -2,8 +2,8 @@ Rails.application.routes.draw do
 
   scope '/setting' do
     devise_for :user, :controllers =>{
-      :registrations => 'user/registrations',
-      :sessions => 'user/sessions'
+      :registrations => 'users/registrations',
+      :sessions => 'users/sessions'
     }
 
     
@@ -22,8 +22,8 @@ Rails.application.routes.draw do
     put "/" => "settings#index"
     delete "/" => "settings#index"
 
-    
-  root to: 'pages#index' 
+  end
+  root to: 'pages#show_route' 
   get    '/new'        => 'pages#new'
   get    '/edit'       => 'pages#edit'
   post   '/'           => 'pages#create'
@@ -31,11 +31,11 @@ Rails.application.routes.draw do
   delete '/'           => 'pages#destroy'
   #get    '*pages/new'  => 'pages#new'
   #get    '*pages/edit' => 'pages#edit'
-  get    '*pages/'      => 'pages#index'
+  get    '*pages/'      => 'pages#show_route'
   post   '*pages/'      => 'pages#create'
   put    '*pages/'      => 'pages#update'
   delete '*pages/'      => 'pages#destroy'
-  end
+
   #resources :usergroups
   #devise_for :users
   #resources :user_groups
