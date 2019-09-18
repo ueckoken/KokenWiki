@@ -9,43 +9,69 @@ class MdEditor extends React.Component {
     
     constructor(props) {
         super(props);
+        marked.setOptions({
+            sanitize: true,
+        });
         this.state = {
-            markdown: "",
-            tabIndex: 0
+            markdown: this.props.markdown,
+            tabIndex: 0,
+            is_edit: false,
+            is_changed: false
         };
     }
 
     handleSelect(index, last) {
         //console.log('Selected tab: ' + index + ', Last tab: ' + last);
-        this.setState({ tabIndex: index });
+        this.setState({
+            tabIndex: index
+        });
+    }
+    onClickEditBtn(e) {
+        this.setState({
+            is_edit: true
+        });
+    }
+    onClickDeleteBtn(e) {
+        this.setState({
+            is_edit: false,
+            markdown: this.props.markdown
+        });
     }
     render() {
         return (
             <React.Fragment>
-                <div className="d-lg-none">
-                    <MdEditorSm
-                        tabSelected={this.handleSelect.bind(this)}
-                        markdown={this.state.markdown}
-                        tabIndex={this.state.tabIndex}
-                        onChangeText={this.onChangeText.bind(this)}>
-                        
-                    </MdEditorSm>
+                <div hidden={this.state.is_edit}>
+                    <button className="btn btn-secondary" onClick={this.onClickEditBtn.bind(this)}>編集</button>
+                    <Markdown md={this.state.markdown}></Markdown>
                 </div>
-                <div className="d-none d-lg-flex width100">
-                    <MdEditorLg
-                        tabSelected={this.handleSelect.bind(this)}
-                        markdown={this.state.markdown}
-                        tabIndex={this.state.tabIndex}
-                        onChangeText={this.onChangeText.bind(this)}>
+                <div hidden={!this.state.is_edit}>
+                    <div className="d-lg-none">
+                        <MdEditorSm
+                            tabSelected={this.handleSelect.bind(this)}
+                            markdown={this.state.markdown}
+                            tabIndex={this.state.tabIndex}
+                            onChangeText={this.onChangeText.bind(this)}>
 
-                    </MdEditorLg>
+                        </MdEditorSm>
+                    </div>
+                    <div className="d-none d-lg-flex width100">
+                        <MdEditorLg
+                            tabSelected={this.handleSelect.bind(this)}
+                            markdown={this.state.markdown}
+                            tabIndex={this.state.tabIndex}
+                            onChangeText={this.onChangeText.bind(this)}>
+
+                        </MdEditorLg>
+                    </div>
+                    <button className="btn btn-secondary" onClick={this.onClickDeleteBtn.bind(this)}>破棄</button>
                 </div>
             </React.Fragment>
         );
     }
     onChangeText(e) {
         this.setState({
-            markdown: e.target.value
+            markdown: e.target.value,
+            is_changed: true
         });
     }
 }
@@ -56,25 +82,27 @@ class MdEditorSm extends React.Component{
     }
     render() {
         return (
-            <Tabs
-                onSelect={this.props.tabSelected}
-                selectedIndex={this.props.tabIndex}
-            >
+            <form>
+                <Tabs
+                    onSelect={this.props.tabSelected}
+                    selectedIndex={this.props.tabIndex}
+                >
 
-                <TabList>
-                    <Tab>プレビュー</Tab>
-                    <Tab>編集</Tab>
-                </TabList>
+                    <TabList>
+                        <Tab>プレビュー</Tab>
+                        <Tab>編集</Tab>
+                    </TabList>
 
-                <TabPanel>
-                    <Markdown md={this.props.markdown}></Markdown>
-                </TabPanel>
-                <TabPanel>
-                    <Editor text={this.props.markdown} onChange={this.props.onChangeText}>
-                    </Editor>
-                </TabPanel>
+                    <TabPanel>
+                        <Markdown md={this.props.markdown}></Markdown>
+                    </TabPanel>
+                    <TabPanel>
+                        <Editor text={this.props.markdown} onChange={this.props.onChangeText}>
+                        </Editor>
+                    </TabPanel>
 
-            </Tabs>
+                </Tabs>
+            </form>
         );
     }
     onChangeText(e) {
@@ -128,7 +156,8 @@ class Editor extends React.Component {
             <textarea
                 className="form-control"
                 value={this.props.text}
-                onChange={this.props.onChange}>
+                onChange={this.props.onChange}
+                name="markdown">
 
             </textarea>
         </div>

@@ -41,8 +41,8 @@ class PagesController < ApplicationController
   def page_show
     path = get_formal_path params[:pages]
     @page = Page.find_by(path: path)
-    render "show"
-    return
+    #render "show"
+    #return
     if @page != nil
       render "show"
     else
@@ -50,8 +50,8 @@ class PagesController < ApplicationController
       parent = Page.find_by(path:parent)
       #if parent is not found, render 404 
       #render createnewpage
-      @page = Page.new
-      render "edit"
+      @page = Page.new(title:get_title(params[:pages]))
+      render "new"
     end
   end
 
@@ -68,9 +68,9 @@ class PagesController < ApplicationController
   end
 
   # GET /pages/new
-  def new
-    @page = Page.new
-  end
+  #def new
+  #  @page = Page.new(title:get_title(params[:pages]))
+  #end
 
   # GET /pages/1/edit
   def edit
@@ -80,7 +80,7 @@ class PagesController < ApplicationController
   # POST /pages.json
 
   def create_route
-    if params[:pages] != nil
+    if params[:file] != nil
       create_file
     elsif params[:comment] != nil
       create_comment
@@ -95,8 +95,8 @@ class PagesController < ApplicationController
     parent = Page.find_by(path: parent)
     title = get_title path
     if parent != nil || path == ""
-      page = Page.new(
-        user: current_user,
+      @page = Page.new(
+        #user: current_user,
         content:"new page",
         title: title,
         path: path,
@@ -110,7 +110,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_to @page, notice: 'Page was successfully created.' }
+        format.html { redirect_to path, notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -156,7 +156,7 @@ class PagesController < ApplicationController
     end
   end
 
-  private
+  #private
     # Use callbacks to share common setup or constraints between actions.
     def set_page
       @page = Page.find(params[:id])
@@ -204,6 +204,10 @@ class PagesController < ApplicationController
     end
 
     def get_title path
+      path = get_formal_path path
+      if path == ""
+        return ""
+      end
       path_ = path.split("/")
       title = path_[path_.size - 1]
       return title
