@@ -24,17 +24,17 @@ Rails.application.routes.draw do
 
   end
   root to: 'pages#show_route' 
-  get    '/new'        => 'pages#new'
-  get    '/edit'       => 'pages#edit'
+  #get    '/new'        => 'pages#new'
+  #get    '/edit'       => 'pages#edit'
   post   '/'           => 'pages#create_route'
   put    '/'           => 'pages#update'
-  delete '/'           => 'pages#destroy'
+  delete '/'           => 'pages#destroy_route'
   #get    '*pages/new'  => 'pages#new'
   #get    '*pages/edit' => 'pages#edit'
   get    '*pages/'      => 'pages#show_route'
   post   '*pages/'      => 'pages#create_route'
   put    '*pages/'      => 'pages#update'
-  delete '*pages/'      => 'pages#destroy'
+  delete '*pages/'      => 'pages#destroy_route'
 
   #resources :usergroups
   #devise_for :users

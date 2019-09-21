@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :set_page, only: [:show, :edit, :update, :destroy]
+  #before_action :set_page, only: [:show, :edit, :update, :destroy]
 
   # settings/以外のgetで呼ばれる
   # paramによって処理を分ける
@@ -48,6 +48,9 @@ class PagesController < ApplicationController
     else
       parent = get_parent_path path
       parent = Page.find_by(path:parent)
+      if parent == nil && path != ""
+        raise ActiveRecord::RecordNotFound
+      end
       #if parent is not found, render 404 
       #render createnewpage
       @page = Page.new(title:get_title(params[:pages]))
@@ -58,9 +61,11 @@ class PagesController < ApplicationController
   def file_show
     path = params[:pages]
     #filename以外のpathを取得
+    filename = get_title path
     path = get_parent_path path
-    title = get_title path
-    page = Page.where()
+    filename += params[:file]
+    page = Page.find_by(path: path)
+    file = page.files.attatchment
   end
   # GET /pages/1
   # GET /pages/1.json
@@ -94,7 +99,7 @@ class PagesController < ApplicationController
     parent = get_parent_path path
     parent = Page.find_by(path: parent)
     title = get_title path
-    if parent != nil || path == ""
+    if Page.find_by(path: path) == nil &&(parent != nil || path == "")
       @page = Page.new(
         #user: current_user,
         content:"new page",
@@ -110,7 +115,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_to path, notice: 'Page was successfully created.' }
+        format.html { redirect_back fallback_location: path, notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -119,19 +124,68 @@ class PagesController < ApplicationController
     end
   end
 
+  def create_comment
+    path = get_formal_path params[:path]
+    page = Page.find_by(path: path)
+    if page == nil
+      raise ActiveRecord::RecordNotFound
+    end
+    comment_param = params.require(:comment).permit(:content)
+    success_flag = true
+    if is_readable? page
+      comment = Comment.create(
+        #user: current_user,
+        page: page,
+        comment: comment_param[:content],
+      )
+    else
+      success_flag = false
+    end
+    respond_to do |format|
+      if success_flag
+        format.html { redirect_to path, notice: 'Comment was successfully createed.' }
+        format.json { render :show, status: :ok, location: path }
+      else
+        format.html { render :show, alert: 'Comment was not created, something wrong'}
+        format.json { render json: page.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def create_file
+
+  end
   # PATCH/PUT /pages/1
   # PATCH/PUT /pages/1.json
 
   #updateはpageのみ
   def update
-
+    path = get_formal_path params[:pages]
+    @page = Page.find_by(path:path)
+    if @page == nil 
+      raise ActiveRecord::RecordNotFound
+      return
+    end
+    user_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
+    success_flag = true
+    if is_editable? @page
+      success_flag = @page.update(
+        #user: current_user,
+        content: user_params[:content],
+        #editable_group: Usergroup.find(user_params[:editable_group_id]),
+        #readable_group: Usergroup.find(user_params[:editable_group_id]),
+        #is_draft: params,
+      )
+    else
+      success_flag = false
+    end
     respond_to do |format|
-      if @page.update(page_params)
-        format.html { redirect_to @page, notice: 'Page was successfully updated.' }
-        format.json { render :show, status: :ok, location: @page }
+      if success_flag
+        format.html { redirect_to path, notice: 'Page was successfully updated.' }
+        format.json { render :show, status: :ok, location: path }
       else
-        format.html { render :edit }
-        format.json { render json: @page.errors, status: :unprocessable_entity }
+        format.html { render :show, alert: 'Page was not updated, something wrong'}
+        format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -149,9 +203,14 @@ class PagesController < ApplicationController
 
   end
   def destroy_page
-    @page.destroy
+    path = get_formal_path params[:pages]
+    page = Page.find_by(path: path)
+    if page == nil || page.children.size != 0
+      raise ActiveRecord::RecordNotFound
+    end
+    page.destroy
     respond_to do |format|
-      format.html { redirect_to pages_url, notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -214,9 +273,15 @@ class PagesController < ApplicationController
     end
 
     def is_editable? page
+      if page == nil
+        return false
+      end
       return true
     end
     def is_readable? page
+      if page == nil
+        return false
+      end
       return true
     end
 end

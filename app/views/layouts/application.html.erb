@@ -13,9 +13,9 @@
   </head>
   <body class = "clearfix container-fluid">
     <%=render partial: "layouts/navbar"%>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
     <div >
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
       <%= yield %>
     </div>
     <%=render partial: "layouts/footer"%>
