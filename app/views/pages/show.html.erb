@@ -26,6 +26,16 @@
             <%=form.submit "投稿", class: "btn btn-primary"%>
         <%end%>
         <%=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
+        <h3>ファイル</h3>
+        <div>
+          <%@page.files.each do |file| %>
+            <%=link_to file.blob.filename.to_s, @path + "/" + file.blob.filename.to_s%> 
+          <%end%>
+        </div><br>
+        <%=form_with scope: :file, method: :post do |form|%>
+            <%=form.file_field :files, :multiple => true%>
+            <%=form.submit "送信"%>
+        <%end%>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
         <%=render partial: "pages/right"%>

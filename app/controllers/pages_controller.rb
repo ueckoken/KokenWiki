@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   #before_action :set_page, only: [:show, :edit, :update, :destroy]
-
+  before_action :force_trailing_slash
   # settings/以外のgetで呼ばれる
   # paramによって処理を分ける
   #　?search 検索
@@ -39,16 +39,16 @@ class PagesController < ApplicationController
 
   #index
   def page_show
-    path = get_formal_path params[:pages]
-    @page = Page.find_by(path: path)
+    @path = get_formal_path params[:pages]
+    @page = Page.find_by(path: @path)
     #render "show"
     #return
     if @page != nil
       render "show"
     else
-      parent = get_parent_path path
+      parent = get_parent_path @path
       parent = Page.find_by(path:parent)
-      if parent == nil && path != ""
+      if parent == nil && @path != ""
         raise ActiveRecord::RecordNotFound
       end
       #if parent is not found, render 404 
@@ -63,9 +63,17 @@ class PagesController < ApplicationController
     #filename以外のpathを取得
     filename = get_title path
     path = get_parent_path path
-    filename += params[:file]
+    filename += "." + params[:format]
     page = Page.find_by(path: path)
-    file = page.files.attatchment
+    if page == nil 
+      raise ActiveRecord::RecordNotFound
+    end
+    file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename}).blob
+    if file == nil
+      raise ActiveRecord::RecordNotFound
+    else
+      send_data file.download
+    end
   end
   # GET /pages/1
   # GET /pages/1.json
@@ -153,6 +161,29 @@ class PagesController < ApplicationController
   end
 
   def create_file
+    path = get_formal_path params[:path]
+    page = Page.find_by(path: path)
+    if page == nil
+      raise ActiveRecord::RecordNotFound
+    end
+    file_param = params.require(:file).permit(files:[])
+    success_flag = true
+    if is_editable? page
+      page.update!(
+        file_param
+      )
+    else
+      success_flag = false
+    end
+    respond_to do |format|
+      if success_flag
+        format.html { redirect_to path, notice: 'Files were successfully uploaded.' }
+        format.json { render :show, status: :ok, location: path }
+      else
+        format.html { render :show, alert: 'Files were not updated, something wrong'}
+        format.json { render json: page.errors, status: :unprocessable_entity }
+      end
+    end
 
   end
   # PATCH/PUT /pages/1
