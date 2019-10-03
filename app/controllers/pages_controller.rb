@@ -169,9 +169,19 @@ class PagesController < ApplicationController
     file_param = params.require(:file).permit(files:[])
     success_flag = true
     if is_editable? page
-      page.update!(
-        file_param
-      )
+      file_param["files"].each do |file|
+        #binding.pry
+        filename = file.original_filename
+        
+        prev_file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
+        if prev_file != nil
+          prev_file.destroy
+        end
+
+        if file.original_filename.include?(".")
+          page.files.attach file
+        end
+      end
     else
       success_flag = false
     end

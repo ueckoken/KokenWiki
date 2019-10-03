@@ -8,11 +8,17 @@ class User < ApplicationRecord
 
   has_one_attached :image
 
-
   validates :user_id, uniqueness: true
   validates :email, uniqueness: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable, :lockable, :trackable
+         :recoverable, :rememberable, :validatable, :lockable, :trackable
+  
+  def email_required?
+    false
+  end
+  def email_changed?
+    false
+  end
 end

@@ -1,0 +1,14 @@
+<p>
+<%=link_to "ユーザーグループ","/setting/usergroups"%>
+</p>
+<p>
+<%=link_to"プロフィール変更",edit_user_registration_path%>
+</p>
+<%if current_user.is_admin%>
+管理者のみ
+<p>
+<%=link_to "ユーザーのロック","/setting/userlock"%>
+</p><p>
+<%=link_to "管理者の変更","/setting/admin"%>
+</p>
+<%end%>

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_action :configure_permitted_parameters, if: :devise_controller?
   def force_trailing_slash
     if params[:format] != nil
       return
@@ -47,5 +48,13 @@ class ApplicationController < ActionController::Base
       username == ENV["BASIC_AUTH_ADMIN_USER"] && password == ENV["BASIC_AUTH_ADMIN_PASSWORD"]
       #username == "use" && password == "pas"
     end
+  end
+
+  
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:user_id,:email,:password, :password_confirmation])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:user_id,:email,:password])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:user_id,:email])
   end
 end

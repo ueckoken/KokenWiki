@@ -1,9 +1,9 @@
-<h2>Log in</h2>
+<h2>ログイン</h2>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="field">
-    <%= f.label "Eメール" %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= f.label "ユーザーID" %><br />
+    <%= f.text_field :user_id, autofocus: true, autocomplete: "user_id" %>
   </div>
 
   <div class="field">
