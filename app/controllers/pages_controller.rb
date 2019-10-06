@@ -29,17 +29,70 @@ class PagesController < ApplicationController
 
   end
 
+  def render_pankuzu_list page
+    if page==nil
+      return []
+    end
+    return render_pankuzu_list(page.parent) + [page]
+  end
+
+  def render_left
+    path = get_formal_path params[:pages]
+    parent_path = get_parent_path path
+    page = Page.find_by(path: path)
+    if path == ""
+      if page == nil
+        @brothers_pages = []
+        @children_pages = []
+      else
+        @brothers_pages = [page]
+        @children_pages = page.children
+      end
+      return
+    end
+    if page != nil
+      parent = page.parent
+    else
+      parent = Page.find_by(path: parent_path)
+    end
+    # parent shold not null
+    @brothers_pages = parent.children
+    if page != nil
+      @children_pages = page.children
+    else
+      @children_pages = []
+    end
+  end
+
+  def render_right
+    tmp_pages = Page.all.order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
+    @updated_pages = []
+    tmp_pages.each do |page|
+      if @updated_pages.size >= 50
+        break
+      end
+      if is_readable? page
+        @updated_pages += [page]
+      end
+    end
+  end
+
   #index
   def page_show
     if force_trailing_slash
       return
     end
     @path = get_formal_path params[:pages]
-    @page = Page.find_by(path: @path)
+    @page = Page.find_by(path: @path) 
+    @title = get_title @path
     #render "show"
     #return
     if @page != nil
       if is_readable? @page
+        @pankuzu = render_pankuzu_list @page.parent
+        @editable = is_editable?(@page)
+        render_right
+        render_left
         render "show"
         return
       else
@@ -54,8 +107,10 @@ class PagesController < ApplicationController
       #if parent is not found, render 404 
       #render createnewpage
       #if user_signed_in?
-
+        @pankuzu = render_pankuzu_list parent
         @page = Page.new(title:get_title(params[:pages]))
+        render_left
+        render_right
         render "new"
         return
       #else
@@ -217,12 +272,14 @@ class PagesController < ApplicationController
     end
     user_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
     success_flag = true
+    puts(current_user.usergroups.find_by(id:user_params[:readable_group_id]))
+    
     if is_editable? @page
       success_flag = @page.update(
         user: current_user,
         content: user_params[:content],
-        #editable_group: Usergroup.find(user_params[:editable_group_id]),
-        #readable_group: Usergroup.find(user_params[:editable_group_id]),
+        readable_group: current_user.usergroups.find_by(id: user_params[:readable_group_id]),
+        editable_group: current_user.usergroups.find_by(id: user_params[:editable_group_id]),
         #is_draft: params,
       )
     else
@@ -273,7 +330,7 @@ class PagesController < ApplicationController
     end
     comment_param = params.require(:comment).permit(:comment_id)
     comment = page.comments.find(comment_param[:comment_id])
-    if (is_editable(page) || comment.user == current_user)
+    if (is_editable?(page) || comment.user == current_user)
       comment.destroy
     else
       #not permittedを返した方が…？

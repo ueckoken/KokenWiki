@@ -9,15 +9,16 @@
    </div>
 
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
+        <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
         <%#react_component("MdEditor",{markdown:"マークダウン"})%>
-        <%if @page.children.size == 0%>
+        <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
                 <%form.submit "削除", {class: "btn btn-danger", style: "float:right;", data:{confirm: "本当に削除しますか"}}%>
             <%end%>
         <%end%>
         <%=form_with scope: :page, method: :put do%>
-        <div id="mdEditor" markdown="<%=@page.content%>"></div>
+        <div id="mdEditor" readable_group_id="<%=@page.readable_group_id%>" editable_group_id="<%=@page.editable_group_id%>" editable="<%=@editable%>" markdown="<%=@page.content%>" usergroups="<%=current_user.usergroups.select(:id,:name).to_json%>"></div>
         <%end%>
         <!--こめんと-->
         <h3>コメント</h3>

@@ -11,7 +11,7 @@ class UsergroupsController < ApplicationController
   def create
     usergroup_param = params.require(:usergroup).permit(:name, check_id:[])
     name = usergroup_param[:name]
-    if usergroup_params[:check_id].size<=1
+    if usergroup_param[:check_id].size<=1
       raise ActiveRecord::RecordNotFound
     end
     usergroup=Usergroup.new(
@@ -61,12 +61,12 @@ class UsergroupsController < ApplicationController
     #usergroup.update(
     #  name:params[:usergroup][:name]
     #)
-    usergroup_params = params.require(:usergroup).permit(check_id:[])
-    if usergroup_params.size <= 1
+    usergroup_param = params.require(:usergroup).permit(check_id:[])
+    if usergroup_param.size <= 1
       raise ActiveRecord::RecordNotFound
     end
     usergroup.users.clear
-    usergroup_params[:check_id].each do |s|
+    usergroup_param[:check_id].each do |s|
       user =User.find_by(id:s.to_i)
       if(user)
         usergroup.users<<user

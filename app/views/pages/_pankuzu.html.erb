@@ -1,0 +1,8 @@
+<%=link_to "/", "/"%>
+<%@pankuzu.each do |page|%>
+    <%if page.parent_id != nil %>
+        <%=link_to page.title, page.path + "/"%>
+    /
+    <%end%>
+<%end%><%puts @pankuzu%>
+<%=link_to @title, @path + "/"%>

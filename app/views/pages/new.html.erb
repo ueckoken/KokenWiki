@@ -9,8 +9,8 @@
    </div>
 
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-    
-        <h1><%=@page.title%></h1>
+        <%=render partial: "pages/pankuzu"%>
+        <h1><%=@title%></h1>
         <%=form_with scope: :page ,method: :post do |form|%>
             <%=form.submit "新規作成", class: "btn btn-primary"%>
         <%end%>

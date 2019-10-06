@@ -1,4 +1,4 @@
-import marked from 'marked';
+import marked, { options } from 'marked';
 import PropTypes from 'prop-types'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -21,25 +21,50 @@ class MdEditor extends React.Component {
     }
     componentDidMount() {
         const root = document.getElementById("mdEditor");
-        this.props.handleSetContent(root.getAttribute("markdown"));
+        const usergroups = JSON.parse(root.getAttribute("usergroups"));
+        const is_editable = (root.getAttribute("editable") == "true");
+        const readable_group_id = Number(root.getAttribute("readable_group_id"));
+        const editable_group_id = Number(root.getAttribute("editable_group_id"));
+        this.props.handleSetContent(root.getAttribute("markdown"),usergroups,is_editable,readable_group_id,editable_group_id);
     }
     render() {
         return (
             <React.Fragment>
                 <div hidden={this.props.is_edit}>
-                    <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickEdit}>編集</button>
+                    <button type="button" hidden={!this.props.is_editable} className="btn btn-secondary" onClick={this.props.handleOnClickEdit}>編集</button>
                     <Markdown></Markdown>
                 </div>
                 <div hidden={!this.props.is_edit}>
-                    <div className="d-lg-none">
+                    <div className="d-xl-none">
                         <MdEditorSm>
 
                         </MdEditorSm>
                     </div>
-                    <div className="d-none d-lg-flex width100">
+                    <div className="d-none d-xl-flex width100">
                         <MdEditorLg>
 
                         </MdEditorLg>
+                    </div>
+                    <div>
+                        <label>閲覧可能グループ</label>
+                        <select value={this.props.readable_group_id} name="page[readable_group_id]" className="form-control" onChange={this.props.handleChangeReadableGroup}>
+                            <option key={0} value={0}>部員全員</option>
+                            
+                            {this.props.usergroups.map((usergroup,i)=>{
+                                return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
+                            })}
+                        </select>
+                    </div>
+                    <div>
+                        <label>編集可能グループ</label>
+                        <select value={this.props.editable_group_id} name="page[editable_group_id]" className="form-control" onChange={this.props.handleChangeEditableGroup}>
+                            <option value={0}>部員全員</option>
+                            
+
+                            {this.props.usergroups.map((usergroup,i)=>{
+                                return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
+                            })}
+                        </select>
                     </div>
                     <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickCancel}>破棄</button>
                     <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!this.props.is_changed}></input>

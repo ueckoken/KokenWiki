@@ -1,1 +1,12 @@
-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+<h5>更新履歴</h5>
+<ul>
+    <%@updated_pages.each do |page|%>
+    <li>
+        <%if page.path == ""%>
+            <%=link_to "/", "/"%>
+        <%else%>
+            <%=link_to page.path, page.path%>
+        <%end%>
+    </li>
+    <%end%>
+</ul>
