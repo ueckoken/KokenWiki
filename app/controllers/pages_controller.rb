@@ -10,23 +10,63 @@ class PagesController < ApplicationController
   # それらの要素がなかった時 ページ表示
   def show_route
     if(params[:search]!=nil)
-      search_show
+      show_search
       return
     elsif params[:format]==nil
-      
-      if(get_formal_path(params[:pages]) == nil)
-        #redirect_404
-        return
-      end
-      page_show
+      show_page
     else
-      file_show
-      #render :nothing=>true and return
+      show_file
     end
   end
 
-  def search
+  def filter_readable_pages pages
+    if is_admin? current_user
+      return pages
+    end
+    readable_pages = []
+    pages.each do |page|
+      if is_readable? page
+      readable_pages += [page]
+      end
+    end
+  end
+  def get_readable_pages
+    #@pages = Page.where(is_public:true)
 
+    pages=Page.where(readable_group_id:nil)
+    if current_user != nil
+      current_user.usergroups.ids.each do |id|
+        pages=pages.or(Page.where(readable_group_id:id))
+      end
+    end
+    return pages
+  end
+  def show_search
+
+    #とりあえずの表示
+    @path = get_formal_path params[:pages]
+    @page = Page.find_by(path: @path)
+    @title = get_title @path
+    if @page != nil
+      @pankuzu = render_pankuzu_list @page.parent
+    else
+      @pankuzu = []
+    end
+    @search_pages = get_readable_pages
+    if(params[:search]!="")
+      searchstr= params[:search].split
+      @search_pages=@search_pages.where("path LIKE ?", @path+"%")
+      @search_pages=@search_pages.where("CONCAT(title,content) LIKE ?", "%"+searchstr.pop+"%")
+      searchstr.each do |str|
+        @search_pages=@search_pages.where("CONCAT(title,content) LIKE ?", "%"+str+"%")
+      end
+    else
+      @search_pages=[]
+    end
+
+    render_left
+    render_right
+    render "search"
   end
 
   def render_pankuzu_list page
@@ -48,6 +88,8 @@ class PagesController < ApplicationController
         @brothers_pages = [page]
         @children_pages = page.children
       end
+      @brothers_pages = filter_readable_pages @brothers_pages
+      @children_pages = filter_readable_pages @children_pages
       return
     end
     if page != nil
@@ -62,23 +104,28 @@ class PagesController < ApplicationController
     else
       @children_pages = []
     end
+    @brothers_pages = filter_readable_pages @brothers_pages
+    @children_pages = filter_readable_pages @children_pages
   end
 
   def render_right
-    tmp_pages = Page.all.order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
-    @updated_pages = []
-    tmp_pages.each do |page|
-      if @updated_pages.size >= 50
-        break
-      end
-      if is_readable? page
-        @updated_pages += [page]
-      end
+    begin
+    #tmp_pages = Page.all.order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
+    #@updated_pages = []
+    #tmp_pages.each do |page|
+    #  if @updated_pages.size >= 50
+    #    break
+    #  end
+    #  if is_readable? page
+    #    @updated_pages += [page]
+    #  end
     end
+    @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
+    
   end
 
   #index
-  def page_show
+  def show_page
     if force_trailing_slash
       return
     end
@@ -119,7 +166,7 @@ class PagesController < ApplicationController
     end
   end
 
-  def file_show
+  def show_file
     path = params[:pages]
     #filename以外のpathを取得
     filename = get_title path
@@ -136,15 +183,6 @@ class PagesController < ApplicationController
       send_data file.download
     end
   end
-  # GET /pages/1
-  # GET /pages/1.json
-  def show
-  end
-
-  # GET /pages/new
-  #def new
-  #  @page = Page.new(title:get_title(params[:pages]))
-  #end
 
   # GET /pages/1/edit
   def edit
@@ -152,7 +190,6 @@ class PagesController < ApplicationController
 
   # POST /pages
   # POST /pages.json
-
   def create_route
     authenticate_user!
     if params[:file] != nil

@@ -57,9 +57,9 @@
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<h3>アカウントの削除</h3>
 
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+<p>Unhappy? <%= button_to "アカウントを消す", registration_path(resource_name), data: { confirm: "Are you sure?"}, method: :delete ,class: "btn btn-danger" %></p>
 
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">

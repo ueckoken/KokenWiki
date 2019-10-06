@@ -13,13 +13,13 @@
 
   <% if devise_mapping.rememberable? %>
     <div class="field">
-      <%= f.check_box :remember_me %>
+      <%= f.check_box :remember_me%>
       <%= f.label "ログイン情報を保持" %>
     </div>
   <% end %>
 
   <div class="actions">
-    <%= f.submit "ログイン" %>
+    <%= f.submit "ログイン" ,class: "btn btn-danger" %>
   </div>
 <% end %>
 

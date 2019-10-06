@@ -11,6 +11,7 @@
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
         <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
+        <p>last edited by <%=@page.user.user_id%></p>
         <%#react_component("MdEditor",{markdown:"マークダウン"})%>
         <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
@@ -22,11 +23,27 @@
         <%end%>
         <!--こめんと-->
         <h3>コメント</h3>
+        <%@page.comments.each do |comment|%>
+            <div class="card"><div class="card-header">
+                <%=comment.user.name%>/<%=comment.user.user_id%> <%=comment.created_at%>
+            </div>
+            <div class="card-body">
+                <%=react_component "Markdown", {markdown: comment.comment}%>
+                <%if @editable || comment.user == current_user%>
+                <%=form_with scope: "comment", method: :delete do |form|%>
+                    <%=form.hidden_field "comment_id", value: comment.id%>
+                    <%=form.submit "削除", class: "btn btn-danger"%>
+                <%end%>
+                <%end%>
+            </div>
+            </div>
+        <%end%>
+        <h4>新しいコメント</h4>
         <%=form_with scope: :comment, method: :post, url: @path do |form|%>
             <%=form.text_area :content, class: "form-control"%>
             <%=form.submit "投稿", class: "btn btn-primary"%>
         <%end%>
-        <%=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
+        <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
         <h3>ファイル</h3>
         <div>
           <%@page.files.each do |file| %>
@@ -35,7 +52,7 @@
         </div><br>
         <%=form_with scope: :file, method: :post do |form|%>
             <%=form.file_field :files, :multiple => true%>
-            <%=form.submit "送信"%>
+            <%=form.submit "送信", class: "btn btn-primary"%>
         <%end%>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
