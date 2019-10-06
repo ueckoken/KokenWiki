@@ -8,7 +8,7 @@ class CreatePages < ActiveRecord::Migration[5.2]
       t.references :parent
       t.references :user
 
-      t.string :parent
+      #t.string :parent
       t.string :title, null: false
       t.text :content, null: false
       t.string :path, null: false

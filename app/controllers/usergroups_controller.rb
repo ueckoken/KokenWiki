@@ -1,74 +1,109 @@
 class UsergroupsController < ApplicationController
-  before_action :set_usergroup, only: [:show, :edit, :update, :destroy]
-
-  # GET /usergroups
-  # GET /usergroups.json
+  before_action :authenticate_user!
   def index
-    @usergroups = Usergroup.all
+    force_trailing_slash
+    @usergroups=Usergroup.all
+    @users=User.all
   end
-
-  # GET /usergroups/1
-  # GET /usergroups/1.json
-  def show
-  end
-
-  # GET /usergroups/new
   def new
-    @usergroup = Usergroup.new
+    @users=User.all
   end
-
-  # GET /usergroups/1/edit
-  def edit
-  end
-
-  # POST /usergroups
-  # POST /usergroups.json
   def create
-    @usergroup = Usergroup.new(usergroup_params)
-
+    usergroup_param = params.require(:usergroup).permit(:name, check_id:[])
+    name = usergroup_param[:name]
+    if usergroup_params[:check_id].size<=1
+      raise ActiveRecord::RecordNotFound
+    end
+    usergroup=Usergroup.new(
+      create_user: current_user,
+      name: name
+    )
+    usergroup_param[:check_id].each do |s|
+      user = User.find_by(id:s.to_i)
+      if user != nil
+        usergroup.users<<user
+      end
+    end
     respond_to do |format|
-      if @usergroup.save
-        format.html { redirect_to @usergroup, notice: 'Usergroup was successfully created.' }
-        format.json { render :show, status: :created, location: @usergroup }
+      if usergroup.save
+        format.html { redirect_to usergroup, notice: 'Usergroup was successfully created.' }
+        format.json { render :show, status: :created, location: usergroup }
       else
         format.html { render :new }
-        format.json { render json: @usergroup.errors, status: :unprocessable_entity }
+        format.json { render json: usergroup.errors, status: :unprocessable_entity }
       end
     end
   end
-
-  # PATCH/PUT /usergroups/1
-  # PATCH/PUT /usergroups/1.json
+  def show
+    #force_trailing_slash
+    id=params[:id]
+    @usergroup=Usergroup.find(id.to_i)
+    if is_editable? @usergroup
+      @editable = true
+    end
+  end
+  def edit
+    id=params[:id]
+    
+    @usergroup=Usergroup.find(id.to_i)
+    if !is_editable? @usergroup
+      raise ActionController::RoutingError
+      return
+    end
+    @users=User.all
+  end
   def update
-    respond_to do |format|
-      if @usergroup.update(usergroup_params)
-        format.html { redirect_to @usergroup, notice: 'Usergroup was successfully updated.' }
-        format.json { render :show, status: :ok, location: @usergroup }
-      else
-        format.html { render :edit }
-        format.json { render json: @usergroup.errors, status: :unprocessable_entity }
+    usergroup=Usergroup.find(params[:id])
+    if ! is_editable? usergroup
+      raise  ActionController::RoutingError
+      return
+    end
+    #usergroup.update(
+    #  name:params[:usergroup][:name]
+    #)
+    usergroup_params = params.require(:usergroup).permit(check_id:[])
+    if usergroup_params.size <= 1
+      raise ActiveRecord::RecordNotFound
+    end
+    usergroup.users.clear
+    usergroup_params[:check_id].each do |s|
+      user =User.find_by(id:s.to_i)
+      if(user)
+        usergroup.users<<user
       end
     end
+    respond_to do |format|
+      format.html { redirect_to usergroup, notice: 'Usergroup was successfully updated.' }
+      format.json { render :show, status: :ok, location: usergroup }
+    end
   end
-
-  # DELETE /usergroups/1
-  # DELETE /usergroups/1.json
   def destroy
-    @usergroup.destroy
+    id = params[:id]
+    
+    usergroup=Usergroup.find(id.to_i)
+    if(is_editable? usergroup)
+      usergroup.destroy!
+    else
+
+    end
     respond_to do |format|
       format.html { redirect_to usergroups_url, notice: 'Usergroup was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_usergroup
-      @usergroup = Usergroup.find(params[:id])
+  def is_editable? usergroup
+    if !user_signed_in?
+      return false
     end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def usergroup_params
-      params.fetch(:usergroup, {})
+    if is_admin? current_user
+      return true
     end
+    if usergroup == nil
+      return false
+    end
+    if ((usergroup.create_user == current_user)||(usergroup.users.include? current_user))
+      return true
+    end
+    return false
+  end
 end

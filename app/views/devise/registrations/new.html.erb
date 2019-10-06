@@ -5,11 +5,15 @@
 
   <div class="field">
     <%= f.label :Eメール %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" ""%>
+    <%= f.email_field :email, autofocus: true, class: "form-control" ""%>
   </div> 
   <div class="field">
   <%= f.label "ユーザーID" %><br />
-  <%= f.text_field :user_id, autofocus: true, autocomplete: "user_id", class: "form-control" %>
+  <%= f.text_field :user_id, autocomplete: "user_id", class: "form-control" %>
+  </div>
+  <div class="field">
+  <%= f.label "名前" %><br />
+  <%= f.text_field :name, class: "form-control" %>
   </div>
 
   <div class="field">

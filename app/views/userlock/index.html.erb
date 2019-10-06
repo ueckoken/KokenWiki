@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
+        <div>
+            <%=render partial: "settings/left"%>
+        </div>
+        <div class="d-lg-none">
+            <%=render partial: "settings/right"%>
+        </div>
+   </div>
+    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
+        
+        <table class = "table">
+            <tr><td>ユーザー名</td><td>メールアドレス</td><td>ロック</td></tr>
+            <%@users.each do |user|%>
+            <tr>
+                <td><%=user.name%></td>
+                <td><%=user.email%></td>
+                <td>
+                    <%if user.access_locked?%>
+                        <%=button_to("ロック解除",{:action =>"update",:user_id=>user.id,:lock=>"false"},:class=>"btn btn-primary",:method=>:put)%>
+                    <%else%>
+                        <%=button_to("ロック",{:action =>"update",:user_id=>user.id,:lock=>"true"},:class=>"btn btn-danger",:method=>:put)%>
+                    <%end%>
+                </td>
+            </tr>
+            <%end%>
+        </table>
+    </div>
+    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
+        <%=render partial: "settings/right"%>
+    </div>
+</div>

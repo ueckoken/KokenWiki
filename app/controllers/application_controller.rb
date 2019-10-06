@@ -23,11 +23,14 @@ class ApplicationController < ActionController::Base
     end
     if redirecturl != url
         redirect_to redirecturl
+        return true
+    else
+      return false
     end
   end
 
   def is_admin? user
-    if user.admin
+    if user.is_admin
       return true
     end
     return false
@@ -53,8 +56,8 @@ class ApplicationController < ActionController::Base
   
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:user_id,:email,:password, :password_confirmation])
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:user_id,:email,:password])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:user_id,:email])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:user_id,:email,:password, :password_confirmation, :name])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:user_id,:email,:password,:remember_me])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:user_id,:email,:password, :password_confirmation,:current_password,:name])
   end
 end

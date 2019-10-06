@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   #before_action :set_page, only: [:show, :edit, :update, :destroy]
-  before_action :force_trailing_slash
+  #before_action :force_trailing_slash
   # settings/以外のgetで呼ばれる
   # paramによって処理を分ける
   #　?search 検索
@@ -12,14 +12,6 @@ class PagesController < ApplicationController
     if(params[:search]!=nil)
       search_show
       return
-    #elsif(params[:new]!=nil)
-    #  new
-    #  render :action=>"new"
-    #  return
-    #elsif(params[:edit]!=nil)
-    #  edit
-      #render :action=>"edit"
-    #  return
     elsif params[:format]==nil
       
       if(get_formal_path(params[:pages]) == nil)
@@ -39,12 +31,20 @@ class PagesController < ApplicationController
 
   #index
   def page_show
+    if force_trailing_slash
+      return
+    end
     @path = get_formal_path params[:pages]
     @page = Page.find_by(path: @path)
     #render "show"
     #return
     if @page != nil
-      render "show"
+      if is_readable? @page
+        render "show"
+        return
+      else
+        raise ActiveRecord::RecordNotFound
+      end
     else
       parent = get_parent_path @path
       parent = Page.find_by(path:parent)
@@ -53,8 +53,14 @@ class PagesController < ApplicationController
       end
       #if parent is not found, render 404 
       #render createnewpage
-      @page = Page.new(title:get_title(params[:pages]))
-      render "new"
+      #if user_signed_in?
+
+        @page = Page.new(title:get_title(params[:pages]))
+        render "new"
+        return
+      #else
+      #  raise ActiveRecord::RecordNotFound
+      #end
     end
   end
 
@@ -65,7 +71,7 @@ class PagesController < ApplicationController
     path = get_parent_path path
     filename += "." + params[:format]
     page = Page.find_by(path: path)
-    if page == nil 
+    if (page == nil || !is_readable?(page))
       raise ActiveRecord::RecordNotFound
     end
     file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename}).blob
@@ -93,6 +99,7 @@ class PagesController < ApplicationController
   # POST /pages.json
 
   def create_route
+    authenticate_user!
     if params[:file] != nil
       create_file
     elsif params[:comment] != nil
@@ -109,7 +116,7 @@ class PagesController < ApplicationController
     title = get_title path
     if Page.find_by(path: path) == nil &&(parent != nil || path == "")
       @page = Page.new(
-        #user: current_user,
+        user: current_user,
         content:"new page",
         title: title,
         path: path,
@@ -133,16 +140,16 @@ class PagesController < ApplicationController
   end
 
   def create_comment
-    path = get_formal_path params[:path]
+    path = get_formal_path params[:pages]
     page = Page.find_by(path: path)
-    if page == nil
+    if (page == nil || !is_readable?(page))
       raise ActiveRecord::RecordNotFound
     end
     comment_param = params.require(:comment).permit(:content)
     success_flag = true
     if is_readable? page
       comment = Comment.create(
-        #user: current_user,
+        user: current_user,
         page: page,
         comment: comment_param[:content],
       )
@@ -151,6 +158,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
+        puts path
         format.html { redirect_to path, notice: 'Comment was successfully createed.' }
         format.json { render :show, status: :ok, location: path }
       else
@@ -161,9 +169,9 @@ class PagesController < ApplicationController
   end
 
   def create_file
-    path = get_formal_path params[:path]
+    path = get_formal_path params[:pages]
     page = Page.find_by(path: path)
-    if page == nil
+    if (page == nil || !is_readable?(page))
       raise ActiveRecord::RecordNotFound
     end
     file_param = params.require(:file).permit(files:[])
@@ -203,7 +211,7 @@ class PagesController < ApplicationController
   def update
     path = get_formal_path params[:pages]
     @page = Page.find_by(path:path)
-    if @page == nil 
+    if (@page == nil || !is_editable?(@page))
       raise ActiveRecord::RecordNotFound
       return
     end
@@ -211,7 +219,7 @@ class PagesController < ApplicationController
     success_flag = true
     if is_editable? @page
       success_flag = @page.update(
-        #user: current_user,
+        user: current_user,
         content: user_params[:content],
         #editable_group: Usergroup.find(user_params[:editable_group_id]),
         #readable_group: Usergroup.find(user_params[:editable_group_id]),
@@ -234,9 +242,10 @@ class PagesController < ApplicationController
   # DELETE /pages/1
   # DELETE /pages/1.json
   def destroy_route
+    authenticate_user!
     if params[:format] != nil
       destroy_file
-    elsif params[:comment_id] != nil
+    elsif params[:comment] != nil
       destroy_comment
     else
       destroy_page
@@ -246,12 +255,54 @@ class PagesController < ApplicationController
   def destroy_page
     path = get_formal_path params[:pages]
     page = Page.find_by(path: path)
-    if page == nil || page.children.size != 0
+    if (page == nil || page.children.size != 0 || !is_editable?(page))
       raise ActiveRecord::RecordNotFound
     end
     page.destroy
     respond_to do |format|
       format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+  
+  def destroy_comment
+    path = get_formal_path params[:pages]
+    page = Page.find_by(path: path)
+    if (page == nil)
+      raise ActiveRecord::RecordNotFound
+    end
+    comment_param = params.require(:comment).permit(:comment_id)
+    comment = page.comments.find(comment_param[:comment_id])
+    if (is_editable(page) || comment.user == current_user)
+      comment.destroy
+    else
+      #not permittedを返した方が…？
+      raise ActiveRecord::RecordNotFound
+    end
+    respond_to do |format|
+      format.html { redirect_to path, notice: 'Comment was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def destroy_file
+    path = params[:pages]
+    #filename以外のpathを取得
+    filename = get_title path
+    path = get_parent_path path
+    filename += "." + params[:format]
+    page = Page.find_by(path: path)
+    if (page == nil || !is_editable?(page))
+      raise ActiveRecord::RecordNotFound
+    end
+    file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
+    if file == nil
+      raise ActiveRecord::RecordNotFound
+    else
+      file.destroy
+    end
+    respond_to do |format|
+      format.html { redirect_to path, notice: 'File was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -317,12 +368,55 @@ class PagesController < ApplicationController
       if page == nil
         return false
       end
+      if !user_signed_in?
+        return false
+      end
+
+      if is_admin? current_user
+        return true
+      end
+      if page.is_draft
+        if page.user == current_user
+          return true
+        else
+          return false
+        end
+      end
+      if page.readable_group == nil
+        return true
+      elsif page.editable_group.users.include? current_user
+        return true
+      else
+        return false
+      end
       return true
     end
     def is_readable? page
       if page == nil
         return false
       end
+      if !user_signed_in?
+        return false
+      end
+
+      if is_admin? current_user
+        return true
+      end
+      if page.is_draft
+        if page.user == current_user
+          return true
+        else
+          return false
+        end
+      end
+      if page.readable_group == nil
+        return true
+      elsif page.readable_group.users.include? current_user
+        return true
+      else
+        return false
+      end
+
       return true
     end
 end

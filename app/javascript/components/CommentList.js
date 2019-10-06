@@ -32,12 +32,18 @@ class CommentList extends React.Component {
                                 />
                                 <input
                                     type="hidden"
+                                    name="_method"
+                                    value={"delete"}
+                                />
+                                <input
+                                    type="hidden"
                                     name="comment[comment_id]"
                                     value={comment.id}
                                 />
                                 <button
+                                    type="submit"
                                     className="btn btn-danger"
-                                />
+                                >削除</button>
                             </form>
                         </div>);
                 }) :<div></div>)}

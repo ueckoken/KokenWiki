@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
     t.bigint "editable_group_id"
     t.bigint "parent_id"
     t.bigint "user_id"
-    t.string "parent"
     t.string "title", null: false
     t.text "content", null: false
     t.string "path", null: false
@@ -81,8 +80,11 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
   end
 
   create_table "usergroups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "create_user_id"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["create_user_id"], name: "index_usergroups_on_create_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -103,7 +105,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
-    t.string "user_id"
+    t.string "user_id", null: false
     t.string "name"
     t.string "description"
     t.boolean "is_admin", default: false, null: false

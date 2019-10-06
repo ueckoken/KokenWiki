@@ -21,7 +21,7 @@
         <%end%>
         <!--こめんと-->
         <h3>コメント</h3>
-        <%=form_with scope: :comment, method: :post do |form|%>
+        <%=form_with scope: :comment, method: :post, url: @path do |form|%>
             <%=form.text_area :content, class: "form-control"%>
             <%=form.submit "投稿", class: "btn btn-primary"%>
         <%end%>
