@@ -29,17 +29,22 @@ class PagesController < ApplicationController
       readable_pages += [page]
       end
     end
+    return readable_pages
   end
   def get_readable_pages
-    #@pages = Page.where(is_public:true)
-
-    pages=Page.where(readable_group_id:nil)
+    pages = Page.where(is_public:true,is_draft:false)
+    if !user_signed_in?
+      return pages
+    end
+    pages=pages.or(Page.where(readable_group:nil,is_draft:false))
     if current_user != nil
-      current_user.usergroups.ids.each do |id|
-        pages=pages.or(Page.where(readable_group_id:id))
+      current_user.usergroups.each do |id|
+        pages=pages.or(Page.where(readable_group:id,is_draft:false))
       end
     end
+    pages = pages.or(Page.where(is_draft:true,user:current_user))
     return pages
+    
   end
   def show_search
 
@@ -120,7 +125,7 @@ class PagesController < ApplicationController
     #    @updated_pages += [page]
     #  end
     end
-    @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
+    @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id)
     
   end
 
@@ -153,16 +158,20 @@ class PagesController < ApplicationController
       end
       #if parent is not found, render 404 
       #render createnewpage
-      #if user_signed_in?
+      if user_signed_in?
         @pankuzu = render_pankuzu_list parent
         @page = Page.new(title:get_title(params[:pages]))
         render_left
         render_right
         render "new"
         return
-      #else
-      #  raise ActiveRecord::RecordNotFound
-      #end
+      else
+        if get_formal_path(params[:pages]) == ""
+          authenticate_user!
+        else
+          raise ActiveRecord::RecordNotFound
+        end
+      end
     end
   end
 
@@ -176,11 +185,15 @@ class PagesController < ApplicationController
     if (page == nil || !is_readable?(page))
       raise ActiveRecord::RecordNotFound
     end
-    file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename}).blob
-    if file == nil
+    file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
+    if file.blob == nil
       raise ActiveRecord::RecordNotFound
     else
-      send_data file.download
+      if file.blob.image? || file.blob.audio? || file.blob.video?
+        send_data file.blob.download, type: file.blob.content_type, disposition: 'inline'
+      else
+        send_data file.blob.download, type: file.blob.content_type, disposition: 'attachment'
+      end
     end
   end
 
@@ -213,7 +226,8 @@ class PagesController < ApplicationController
         title: title,
         path: path,
         parent: parent,
-        is_draft: true
+        is_draft: false,
+        is_public: false
         )
     else
       raise MajorError::bad_request
@@ -270,15 +284,14 @@ class PagesController < ApplicationController
     success_flag = true
     if is_editable? page
       file_param["files"].each do |file|
-        #binding.pry
-        filename = file.original_filename
+        filename = file.original_filename.to_s
         
         prev_file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
         if prev_file != nil
           prev_file.destroy
         end
-
-        if file.original_filename.include?(".")
+  
+        if filename.include?(".") && !filename.include?("?") && !filename.include?("/")
           page.files.attach file
         end
       end
@@ -307,23 +320,26 @@ class PagesController < ApplicationController
       raise ActiveRecord::RecordNotFound
       return
     end
-    user_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
+    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft, :is_public)
     success_flag = true
-    puts(current_user.usergroups.find_by(id:user_params[:readable_group_id]))
+    puts(current_user.usergroups.find_by(id:page_params[:readable_group_id]))
     
     if is_editable? @page
       success_flag = @page.update(
         user: current_user,
-        content: user_params[:content],
-        readable_group: current_user.usergroups.find_by(id: user_params[:readable_group_id]),
-        editable_group: current_user.usergroups.find_by(id: user_params[:editable_group_id]),
-        #is_draft: params,
+        content: page_params[:content],
+        readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
+        editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
+        is_draft: page_params[:is_draft],
+        is_public: page_params[:is_public]
       )
     else
       success_flag = false
     end
     respond_to do |format|
       if success_flag
+        history = UpdateHistory.new(user:@page.user,content:@page.content)
+        @page.update_histories<<history
         format.html { redirect_to path, notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: path }
       else
@@ -476,7 +492,7 @@ class PagesController < ApplicationController
           return false
         end
       end
-      if page.readable_group == nil
+      if page.editable_group == nil
         return true
       elsif page.editable_group.users.include? current_user
         return true
@@ -488,6 +504,16 @@ class PagesController < ApplicationController
     def is_readable? page
       if page == nil
         return false
+      end
+      if page.is_draft
+        if current_user == page.user
+          return true
+        else
+          return false
+        end
+      end
+      if page.is_public
+        return true
       end
       if !user_signed_in?
         return false

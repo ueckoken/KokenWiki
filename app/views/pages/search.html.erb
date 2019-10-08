@@ -13,7 +13,11 @@
         <%@search_pages.each do |page|%>
         <div class="card">
             <div class="card-header">
-                <%=link_to page.path, page.path + "/"%>
+                <%if page.path == ""%>
+                    <%=link_to "/", "/"%>
+                <%else%>
+                    <%=link_to page.path, page.path + "/"%>
+                <%end%>
             </div>
             <div class="card-body">
                 <%=page.content[0,500]%>

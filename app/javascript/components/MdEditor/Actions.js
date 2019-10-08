@@ -1,4 +1,4 @@
-import {CHANGE_TAB, CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP } from "./action_name";
+import {CHANGE_TAB, CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_DRAFT, ONCLICK_IS_PUBLIC } from "./action_name";
 
 const Actions = {
     changeText(e) {
@@ -32,7 +32,7 @@ const Actions = {
             }
         }
     },
-
+    
     changeReadableGroup(e){
         return {
             type: CHANGE_READABLE_GROUP,
@@ -50,7 +50,21 @@ const Actions = {
             }
         }
     },
-    setContent(content,usergroups,is_editable,default_readable_group_id,default_editable_group_id) {
+    onClickIsDraft(e){
+        return {
+            type: ONCLICK_IS_DRAFT,
+            payload: {
+            }
+        }
+    },
+    onClickIsPublic(e){
+        return {
+            type: ONCLICK_IS_PUBLIC,
+            payload: {
+            }
+        }
+    },
+    setContent(content,usergroups,is_editable,default_readable_group_id,default_editable_group_id,default_is_draft,default_is_public) {
         if(!Array.isArray(usergroups)){
             usergroups = [];
         }
@@ -62,6 +76,8 @@ const Actions = {
                 is_editable: is_editable,
                 default_readable_group_id: default_readable_group_id,
                 default_editable_group_id: default_editable_group_id,
+                default_is_draft: default_is_draft,
+                default_is_public: default_is_public,
             }
         }
     }

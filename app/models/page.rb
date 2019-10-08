@@ -1,5 +1,5 @@
 class Page < ApplicationRecord
-    belongs_to :user, optional: true
+    belongs_to :user
     belongs_to :editable_group, class_name: "Usergroup", optional: true
     belongs_to :readable_group, class_name: "Usergroup", optional: true
 
@@ -14,5 +14,7 @@ class Page < ApplicationRecord
     has_many_attached :files
 
     validates :path, uniqueness: true
+    validates :title, exclusion: { in: [nil] }
+
 
 end

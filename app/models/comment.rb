@@ -1,4 +1,6 @@
 class Comment < ApplicationRecord
-    belongs_to :user, optional: true
-    belongs_to :page, optional: true
+    belongs_to :user
+    belongs_to :page
+
+    validates :comment, exclusion: { in: [nil] }
 end

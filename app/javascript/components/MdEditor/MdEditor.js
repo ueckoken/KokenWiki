@@ -25,7 +25,9 @@ class MdEditor extends React.Component {
         const is_editable = (root.getAttribute("editable") == "true");
         const readable_group_id = Number(root.getAttribute("readable_group_id"));
         const editable_group_id = Number(root.getAttribute("editable_group_id"));
-        this.props.handleSetContent(root.getAttribute("markdown"),usergroups,is_editable,readable_group_id,editable_group_id);
+        const is_draft = (root.getAttribute("is_draft") == "true");
+        const is_public = (root.getAttribute("is_public") == "true");
+        this.props.handleSetContent(root.getAttribute("markdown"),usergroups,is_editable,readable_group_id,editable_group_id,is_draft,is_public);
     }
     render() {
         return (
@@ -65,6 +67,16 @@ class MdEditor extends React.Component {
                                 return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
                             })}
                         </select>
+                    </div>
+                    <div className="form-check">
+                        <input type="checkbox" className="form-check-input" checked={this.props.is_draft} onChange={this.props.handleOnClickIsDraft}/>
+                        <label className="form-check-label">下書き</label>
+                        <input type="hidden" name="page[is_draft]" value={this.props.is_draft} />
+                    </div>
+                    <div className="form-check">
+                        <input type="checkbox" className="form-check-input" checked={this.props.is_public} onChange={this.props.handleOnClickIsPublic}/>
+                        <label className="form-check-label">一般公開</label>
+                        <input type="hidden" name="page[is_public]" value={this.props.is_public} />
                     </div>
                     <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickCancel}>破棄</button>
                     <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!this.props.is_changed}></input>

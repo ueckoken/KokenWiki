@@ -13,7 +13,8 @@ class CreatePages < ActiveRecord::Migration[5.2]
       t.text :content, null: false
       t.string :path, null: false
 
-      t.boolean :is_draft, default: true, null: false
+      t.boolean :is_draft, default: false, null: false
+      t.boolean :is_public, default: false, null: false
 
       t.timestamps
     end

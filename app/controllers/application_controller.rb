@@ -30,6 +30,9 @@ class ApplicationController < ActionController::Base
   end
 
   def is_admin? user
+    if user == nil
+      return false
+    end
     if user.is_admin
       return true
     end

@@ -14,7 +14,8 @@ class User < ApplicationRecord
 
   
 
-  validates :user_id, uniqueness: true
+  validates :user_id, uniqueness: true, format: { with: /\A[a-zA-Z\-\_]+\z/,
+  message: "英文字,_,-のみが使えます" }
   validates :email, uniqueness: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

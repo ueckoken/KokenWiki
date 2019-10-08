@@ -19,7 +19,7 @@
             <%end%>
         <%end%>
         <%=form_with scope: :page, method: :put do%>
-        <div id="mdEditor" readable_group_id="<%=@page.readable_group_id%>" editable_group_id="<%=@page.editable_group_id%>" editable="<%=@editable%>" markdown="<%=@page.content%>" usergroups="<%=current_user.usergroups.select(:id,:name).to_json%>"></div>
+        <div id="mdEditor" is_draft="<%=@page.is_draft%>" is_public="<%=@page.is_public%>" readable_group_id="<%=@page.readable_group_id%>" editable_group_id="<%=@page.editable_group_id%>" editable="<%=@editable%>" markdown="<%=@page.content%>" usergroups="<%=if current_user != nil then current_user.usergroups.select(:id,:name).to_json else [] end%>"></div>
         <%end%>
         <!--こめんと-->
         <h3>コメント</h3>
@@ -38,10 +38,12 @@
             </div>
             </div>
         <%end%>
+        <%if user_signed_in?%>
         <h4>新しいコメント</h4>
         <%=form_with scope: :comment, method: :post, url: @path do |form|%>
             <%=form.text_area :content, class: "form-control"%>
             <%=form.submit "投稿", class: "btn btn-primary"%>
+        <%end%>
         <%end%>
         <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
         <h3>ファイル</h3>
@@ -50,10 +52,18 @@
             <%=link_to file.blob.filename.to_s, @path + "/" + file.blob.filename.to_s%> 
           <%end%>
         </div><br>
-        <%=form_with scope: :file, method: :post do |form|%>
-            <%=form.file_field :files, :multiple => true%>
-            <%=form.submit "送信", class: "btn btn-primary"%>
+        <%if user_signed_in?%>
+            <%=form_with scope: :file, method: :post do |form|%>
+                <%=form.file_field :files, :multiple => true%>
+                <%=form.submit "送信", class: "btn btn-primary"%>
+            <%end%>
         <%end%>
+        <h3>更新履歴</h3>
+        <div>
+            <%@page.update_histories.order("created_at DESC").limit(10).each do |hist|%>
+                <p><%=hist.created_at%> edited by <%=hist.user.user_id%></p>
+            <%end%>
+        </div>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
         <%=render partial: "pages/right"%>

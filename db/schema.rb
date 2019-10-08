@@ -51,7 +51,8 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
     t.string "title", null: false
     t.text "content", null: false
     t.string "path", null: false
-    t.boolean "is_draft", default: true, null: false
+    t.boolean "is_draft", default: false, null: false
+    t.boolean "is_public", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
