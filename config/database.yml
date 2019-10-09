@@ -22,14 +22,14 @@ default: &default
 
 development:
   <<: *default
-  database: wiki1_development
+  database: wiki2_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: wiki1_test
+  database: wiki2_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -52,6 +52,6 @@ test:
 #
 production:
   <<: *default
-  database: wiki1_production
+  database: wiki2_production
   username: rails
   password: <%= ENV['WIKI1_DATABASE_PASSWORD'] %>
