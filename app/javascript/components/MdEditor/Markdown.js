@@ -28,7 +28,7 @@ function html_escape(str) {
         '>': '&gt;',
         '&': '&amp;',
         '"': '&quot;',
-        "'": '&#27;',
+        "'": '&#39;',
         '`': '&#x60;'
       };
       return escape[match];

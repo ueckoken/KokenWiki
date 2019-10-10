@@ -38,5 +38,5 @@
 yarn-debug.log*
 .yarn-integrity
 /pukiwiki/*
-migrate_pukiwiki.log
+pukiwiki_migrate.log
 /config/database.yml
