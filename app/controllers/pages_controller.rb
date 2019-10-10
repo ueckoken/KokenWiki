@@ -148,13 +148,21 @@ class PagesController < ApplicationController
         render "show"
         return
       else
-        raise ActiveRecord::RecordNotFound
+        if !user_signed_in?
+          authenticate_user!
+        else
+          raise ActiveRecord::RecordNotFound
+        end
       end
     else
       parent = get_parent_path @path
       parent = Page.find_by(path:parent)
       if parent == nil && @path != ""
-        raise ActiveRecord::RecordNotFound
+        if !user_signed_in?
+          authenticate_user!
+        else
+          raise ActiveRecord::RecordNotFound
+        end
       end
       #if parent is not found, render 404 
       #render createnewpage
@@ -166,11 +174,11 @@ class PagesController < ApplicationController
         render "new"
         return
       else
-        if get_formal_path(params[:pages]) == ""
+        #if get_formal_path(params[:pages]) == ""
           authenticate_user!
-        else
-          raise ActiveRecord::RecordNotFound
-        end
+        #else
+        #  raise ActiveRecord::RecordNotFound
+        #end
       end
     end
   end
@@ -288,7 +296,7 @@ class PagesController < ApplicationController
         
         prev_file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
         if prev_file != nil
-          prev_file.destroy
+          prev_file.purge
         end
   
         if filename.include?(".") && !filename.include?("?") && !filename.include?("/")
@@ -409,7 +417,7 @@ class PagesController < ApplicationController
     if file == nil
       raise ActiveRecord::RecordNotFound
     else
-      file.destroy
+      file.purge
     end
     respond_to do |format|
       format.html { redirect_to path, notice: 'File was successfully destroyed.' }

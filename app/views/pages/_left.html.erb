@@ -1,4 +1,10 @@
-<%=render partial: "pages/pankuzu"%>
+<nav class="navbar-expand-sm navbar-light bg-light">
+    <h5>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#leftbarNav" aria-controls="ledtbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>ページ</h5>
+<div class="collapse navbar-collapse" id="leftbarNav">
+<%#%=render partial: "pages/pankuzu"%>
 <ul>
     <%@brothers_pages.each do |page|%>
     <li>
@@ -21,3 +27,5 @@
     </li>
     <%end%>
 </ul>
+</div>
+</nav>

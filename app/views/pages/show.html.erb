@@ -40,7 +40,7 @@
         <%end%>
         <%if user_signed_in?%>
         <h4>新しいコメント</h4>
-        <%=form_with scope: :comment, method: :post, url: @path do |form|%>
+        <%=form_with scope: :comment, method: :post, url: URI.encode(@path) do |form|%>
             <%=form.text_area :content, class: "form-control"%>
             <%=form.submit "投稿", class: "btn btn-primary"%>
         <%end%>

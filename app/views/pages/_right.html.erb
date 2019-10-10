@@ -1,12 +1,20 @@
-<h5>更新履歴</h5>
-<ul>
-    <%@updated_pages.each do |page|%>
-    <li>
-        <%if page.path == ""%>
-            <%=link_to "/", "/"%>
-        <%else%>
-            <%=link_to page.path, page.path%>
+
+<nav class="navbar-expand-sm navbar-light bg-light">
+    <h5>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#rightbarNav" aria-controls="rightbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>更新履歴</h5>
+    <div class="collapse navbar-collapse" id="rightbarNav">
+        <ul class="rightbar-nav">
+        <%@updated_pages.each do |page|%>
+            <li>
+                <%if page.path == ""%>
+                    <%=link_to "/", "/"%>
+                <%else%>
+                    <%=link_to page.path, page.path + "/"%>
+                <%end%>
+            </li>
         <%end%>
-    </li>
-    <%end%>
-</ul>
+        </ul>
+    </div>
+</nav>

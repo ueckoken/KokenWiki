@@ -13,8 +13,10 @@ class Page < ApplicationRecord
 
     has_many_attached :files
 
-    validates :path, uniqueness: true
-    validates :title, exclusion: { in: [nil] }
+    validates :path, uniqueness: true, exclusion: { in: [nil] }
+    validates :title, exclusion: { in: [nil] }, format: {with: /\A[^?\.]*\z/}
+    validates :path, format: { with: /\A[^?\.]*\z/}
+    validates :content, exclusion: { in: [nil]}
 
 
 end

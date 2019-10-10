@@ -10,7 +10,7 @@ class CreatePages < ActiveRecord::Migration[5.2]
 
       #t.string :parent
       t.string :title, null: false
-      t.text :content, null: false
+      t.text :content, null: false, limit: 4294967295
       t.string :path, null: false
 
       t.boolean :is_draft, default: false, null: false

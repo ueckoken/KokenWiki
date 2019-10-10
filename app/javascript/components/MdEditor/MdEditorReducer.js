@@ -15,6 +15,7 @@ const initialState = {
     default_is_public: false,
     is_draft: false,
     is_public: false,
+    textHeight: "200px"
 };
 const MdEditorReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -31,24 +32,25 @@ const MdEditorReducer = (state = initialState, action) => {
             }
             return Object.assign({}, state, {
                 markdown: action.payload.text,
+                is_changed: true,
+                textHeight: action.payload.textHeight + "px"
+            });
+        case CHANGE_READABLE_GROUP:
+            if(state.is_editable == false){
+                return state;
+            }
+            return Object.assign({}, state, {
+                readable_group_id: action.payload.readable_group_id,
                 is_changed: true
             });
-            case CHANGE_READABLE_GROUP:
-                if(state.is_editable == false){
-                    return state;
-                }
-                return Object.assign({}, state, {
-                    readable_group_id: action.payload.readable_group_id,
-                    is_changed: true
-                });
-            case CHANGE_EDITABLE_GROUP:
-                if(state.is_editable == false){
-                    return state;
-                }
-                return Object.assign({}, state, {
-                    editable_group_id: action.payload.editable_group_id,
-                    is_changed: true
-                });
+        case CHANGE_EDITABLE_GROUP:
+            if(state.is_editable == false){
+                return state;
+            }
+            return Object.assign({}, state, {
+                editable_group_id: action.payload.editable_group_id,
+                is_changed: true
+            });
 
         case ONCLICK_EDIT:
             if(state.is_editable == false){

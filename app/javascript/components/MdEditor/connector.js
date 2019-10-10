@@ -11,6 +11,7 @@ export const mapStateToProps = (state) => {
         editable_group_id: state.editable_group_id,
         is_draft: state.is_draft,
         is_public: state.is_public,
+        textHeight: state.textHeight,
     }
 };
 export const mapDispatchToProps = (dispatch) => {
