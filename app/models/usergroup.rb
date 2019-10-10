@@ -12,5 +12,5 @@ class Usergroup < ApplicationRecord
     has_many :editable_pages, class_name: "Page",
                           foreign_key: "editable_group_id"
     
-    validates :name, uniqueness: true, length: { in: 1..20 }
+    validates :name, uniqueness: true, length: { in: 1..50 }
 end

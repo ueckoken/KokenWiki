@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :user_id, uniqueness: true, format: { with: /\A\w+\z/,
   message: "英数字,アンダーバーのみが使えます" }
   validates :email, uniqueness: true
+  validates :name, length: {in:1..50}
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

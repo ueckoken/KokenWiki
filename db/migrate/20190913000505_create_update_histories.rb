@@ -4,7 +4,7 @@ class CreateUpdateHistories < ActiveRecord::Migration[5.2]
       t.belongs_to :page
       t.belongs_to :user
       
-      t.string :content, null: false, limit: 4294967295
+      t.string :content, null: false
 
       t.timestamps
     end

@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
   create_table "update_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "page_id"
     t.bigint "user_id"
-    t.string "content"
+    t.string "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["page_id"], name: "index_update_histories_on_page_id"
