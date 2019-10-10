@@ -2,22 +2,20 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {mapStateToProps,mapDispatchToProps} from "./connector"
 import { end } from 'worker-farm';
+import TextareaAutosize from 'react-autosize-textarea';
 export class Editor extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
         return <div>
-            <textarea
+            <TextareaAutosize
                 className="form-control"
+                row={5}
                 value={this.props.markdown}
                 onChange={this.props.handleChangeText}
-                onFocus={this.props.handleChangeText}
                 name="page[content]"
-                style={{height:this.props.textHeight}}
-                >
-
-            </textarea>
+                />
         </div>
     }
 }

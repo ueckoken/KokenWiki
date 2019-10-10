@@ -15,7 +15,6 @@ const initialState = {
     default_is_public: false,
     is_draft: false,
     is_public: false,
-    textHeight: "200px"
 };
 const MdEditorReducer = (state = initialState, action) => {
     switch (action.type) {

@@ -2,12 +2,10 @@ import {CHANGE_TAB, CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_
 
 const Actions = {
     changeText(e) {
-        e.target.adjust_textarea
         return {
             type: CHANGE_TEXT,
             payload: {
                 text: e.target.value,
-                textHeight: e.target.scrollHeight
             }
         }
     },
