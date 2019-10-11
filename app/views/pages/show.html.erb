@@ -28,7 +28,7 @@
                 <%=comment.user.name%>/<%=comment.user.user_id%> <%=comment.created_at%>
             </div>
             <div class="card-body">
-                <%=react_component "Markdown", {markdown: comment.comment}%>
+                <%=react_component "Markdown", {markdown: comment.comment, highlight:true}%>
                 <%if @editable || comment.user == current_user%>
                 <%=form_with scope: "comment", method: :delete do |form|%>
                     <%=form.hidden_field "comment_id", value: comment.id%>

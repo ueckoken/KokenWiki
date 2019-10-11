@@ -34,7 +34,7 @@ class MdEditor extends React.Component {
             <React.Fragment>
                 <div hidden={this.props.is_edit}>
                     <button type="button" hidden={!this.props.is_editable} className="btn btn-secondary" onClick={this.props.handleOnClickEdit}>編集</button>
-                    <Markdown></Markdown>
+                    <Markdown highlight={!this.props.is_edit}></Markdown>
                 </div>
                 <div hidden={!this.props.is_edit}>
                     <div className="d-xl-none">
@@ -112,7 +112,7 @@ class MdEditorSm extends React.Component{
                     </TabList>
 
                     <TabPanel>
-                        <Markdown></Markdown>
+                        <Markdown highlight={false}></Markdown>
                     </TabPanel>
                     <TabPanel>
                         <Editor>
@@ -139,7 +139,7 @@ class MdEditorLg extends React.Component {
                         </TabList>
 
                         <TabPanel>
-                            <Markdown></Markdown>
+                            <Markdown highlight={false}></Markdown>
                         </TabPanel>
                     </Tabs>
                 </div>
