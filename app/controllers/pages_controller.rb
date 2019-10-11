@@ -244,7 +244,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_back fallback_location: path, notice: 'Page was successfully created.' }
+        format.html { redirect_back fallback_location: path + "/", notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -272,8 +272,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
-        puts path
-        format.html { redirect_to path, notice: 'Comment was successfully createed.' }
+        format.html { redirect_to path + "/", notice: 'Comment was successfully createed.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Comment was not created, something wrong'}
@@ -308,7 +307,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
-        format.html { redirect_to path, notice: 'Files were successfully uploaded.' }
+        format.html { redirect_to path + "/", notice: 'Files were successfully uploaded.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Files were not updated, something wrong'}
@@ -348,7 +347,7 @@ class PagesController < ApplicationController
       if success_flag
         history = UpdateHistory.new(user:@page.user,content:@page.content)
         @page.update_histories<<history
-        format.html { redirect_to path, notice: 'Page was successfully updated.' }
+        format.html { redirect_to path + "/", notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Page was not updated, something wrong'}
@@ -378,7 +377,7 @@ class PagesController < ApplicationController
     end
     page.destroy
     respond_to do |format|
-      format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to path + "/", notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -398,7 +397,7 @@ class PagesController < ApplicationController
       raise ActiveRecord::RecordNotFound
     end
     respond_to do |format|
-      format.html { redirect_to path, notice: 'Comment was successfully destroyed.' }
+      format.html { redirect_to path + "/", notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -419,10 +418,9 @@ class PagesController < ApplicationController
     else
       file.purge
     end
-    respond_to do |format|
-      format.html { redirect_to path, notice: 'File was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    
+    redirect_to path + "/", notice: 'File was successfully destroyed.'
+    
   end
 
   #private
