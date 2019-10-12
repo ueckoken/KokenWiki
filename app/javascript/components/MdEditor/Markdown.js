@@ -56,10 +56,10 @@ marked.Renderer.prototype.video = function (href, title, alt) {
             if (size_.length==2) {
                                                                                                                                                           
                 if (isNumber(Number.parseInt(size_[0]))){                                                                                                       
-                    size += 'width=' + size_[0];
+                    size += 'width="' + size_[0]+`"`;
                 }
                 if (isNumber(Number.parseInt(size_[1]))) {                                                                                          
-                    size += ' height=' + size_[1];
+                    size += ' height="' + size_[1]+`"`;
                 }
             } else {
                 size=""                                                                                 
