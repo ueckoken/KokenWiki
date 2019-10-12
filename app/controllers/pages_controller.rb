@@ -194,7 +194,7 @@ class PagesController < ApplicationController
       raise ActiveRecord::RecordNotFound
     end
     file = page.files.joins(:blob).find_by(active_storage_blobs:{filename:filename})
-    if file.blob == nil
+    if file == nil
       raise ActiveRecord::RecordNotFound
     else
       if file.blob.image? || file.blob.audio? || file.blob.video?
