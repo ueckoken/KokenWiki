@@ -148,21 +148,22 @@ class PagesController < ApplicationController
         render "show"
         return
       else
-        if !user_signed_in?
-          authenticate_user!
-        else
+        #if !user_signed_in?
+        #  authenticate_user!
+        #else
           raise ActiveRecord::RecordNotFound
-        end
+        #end
       end
     else
       parent = get_parent_path @path
       parent = Page.find_by(path:parent)
-      if parent == nil && @path != ""
-        if !user_signed_in?
-          authenticate_user!
-        else
-          raise ActiveRecord::RecordNotFound
-        end
+      if (parent == nil|| !is_readable(parent)) && @path != ""
+        #見えない人は下部ページ作れないでいいよね
+        #if !user_signed_in?
+        #  authenticate_user!
+        #else
+        raise ActiveRecord::RecordNotFound
+        #end
       end
       #if parent is not found, render 404 
       #render createnewpage
@@ -175,9 +176,9 @@ class PagesController < ApplicationController
         return
       else
         #if get_formal_path(params[:pages]) == ""
-          authenticate_user!
+        #authenticate_user!
         #else
-        #  raise ActiveRecord::RecordNotFound
+        raise ActiveRecord::RecordNotFound
         #end
       end
     end
