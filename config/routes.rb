@@ -23,6 +23,14 @@ Rails.application.routes.draw do
     delete "/" => "settings#index"
 
   end
+
+  
+  get 'rails/' =>  "application#render_404"
+  get 'rails/*some' =>  "application#render_404"
+  post 'rails/' =>  "application#render_404"
+  post 'rails/*some' =>  "application#render_404"
+  #のちに使いたいかもしれない
+
   root to: 'pages#show_route' 
   #get    '/new'        => 'pages#new'
   #get    '/edit'       => 'pages#edit'

@@ -157,7 +157,7 @@ class PagesController < ApplicationController
     else
       parent = get_parent_path @path
       parent = Page.find_by(path:parent)
-      if (parent == nil|| !is_readable(parent)) && @path != ""
+      if (parent == nil|| !is_readable?(parent)) && @path != ""
         #見えない人は下部ページ作れないでいいよね
         #if !user_signed_in?
         #  authenticate_user!
