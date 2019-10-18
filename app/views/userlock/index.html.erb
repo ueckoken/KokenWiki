@@ -10,10 +10,11 @@
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
         
         <table class = "table">
-            <tr><td>ユーザー名</td><td>メールアドレス</td><td>ロック</td></tr>
+            <tr><td>名前</td><td>ユーザーID</td><td>メールアドレス</td><td>ロック</td></tr>
             <%@users.each do |user|%>
             <tr>
                 <td><%=user.name%></td>
+                <td><%=user.user_id%></td>
                 <td><%=user.email%></td>
                 <td>
                     <%if user.access_locked?%>
