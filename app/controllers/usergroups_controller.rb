@@ -11,9 +11,6 @@ class UsergroupsController < ApplicationController
   def create
     usergroup_param = params.require(:usergroup).permit(:name, check_id:[])
     name = usergroup_param[:name]
-    if usergroup_param[:check_id].size<=1
-      raise ActiveRecord::RecordNotFound
-    end
     usergroup=Usergroup.new(
       create_user: current_user,
       name: name
@@ -23,6 +20,9 @@ class UsergroupsController < ApplicationController
       if user != nil
         usergroup.users<<user
       end
+    end
+    if usergroup.users.size==0
+      raise ActiveRecord::RecordNotFound
     end
     respond_to do |format|
       if usergroup.save
@@ -47,7 +47,7 @@ class UsergroupsController < ApplicationController
     
     @usergroup=Usergroup.find(id.to_i)
     if !is_editable? @usergroup
-      raise ActionController::RoutingError
+      raise ActiveRecord::RecordNotFound
       return
     end
     @users=User.all
@@ -55,22 +55,26 @@ class UsergroupsController < ApplicationController
   def update
     usergroup=Usergroup.find(params[:id])
     if ! is_editable? usergroup
-      raise  ActionController::RoutingError
+      raise ActiveRecord::RecordNotFound
       return
     end
     #usergroup.update(
     #  name:params[:usergroup][:name]
     #)
     usergroup_param = params.require(:usergroup).permit(check_id:[])
-    if usergroup_param.size <= 1
-      raise ActiveRecord::RecordNotFound
-    end
+    users=usergroup.users.all
     usergroup.users.clear
     usergroup_param[:check_id].each do |s|
       user =User.find_by(id:s.to_i)
       if(user)
         usergroup.users<<user
       end
+    end
+    if usergroup.users.size == 0
+      users.each do |user|
+        usergroup.users<<user
+      end
+      raise ActiveRecord::RecordNotFound
     end
     respond_to do |format|
       format.html { redirect_to usergroup, notice: 'Usergroup was successfully updated.' }

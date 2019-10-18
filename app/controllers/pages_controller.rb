@@ -125,8 +125,8 @@ class PagesController < ApplicationController
     #    @updated_pages += [page]
     #  end
     end
-    @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id)
-    
+    #@updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id)
+    @updated_pages = filter_readable_pages(Page.order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id).limit(50))
   end
 
   #index
@@ -330,8 +330,6 @@ class PagesController < ApplicationController
     end
     page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft, :is_public)
     success_flag = true
-    puts(current_user.usergroups.find_by(id:page_params[:readable_group_id]))
-    
     if is_editable? @page
       success_flag = @page.update(
         user: current_user,

@@ -11,7 +11,7 @@
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
         <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
-        <p>last edited by <%=@page.user.user_id%></p>
+        <p>last edited by <%=if @page.user != nil then @page.user.user_id else "???" end%></p>
         <%#react_component("MdEditor",{markdown:"マークダウン"})%>
         <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
@@ -25,7 +25,7 @@
         <h3>コメント</h3>
         <%@page.comments.each do |comment|%>
             <div class="card"><div class="card-header">
-                <%=comment.user.name%>/<%=comment.user.user_id%> <%=comment.created_at%>
+                <%=if comment.user != nil then comment.user.name else "???" end%>/<%=if comment.user != nil then comment.user.user_id else "???" end%> <%=comment.created_at%>
             </div>
             <div class="card-body">
                 <%=react_component "Markdown", {markdown: comment.comment, highlight:true}%>
@@ -66,7 +66,7 @@
         <h3>更新履歴</h3>
         <div>
             <%@page.update_histories.order("created_at DESC").limit(10).each do |hist|%>
-                <p><%=hist.created_at%> edited by <%=hist.user.user_id%></p>
+                <p><%=hist.created_at%> edited by <%=if hist.user != nil then hist.user.user_id else "???" end%></p>
             <%end%>
         </div>
     </div>
