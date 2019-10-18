@@ -62,7 +62,7 @@ class UsergroupsController < ApplicationController
     #  name:params[:usergroup][:name]
     #)
     usergroup_param = params.require(:usergroup).permit(check_id:[])
-    users=usergroup.users.all
+    users=usergroup.users.all.to_ary
     usergroup.users.clear
     usergroup_param[:check_id].each do |s|
       user =User.find_by(id:s.to_i)
@@ -105,7 +105,7 @@ class UsergroupsController < ApplicationController
     if usergroup == nil
       return false
     end
-    if ((usergroup.create_user == current_user)||(usergroup.users.include? current_user))
+    if ((usergroup.users.include? current_user))
       return true
     end
     return false
