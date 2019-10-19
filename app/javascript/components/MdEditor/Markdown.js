@@ -106,7 +106,6 @@ marked.Renderer.prototype.image = function(href, title, text) {
 };
 export class Markdown extends React.Component {
     constructor(props) {
-        let renderer = new marked.Renderer();
         
         marked.setOptions({
             gfm: true,
@@ -117,17 +116,16 @@ export class Markdown extends React.Component {
             smartLists: true,
             smartypants: false,
             langPrefix: '',
-            renderer: renderer
         });
         super(props);
         this.myRef = React.createRef();
     }
     componentDidMount() {
-      this.updateCodeSyntaxHighlighting();
+      //this.updateCodeSyntaxHighlighting();
     }
   
     componentDidUpdate() {
-      this.updateCodeSyntaxHighlighting();
+      //this.updateCodeSyntaxHighlighting();
     }
   
     updateCodeSyntaxHighlighting = () => {
@@ -138,7 +136,7 @@ export class Markdown extends React.Component {
     };
   
     render() {
-        const html = marked(amp_escape(this.props.markdown))
+        const html = marked((this.props.markdown))
         return (
             <div ref={this.myRef} className="" dangerouslySetInnerHTML={{
                 __html: html
