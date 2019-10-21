@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_003112) do
+ActiveRecord::Schema.define(version: 2019_10_21_152303) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
     t.bigint "parent_id"
     t.bigint "user_id"
     t.string "title", null: false
-    t.text "content", null: false
+    t.text "content", size: :long
     t.string "path", null: false
     t.boolean "is_draft", default: false, null: false
     t.boolean "is_public", default: false, null: false
@@ -58,15 +58,17 @@ ActiveRecord::Schema.define(version: 2019_09_13_003112) do
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["readable_group_id"], name: "index_pages_on_readable_group_id"
+    t.index ["updated_at", "path"], name: "index_pages_on_updated_at_and_path"
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
   create_table "update_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "page_id"
     t.bigint "user_id"
-    t.string "content", null: false
+    t.text "content", size: :long
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_update_histories_on_created_at"
     t.index ["page_id"], name: "index_update_histories_on_page_id"
     t.index ["user_id"], name: "index_update_histories_on_user_id"
   end
