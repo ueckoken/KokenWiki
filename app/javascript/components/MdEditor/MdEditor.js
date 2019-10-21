@@ -32,11 +32,12 @@ class MdEditor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <div hidden={this.props.is_edit}>
+                {(!this.props.is_edit)?
+                <div>
                     <button type="button" hidden={!this.props.is_editable} className="btn btn-secondary" onClick={this.props.handleOnClickEdit}>編集</button>
                     <Markdown highlight={!this.props.is_edit}></Markdown>
-                </div>
-                <div hidden={!this.props.is_edit}>
+                </div>:
+                <div>
                     <div className="d-xl-none">
                         <MdEditorSm>
 
@@ -80,7 +81,7 @@ class MdEditor extends React.Component {
                     </div>
                     <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickCancel}>破棄</button>
                     <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!this.props.is_changed}></input>
-                </div>
+                </div>}
             </React.Fragment>
         );
     }
