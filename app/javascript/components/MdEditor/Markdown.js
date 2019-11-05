@@ -3,8 +3,8 @@ import marked from 'marked';
 import * as escape from 'escape-html';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps} from "./connector";
-import hljs from 'highlight.js';
-import 'highlight.js/styles/vs.css';
+//import hljs from 'highlight.js';
+//import 'highlight.js/styles/vs.css';
 //hljs.configure({useBR: true});
 marked.Parser.prototype.parse = function(src) {
     this.inline = new marked.InlineLexer(src.links, this.options)
@@ -129,10 +129,10 @@ export class Markdown extends React.Component {
     }
   
     updateCodeSyntaxHighlighting = () => {
-        if(!this.props.highlight){return;}
+        /*if(!this.props.highlight){return;}
         this.myRef.current.querySelectorAll("pre code").forEach(block => {
             hljs.highlightBlock(block);
-        });
+        });*/
     };
   
     render() {
