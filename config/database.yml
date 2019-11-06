@@ -16,8 +16,8 @@ default: &default
   collation: utf8mb4_unicode_ci
   reconnect: false
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: rails
-  password: rails
+  username: root
+  password: password
   socket: /var/run/mysqld/mysqld.sock
 
 development:
