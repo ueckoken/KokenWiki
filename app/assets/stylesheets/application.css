@@ -31,3 +31,7 @@ body,ol,ul,li{
     width:100%;
     overflow-wrap: break-word;
 }
+
+a:hover {
+  background-color: initial;
+}
