@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-
   scope '/setting' do
-    devise_for :user, :controllers =>{
-      :registrations => 'users/registrations',
-      :sessions => 'users/sessions'
+    devise_for :user, controllers: {
+      registrations: 'users/registrations',
+      sessions: 'users/sessions'
     }
 
-    
+
     resources :usergroups
     get "/usergroups/*id/edit/" => "usergroups#edit"
     get "/userlock" => "userlock#index"
@@ -21,34 +20,32 @@ Rails.application.routes.draw do
     post "/" => "settings#index"
     put "/" => "settings#index"
     delete "/" => "settings#index"
-
   end
 
-  
+
   get 'rails/' =>  "application#render_404"
   get 'rails/*some' =>  "application#render_404"
   post 'rails/' =>  "application#render_404"
   post 'rails/*some' =>  "application#render_404"
-  #のちに使いたいかもしれない
+  # のちに使いたいかもしれない
 
-  root to: 'pages#show_route' 
-  #get    '/new'        => 'pages#new'
-  #get    '/edit'       => 'pages#edit'
+  root to: 'pages#show_route'
+  # get    '/new'        => 'pages#new'
+  # get    '/edit'       => 'pages#edit'
   post   '/'           => 'pages#create_route'
   put    '/'           => 'pages#update'
   delete '/'           => 'pages#destroy_route'
-  #get    '*pages/new'  => 'pages#new'
-  #get    '*pages/edit' => 'pages#edit'
+  # get    '*pages/new'  => 'pages#new'
+  # get    '*pages/edit' => 'pages#edit'
   get    '*pages/'      => 'pages#show_route'
   post   '*pages/'      => 'pages#create_route'
   put    '*pages/'      => 'pages#update'
   delete '*pages/'      => 'pages#destroy_route'
 
-  #resources :usergroups
-  #devise_for :users
-  #resources :user_groups
-  #resources :pages
+  # resources :usergroups
+  # devise_for :users
+  # resources :user_groups
+  # resources :pages
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  #root to: 'pages#index'
-
+  # root to: 'pages#index'
 end
