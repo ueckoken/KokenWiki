@@ -18,15 +18,15 @@ export default ({
 }) => {
     useEffect(() => {
         store.dispatch(
-            setContent(
+            setContent({
                 markdown,
                 usergroups,
-                editable,
+                is_editable: editable,
                 readable_group_id,
                 editable_group_id,
                 is_draft,
                 is_public
-            )
+            })
         );
     }, [
         markdown,

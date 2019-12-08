@@ -36,7 +36,7 @@ const MdEditor = ({
     if (!is_edit) {
         return (
             <div>
-                <button type="button" hidden={!is_editable} className="btn btn-secondary" onClick={handleOnClickEdit}>編集</button>
+                <button type="button" hidden={!is_editable} className="btn btn-secondary" onClick={() => handleOnClickEdit()}>編集</button>
                 <Markdown highlight={!is_edit}></Markdown>
             </div>
         );
@@ -51,29 +51,30 @@ const MdEditor = ({
             </div>
             <div>
                 <label>閲覧可能グループ</label>
-                <select value={readable_group_id} name="page[readable_group_id]" className="form-control" onChange={handleChangeReadableGroup}>
+                <select value={readable_group_id} name="page[readable_group_id]" className="form-control" onChange={e => handleChangeReadableGroup(e.target.value)}>
                     <option key={0} value={0}>部員全員</option>
                     {usergroups.map((usergroup, i) => <option value={usergroup.id} key={i + 1}>{usergroup.name}</option>)}
                 </select>
             </div>
             <div>
                 <label>編集可能グループ</label>
-                <select value={editable_group_id} name="page[editable_group_id]" className="form-control" onChange={handleChangeEditableGroup}>
+                <select value={editable_group_id} name="page[editable_group_id]" className="form-control" onChange={e => handleChangeEditableGroup(e.target.value)}>
+
                     <option value={0}>部員全員</option>
                     {usergroups.map((usergroup, i) => <option value={usergroup.id} key={i + 1}>{usergroup.name}</option>)}
                 </select>
             </div>
             <div className="form-check">
-                <input type="checkbox" className="form-check-input" checked={is_draft} onChange={handleOnClickIsDraft} />
+                <input type="checkbox" className="form-check-input" checked={is_draft} onChange={() => handleOnClickIsDraft()} />
                 <label className="form-check-label">下書き</label>
                 <input type="hidden" name="page[is_draft]" value={is_draft} />
             </div>
             <div className="form-check">
-                <input type="checkbox" className="form-check-input" checked={is_public} onChange={handleOnClickIsPublic} />
+                <input type="checkbox" className="form-check-input" checked={is_public} onChange={() => handleOnClickIsPublic()} />
                 <label className="form-check-label">一般公開</label>
                 <input type="hidden" name="page[is_public]" value={is_public} />
             </div>
-            <button type="button" className="btn btn-secondary" onClick={handleOnClickCancel}>破棄</button>
+            <button type="button" className="btn btn-secondary" onClick={() => handleOnClickCancel()}>破棄</button>
             <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!is_changed}></input>
         </div>
     );

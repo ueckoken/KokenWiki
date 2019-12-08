@@ -10,7 +10,7 @@ export const Editor = ({ markdown, handleChangeText }) => (
             className="form-control"
             row={5}
             value={markdown}
-            onChange={handleChangeText}
+            onChange={e => handleChangeText(e.target.value)}
             name="page[content]"
         />
     </div>

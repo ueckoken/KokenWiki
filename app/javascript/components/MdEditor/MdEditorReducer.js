@@ -23,16 +23,15 @@ const MdEditorReducer = createReducer(initialState, {
         if (state.is_editable == false) {
             return state;
         }
-        state.markdown = action.payload.text;
+        state.markdown = action.payload;
         state.is_changed = true;
-        state.textHeight = action.payload.textHeight + "px";
         return state;
     },
     [changeReadableGroup]: (state, action) => {
         if (state.is_editable == false) {
             return state;
         }
-        state.readable_group_id = action.payload.readable_group_id;
+        state.readable_group_id = action.payload;
         state.is_changed = true;
         return state;
     },
@@ -40,7 +39,7 @@ const MdEditorReducer = createReducer(initialState, {
         if (state.is_editable == false) {
             return state;
         }
-        state.editable_group_id = action.payload.editable_group_id;
+        state.editable_group_id = action.payload;
         state.is_changed = true;
         return state;
     },
@@ -82,14 +81,14 @@ const MdEditorReducer = createReducer(initialState, {
         state.default_markdown = action.payload.markdown;
         state.usergroups = action.payload.usergroups;
         state.is_editable = action.payload.is_editable;
-        state.readable_group_id = action.payload.default_readable_group_id;
-        state.editable_group_id = action.payload.default_editable_group_id;
-        state.default_readable_group_id = action.payload.default_readable_group_id;
-        state.default_editable_group_id = action.payload.default_editable_group_id;
-        state.default_is_draft = action.payload.default_is_draft;
-        state.default_is_public = action.payload.default_is_public;
-        state.is_draft = action.payload.default_is_draft;
-        state.is_public = action.payload.default_is_public;
+        state.readable_group_id = action.payload.readable_group_id;
+        state.editable_group_id = action.payload.editable_group_id;
+        state.default_readable_group_id = action.payload.readable_group_id;
+        state.default_editable_group_id = action.payload.editable_group_id;
+        state.default_is_draft = action.payload.is_draft;
+        state.default_is_public = action.payload.is_public;
+        state.is_draft = action.payload.is_draft;
+        state.is_public = action.payload.is_public;
         state.is_edit = false
         return state;
     }
