@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { createStore } from "redux";
 import { Provider } from 'react-redux';
+import { configureStore } from "@reduxjs/toolkit";
 import MdEditorReducer from "./MdEditorReducer"
 import { setContent } from "./Actions"
 import MdEditor from "./MdEditor"
 
-const store = createStore(MdEditorReducer);
+const store = configureStore({
+    reducer: MdEditorReducer
+});
 
 export default ({
     markdown,
