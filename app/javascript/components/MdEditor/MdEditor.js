@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import * as escape from 'escape-html';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { hidden } from 'ansi-colors';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";
 import {
@@ -16,11 +16,11 @@ import {
     changeReadableGroup,
     changeEditableGroup,
 } from "./Actions";
+import { isChangedSelector } from "./selectors";
 
 const MdEditor = ({
     usergroups,
     is_edit,
-    is_changed,
     is_editable,
     readable_group_id,
     editable_group_id,
@@ -33,6 +33,7 @@ const MdEditor = ({
     handleChangeReadableGroup,
     handleChangeEditableGroup,
   }) => {
+    const is_changed = useSelector(isChangedSelector);
     if (!is_edit) {
         return (
             <div>
@@ -51,14 +52,14 @@ const MdEditor = ({
             </div>
             <div>
                 <label>閲覧可能グループ</label>
-                <select value={readable_group_id} name="page[readable_group_id]" className="form-control" onChange={e => handleChangeReadableGroup(e.target.value)}>
+                <select value={readable_group_id} name="page[readable_group_id]" className="form-control" onChange={e => handleChangeReadableGroup(Number(e.target.value))}>
                     <option key={0} value={0}>部員全員</option>
                     {usergroups.map((usergroup, i) => <option value={usergroup.id} key={i + 1}>{usergroup.name}</option>)}
                 </select>
             </div>
             <div>
                 <label>編集可能グループ</label>
-                <select value={editable_group_id} name="page[editable_group_id]" className="form-control" onChange={e => handleChangeEditableGroup(e.target.value)}>
+                <select value={editable_group_id} name="page[editable_group_id]" className="form-control" onChange={e => handleChangeEditableGroup(Number(e.target.value))}>
 
                     <option value={0}>部員全員</option>
                     {usergroups.map((usergroup, i) => <option value={usergroup.id} key={i + 1}>{usergroup.name}</option>)}
@@ -131,7 +132,6 @@ const MdEditorLg = () => (
 export default connect((state) => ({
     usergroups: state.usergroups,
     is_edit: state.is_edit,
-    is_changed: state.is_changed,
     is_editable: state.is_editable,
     readable_group_id: state.readable_group_id,
     editable_group_id: state.editable_group_id,

@@ -22,8 +22,8 @@
             markdown: @page.content,
             is_draft: @page.is_draft,
             is_public: @page.is_public,
-            readable_group_id: @page.readable_group_id,
-            editable_group_id: @page.editable_group_id,
+            readable_group_id: @page.readable_group_id || 0,
+            editable_group_id: @page.editable_group_id || 0,
             editable: @editable,
             usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
         )%>

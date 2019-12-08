@@ -6,7 +6,6 @@ const initialState = {
     default_markdown: "",
     usergroups: [],
     is_edit: false,
-    is_changed: false,
     is_editable: false,
     readable_group_id: 0,
     editable_group_id: 0,
@@ -24,7 +23,6 @@ const MdEditorReducer = createReducer(initialState, {
             return state;
         }
         state.markdown = action.payload;
-        state.is_changed = true;
         return state;
     },
     [changeReadableGroup]: (state, action) => {
@@ -32,7 +30,6 @@ const MdEditorReducer = createReducer(initialState, {
             return state;
         }
         state.readable_group_id = action.payload;
-        state.is_changed = true;
         return state;
     },
     [changeEditableGroup]: (state, action) => {
@@ -40,7 +37,6 @@ const MdEditorReducer = createReducer(initialState, {
             return state;
         }
         state.editable_group_id = action.payload;
-        state.is_changed = true;
         return state;
     },
     [onClickEdit]: state => {
@@ -53,7 +49,6 @@ const MdEditorReducer = createReducer(initialState, {
     [onClickCancel]: state => {
         state.markdown = state.default_markdown;
         state.is_edit = false;
-        state.is_changed = false;
         state.readable_group_id = state.default_readable_group_id;
         state.editable_group_id = state.default_editable_group_id;
         state.is_draft = state.default_is_draft;
@@ -65,7 +60,6 @@ const MdEditorReducer = createReducer(initialState, {
             return state;
         }
         state.is_draft = !state.is_draft;
-        state.is_changed = true;
         return state;
     },
     [onClickIsPublic]: state => {
@@ -73,7 +67,6 @@ const MdEditorReducer = createReducer(initialState, {
             return state;
         }
         state.is_public = !state.is_public;
-        state.is_changed = true;
         return state;
     },
     [setContent]: (state, action) => {
