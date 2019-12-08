@@ -1,4 +1,6 @@
-import {CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_PUBLIC, ONCLICK_IS_DRAFT} from "./action_name"
+import { createReducer } from "@reduxjs/toolkit";
+import { changeText, changeReadableGroup, changeEditableGroup, onClickEdit, onClickCancel, onClickIsDraft, onClickIsPublic, setContent } from "./Actions";
+
 const initialState = {
     markdown: "",
     default_markdown: "",
@@ -15,88 +17,81 @@ const initialState = {
     is_draft: false,
     is_public: false,
 };
-const MdEditorReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case CHANGE_TEXT:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                markdown: action.payload.text,
-                is_changed: true,
-                textHeight: action.payload.textHeight + "px"
-            });
-        case CHANGE_READABLE_GROUP:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                readable_group_id: action.payload.readable_group_id,
-                is_changed: true
-            });
-        case CHANGE_EDITABLE_GROUP:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                editable_group_id: action.payload.editable_group_id,
-                is_changed: true
-            });
 
-        case ONCLICK_EDIT:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                is_edit: true
-            });
-
-        case ONCLICK_CANCEL:
-            return Object.assign({}, state, {
-                markdown: state.default_markdown,
-                is_edit: false,
-                is_changed: false,
-                readable_group_id: state.default_readable_group_id,
-                editable_group_id: state.default_editable_group_id,
-                is_draft: state.default_is_draft,
-                is_public: state.default_is_public
-            });
-        case ONCLICK_IS_DRAFT:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                is_draft: !state.is_draft,
-                is_changed: true
-            });
-        
-        case ONCLICK_IS_PUBLIC:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                is_public: !state.is_public,
-                is_changed: true
-            });
-
-        case SET_CONTENT:
-            return Object.assign({}, state, {
-                markdown: action.payload.markdown,
-                default_markdown: action.payload.markdown,
-                usergroups: action.payload.usergroups,
-                is_editable: action.payload.is_editable,
-                readable_group_id: action.payload.default_readable_group_id,
-                editable_group_id: action.payload.default_editable_group_id,
-                default_readable_group_id: action.payload.default_readable_group_id,
-                default_editable_group_id: action.payload.default_editable_group_id,
-                default_is_draft: action.payload.default_is_draft,
-                default_is_public: action.payload.default_is_public,
-                is_draft: action.payload.default_is_draft,
-                is_public: action.payload.default_is_public,
-                is_edit: false
-            });
-        default:
+const MdEditorReducer = createReducer(initialState, {
+    [changeText]: (state, action) => {
+        if (state.is_editable == false) {
             return state;
+        }
+        state.markdown = action.payload.text;
+        state.is_changed = true;
+        state.textHeight = action.payload.textHeight + "px";
+        return state;
+    },
+    [changeReadableGroup]: (state, action) => {
+        if (state.is_editable == false) {
+            return state;
+        }
+        state.readable_group_id = action.payload.readable_group_id;
+        state.is_changed = true;
+        return state;
+    },
+    [changeEditableGroup]: (state, action) => {
+        if (state.is_editable == false) {
+            return state;
+        }
+        state.editable_group_id = action.payload.editable_group_id;
+        state.is_changed = true;
+        return state;
+    },
+    [onClickEdit]: state => {
+        if (state.is_editable == false) {
+            return state;
+        }
+        state.is_edit = true;
+        return state;
+    },
+    [onClickCancel]: state => {
+        state.markdown = state.default_markdown;
+        state.is_edit = false;
+        state.is_changed = false;
+        state.readable_group_id = state.default_readable_group_id;
+        state.editable_group_id = state.default_editable_group_id;
+        state.is_draft = state.default_is_draft;
+        state.is_public = state.default_is_public;
+        return state;
+    },
+    [onClickIsDraft]: state => {
+        if (state.is_editable == false) {
+            return state;
+        }
+        state.is_draft = !state.is_draft;
+        state.is_changed = true;
+        return state;
+    },
+    [onClickIsPublic]: state => {
+        if (state.is_editable == false) {
+            return state;
+        }
+        state.is_public = !state.is_public;
+        state.is_changed = true;
+        return state;
+    },
+    [setContent]: (state, action) => {
+        state.markdown = action.payload.markdown;
+        state.default_markdown = action.payload.markdown;
+        state.usergroups = action.payload.usergroups;
+        state.is_editable = action.payload.is_editable;
+        state.readable_group_id = action.payload.default_readable_group_id;
+        state.editable_group_id = action.payload.default_editable_group_id;
+        state.default_readable_group_id = action.payload.default_readable_group_id;
+        state.default_editable_group_id = action.payload.default_editable_group_id;
+        state.default_is_draft = action.payload.default_is_draft;
+        state.default_is_public = action.payload.default_is_public;
+        state.is_draft = action.payload.default_is_draft;
+        state.is_public = action.payload.default_is_public;
+        state.is_edit = false
+        return state;
     }
-};
+});
 export default MdEditorReducer;

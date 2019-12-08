@@ -8,7 +8,14 @@ import { hidden } from 'ansi-colors';
 import { connect } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";
-import Actions from "./Actions";
+import {
+    onClickEdit,
+    onClickCancel,
+    onClickIsDraft,
+    onClickIsPublic,
+    changeReadableGroup,
+    changeEditableGroup,
+} from "./Actions";
 
 const MdEditor = ({
     usergroups,
@@ -130,10 +137,10 @@ export default connect((state) => ({
     is_draft: state.is_draft,
     is_public: state.is_public,
 }), {
-    handleOnClickEdit: Actions.onClickEdit,
-    handleOnClickCancel: Actions.onClickCancel,
-    handleOnClickIsDraft: Actions.onClickIsDraft,
-    handleOnClickIsPublic: Actions.onClickIsPublic,
-    handleChangeReadableGroup: Actions.changeReadableGroup,
-    handleChangeEditableGroup: Actions.changeEditableGroup,
+    handleOnClickEdit: onClickEdit,
+    handleOnClickCancel: onClickCancel,
+    handleOnClickIsDraft: onClickIsDraft,
+    handleOnClickIsPublic: onClickIsPublic,
+    handleChangeReadableGroup: changeReadableGroup,
+    handleChangeEditableGroup: changeEditableGroup,
 })(MdEditor);

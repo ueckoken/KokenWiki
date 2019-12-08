@@ -1,77 +1,42 @@
-import { CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_DRAFT, ONCLICK_IS_PUBLIC } from "./action_name";
+import { createAction } from "@reduxjs/toolkit";
 
-const Actions = {
-    changeText(e) {
-        return {
-            type: CHANGE_TEXT,
-            payload: {
-                text: e.target.value,
-            }
-        }
-    },
-    onClickEdit(e) {
-        return {
-            type: ONCLICK_EDIT,
-            payload: {
-            }
-        }
-    },
+export const changeText = createAction("CHANGE_TEXT", e => ({
+    payload: {
+        text: e.target.value,
+    }
+}));
 
-    onClickCancel(e) {
-        return {
-            type: ONCLICK_CANCEL,
-            payload: {
-            }
-        }
-    },
-    
-    changeReadableGroup(e){
-        return {
-            type: CHANGE_READABLE_GROUP,
-            payload: {
-                readable_group_id: e.target.value
-            }
-        }
-    },
-    
-    changeEditableGroup(e){
-        return {
-            type: CHANGE_EDITABLE_GROUP,
-            payload: {
-                editable_group_id: e.target.value
-            }
-        }
-    },
-    onClickIsDraft(e){
-        return {
-            type: ONCLICK_IS_DRAFT,
-            payload: {
-            }
-        }
-    },
-    onClickIsPublic(e){
-        return {
-            type: ONCLICK_IS_PUBLIC,
-            payload: {
-            }
-        }
-    },
-    setContent(content,usergroups,is_editable,default_readable_group_id,default_editable_group_id,default_is_draft,default_is_public) {
-        if(!Array.isArray(usergroups)){
-            usergroups = [];
-        }
-        return {
-            type: SET_CONTENT,
-            payload: {
-                markdown: content,
-                usergroups: usergroups,
-                is_editable: is_editable,
-                default_readable_group_id: default_readable_group_id,
-                default_editable_group_id: default_editable_group_id,
-                default_is_draft: default_is_draft,
-                default_is_public: default_is_public,
-            }
+export const onClickEdit = createAction("ONCLICK_EDIT");
+export const onClickCancel = createAction("ONCLICK_CANCEL");
+
+export const changeReadableGroup = createAction("CHANGE_READABLE_GROUP", e => ({
+    payload: {
+        readable_group_id: e.target.value
+    }
+}));
+
+export const changeEditableGroup = createAction("CHANGE_EDITABLE_GROUP", e => ({
+    payload: {
+        editable_group_id: e.target.value
+    }
+}));
+
+
+export const onClickIsDraft = createAction("ONCLICK_IS_DRAFT");
+export const onClickIsPublic = createAction("ONCLICK_IS_PUBLIC");
+export const setContent = createAction("SET_CONTENT", (content, usergroups, is_editable, default_readable_group_id, default_editable_group_id, default_is_draft, default_is_public) => {
+    if (!Array.isArray(usergroups)) {
+        usergroups = [];
+    }
+    return {
+        payload: {
+            markdown: content,
+            usergroups: usergroups,
+            is_editable: is_editable,
+            default_readable_group_id: default_readable_group_id,
+            default_editable_group_id: default_editable_group_id,
+            default_is_draft: default_is_draft,
+            default_is_public: default_is_public,
         }
     }
-}
-export default Actions;
+});

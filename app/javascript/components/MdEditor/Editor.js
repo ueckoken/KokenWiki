@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { end } from 'worker-farm';
 import TextareaAutosize from 'react-autosize-textarea';
-import Actions from "./Actions"
+import { changeText } from "./Actions"
 
 export const Editor = ({ markdown, handleChangeText }) => (
     <div>
@@ -19,5 +19,5 @@ export const Editor = ({ markdown, handleChangeText }) => (
 export default connect(state => ({
     markdown: state.markdown
 }), {
-    handleChangeText: Actions.changeText
+    handleChangeText: changeText
 })(Editor);

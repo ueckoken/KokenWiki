@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import MdEditorReducer from "./MdEditorReducer"
-import Actions from "./Actions"
+import { setContent } from "./Actions"
 import MdEditor from "./MdEditor"
 
 const store = createStore(MdEditorReducer);
@@ -18,7 +18,7 @@ export default ({
 }) => {
     useEffect(() => {
         store.dispatch(
-            Actions.setContent(
+            setContent(
                 markdown,
                 usergroups,
                 editable,
