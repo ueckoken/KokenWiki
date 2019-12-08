@@ -102,6 +102,7 @@ const MdEditorReducer = (state = initialState, action) => {
                 default_is_public: action.payload.default_is_public,
                 is_draft: action.payload.default_is_draft,
                 is_public: action.payload.default_is_public,
+                is_edit: false
             });
         default:
             return state;
