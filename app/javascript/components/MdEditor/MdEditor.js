@@ -3,15 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect, useSelector } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";
-import {
-    onClickEdit,
-    onClickCancel,
-    onClickIsDraft,
-    onClickIsPublic,
-    changeReadableGroup,
-    changeEditableGroup,
-} from "./Actions";
-import { isChangedSelector } from "./selectors";
+import { actions, selectors } from "./redux";
 
 const MdEditor = ({
     usergroups,
@@ -28,7 +20,7 @@ const MdEditor = ({
     handleChangeReadableGroup,
     handleChangeEditableGroup,
   }) => {
-    const is_changed = useSelector(isChangedSelector);
+    const is_changed = useSelector(selectors.isChanged);
     if (!is_edit) {
         return (
             <div>
@@ -133,10 +125,10 @@ export default connect((state) => ({
     is_draft: state.is_draft,
     is_public: state.is_public,
 }), {
-    handleOnClickEdit: onClickEdit,
-    handleOnClickCancel: onClickCancel,
-    handleOnClickIsDraft: onClickIsDraft,
-    handleOnClickIsPublic: onClickIsPublic,
-    handleChangeReadableGroup: changeReadableGroup,
-    handleChangeEditableGroup: changeEditableGroup,
+    handleOnClickEdit: actions.onClickEdit,
+    handleOnClickCancel: actions.onClickCancel,
+    handleOnClickIsDraft: actions.onClickIsDraft,
+    handleOnClickIsPublic: actions.onClickIsPublic,
+    handleChangeReadableGroup: actions.changeReadableGroup,
+    handleChangeEditableGroup: actions.changeEditableGroup,
 })(MdEditor);
