@@ -30,59 +30,56 @@ class MdEditor extends React.Component {
         this.props.handleSetContent(root.getAttribute("markdown"),usergroups,is_editable,readable_group_id,editable_group_id,is_draft,is_public);
     }
     render() {
-        return (
-            <React.Fragment>
-                {(!this.props.is_edit)?
+        if (!this.props.is_edit) {
+            return (
                 <div>
                     <button type="button" hidden={!this.props.is_editable} className="btn btn-secondary" onClick={this.props.handleOnClickEdit}>編集</button>
                     <Markdown highlight={!this.props.is_edit}></Markdown>
-                </div>:
+                </div>
+            );
+        }
+        return (
+            <div>
+                <div className="d-xl-none">
+                    <MdEditorSm />
+                </div>
+                <div className="d-none d-xl-flex width100">
+                    <MdEditorLg />
+                </div>
                 <div>
-                    <div className="d-xl-none">
-                        <MdEditorSm>
+                    <label>閲覧可能グループ</label>
+                    <select value={this.props.readable_group_id} name="page[readable_group_id]" className="form-control" onChange={this.props.handleChangeReadableGroup}>
+                        <option key={0} value={0}>部員全員</option>
+                        
+                        {this.props.usergroups.map((usergroup,i)=>{
+                            return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
+                        })}
+                    </select>
+                </div>
+                <div>
+                    <label>編集可能グループ</label>
+                    <select value={this.props.editable_group_id} name="page[editable_group_id]" className="form-control" onChange={this.props.handleChangeEditableGroup}>
+                        <option value={0}>部員全員</option>
+                        
 
-                        </MdEditorSm>
-                    </div>
-                    <div className="d-none d-xl-flex width100">
-                        <MdEditorLg>
-
-                        </MdEditorLg>
-                    </div>
-                    <div>
-                        <label>閲覧可能グループ</label>
-                        <select value={this.props.readable_group_id} name="page[readable_group_id]" className="form-control" onChange={this.props.handleChangeReadableGroup}>
-                            <option key={0} value={0}>部員全員</option>
-                            
-                            {this.props.usergroups.map((usergroup,i)=>{
-                                return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
-                            })}
-                        </select>
-                    </div>
-                    <div>
-                        <label>編集可能グループ</label>
-                        <select value={this.props.editable_group_id} name="page[editable_group_id]" className="form-control" onChange={this.props.handleChangeEditableGroup}>
-                            <option value={0}>部員全員</option>
-                            
-
-                            {this.props.usergroups.map((usergroup,i)=>{
-                                return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
-                            })}
-                        </select>
-                    </div>
-                    <div className="form-check">
-                        <input type="checkbox" className="form-check-input" checked={this.props.is_draft} onChange={this.props.handleOnClickIsDraft}/>
-                        <label className="form-check-label">下書き</label>
-                        <input type="hidden" name="page[is_draft]" value={this.props.is_draft} />
-                    </div>
-                    <div className="form-check">
-                        <input type="checkbox" className="form-check-input" checked={this.props.is_public} onChange={this.props.handleOnClickIsPublic}/>
-                        <label className="form-check-label">一般公開</label>
-                        <input type="hidden" name="page[is_public]" value={this.props.is_public} />
-                    </div>
-                    <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickCancel}>破棄</button>
-                    <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!this.props.is_changed}></input>
-                </div>}
-            </React.Fragment>
+                        {this.props.usergroups.map((usergroup,i)=>{
+                            return <option value={usergroup.id} key={i+1}>{usergroup.name}</option>
+                        })}
+                    </select>
+                </div>
+                <div className="form-check">
+                    <input type="checkbox" className="form-check-input" checked={this.props.is_draft} onChange={this.props.handleOnClickIsDraft}/>
+                    <label className="form-check-label">下書き</label>
+                    <input type="hidden" name="page[is_draft]" value={this.props.is_draft} />
+                </div>
+                <div className="form-check">
+                    <input type="checkbox" className="form-check-input" checked={this.props.is_public} onChange={this.props.handleOnClickIsPublic}/>
+                    <label className="form-check-label">一般公開</label>
+                    <input type="hidden" name="page[is_public]" value={this.props.is_public} />
+                </div>
+                <button type="button" className="btn btn-secondary" onClick={this.props.handleOnClickCancel}>破棄</button>
+                <input type="submit" value="保存" className="btn btn-primary" style={{ float: "right" }} hidden={!this.props.is_changed}></input>
+            </div>
         );
     }
     /*onChangeText(e) {
