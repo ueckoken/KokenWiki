@@ -72,12 +72,9 @@ const MdEditor = ({
     );
 }
 
-const MdEditorSm = ({ tabIndex, handleChangeTab }) => (
+const MdEditorSm = () => (
     <form>
-        <Tabs
-            onSelect={handleChangeTab}
-            selectedIndex={tabIndex}
-        >
+        <Tabs>
 
             <TabList>
                 <Tab>プレビュー</Tab>
@@ -125,7 +122,6 @@ const MdEditorLg = () => (
 
 export default connect((state) => ({
     usergroups: state.usergroups,
-    tabIndex: state.tabIndex,
     is_edit: state.is_edit,
     is_changed: state.is_changed,
     is_editable: state.is_editable,
@@ -134,7 +130,6 @@ export default connect((state) => ({
     is_draft: state.is_draft,
     is_public: state.is_public,
 }), {
-    handleChangeTab: Actions.changeTab,
     handleOnClickEdit: Actions.onClickEdit,
     handleOnClickCancel: Actions.onClickCancel,
     handleOnClickIsDraft: Actions.onClickIsDraft,

@@ -1,9 +1,8 @@
-import {CHANGE_TAB,CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_PUBLIC, ONCLICK_IS_DRAFT} from "./action_name"
+import {CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_PUBLIC, ONCLICK_IS_DRAFT} from "./action_name"
 const initialState = {
     markdown: "",
     default_markdown: "",
     usergroups: [],
-    tabIndex: 1,
     is_edit: false,
     is_changed: false,
     is_editable: false,
@@ -18,13 +17,6 @@ const initialState = {
 };
 const MdEditorReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CHANGE_TAB:
-            if(state.is_editable == false){
-                return state;
-            }
-            return Object.assign({}, state, {
-                tabIndex: action.payload.tabIndex,
-            });
         case CHANGE_TEXT:
             if(state.is_editable == false){
                 return state;
@@ -62,7 +54,6 @@ const MdEditorReducer = (state = initialState, action) => {
         case ONCLICK_CANCEL:
             return Object.assign({}, state, {
                 markdown: state.default_markdown,
-                tabIndex: 0,
                 is_edit: false,
                 is_changed: false,
                 readable_group_id: state.default_readable_group_id,

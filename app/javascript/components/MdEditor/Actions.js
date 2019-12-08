@@ -1,4 +1,4 @@
-import {CHANGE_TAB, CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_DRAFT, ONCLICK_IS_PUBLIC } from "./action_name";
+import { CHANGE_TEXT,ONCLICK_EDIT,ONCLICK_CANCEL,SET_CONTENT, CHANGE_READABLE_GROUP, CHANGE_EDITABLE_GROUP, ONCLICK_IS_DRAFT, ONCLICK_IS_PUBLIC } from "./action_name";
 
 const Actions = {
     changeText(e) {
@@ -6,14 +6,6 @@ const Actions = {
             type: CHANGE_TEXT,
             payload: {
                 text: e.target.value,
-            }
-        }
-    },
-    changeTab(index, last) {
-        return {
-            type: CHANGE_TAB,
-            payload: {
-                tabIndex: index,
             }
         }
     },
