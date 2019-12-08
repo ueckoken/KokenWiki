@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import marked from 'marked';
 import * as escape from 'escape-html';
 import { connect } from 'react-redux';
@@ -103,9 +103,8 @@ marked.Renderer.prototype.image = function(href, title, text) {
     }                                                                                                                         
     return ('<img src="' + href + '" alt="' + text + '" ' + size + '>');                                                      
 };
-export class Markdown extends React.Component {
-    constructor(props) {
-        
+export const Markdown = ({ markdown }) => {
+    useEffect(() => {
         marked.setOptions({
             gfm: true,
             tables: true,
@@ -116,32 +115,14 @@ export class Markdown extends React.Component {
             smartypants: false,
             langPrefix: '',
         });
-        super(props);
-        this.myRef = React.createRef();
-    }
-    componentDidMount() {
-      //this.updateCodeSyntaxHighlighting();
-    }
-  
-    componentDidUpdate() {
-      //this.updateCodeSyntaxHighlighting();
-    }
-  
-    updateCodeSyntaxHighlighting = () => {
-        /*if(!this.props.highlight){return;}
-        this.myRef.current.querySelectorAll("pre code").forEach(block => {
-            hljs.highlightBlock(block);
-        });*/
-    };
-  
-    render() {
-        const html = marked((this.props.markdown))
-        return (
-            <div ref={this.myRef} className="markdown-body" dangerouslySetInnerHTML={{
-                __html: html
-            }}>
-            </div>);
-    }
+    }, []);
+    const html = marked(markdown)
+    return (
+        <div className="markdown-body" dangerouslySetInnerHTML={{
+            __html: html
+        }}>
+        </div>
+    );
 };
 function html_escape(str) {
     if (!str) return "";
