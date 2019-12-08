@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {mapStateToProps,mapDispatchToProps} from "./connector"
 import { end } from 'worker-farm';
 import TextareaAutosize from 'react-autosize-textarea';
+import Actions from "./Actions"
 export class Editor extends React.Component {
     constructor(props) {
         super(props);
@@ -21,4 +21,8 @@ export class Editor extends React.Component {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(state => ({
+    markdown: state.markdown
+}), {
+    handleChangeText: Actions.changeText
+})(Editor);

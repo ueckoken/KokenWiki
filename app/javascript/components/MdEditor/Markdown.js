@@ -2,7 +2,6 @@ import React from 'react'
 import marked from 'marked';
 import * as escape from 'escape-html';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps} from "./connector";
 //import hljs from 'highlight.js';
 //import 'highlight.js/styles/vs.css';
 //hljs.configure({useBR: true});
@@ -168,4 +167,6 @@ function amp_escape(str) {
       return escape[match];
     });
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Markdown);
+export default connect(state => ({
+    markdown: state.markdown
+}), null)(Markdown);

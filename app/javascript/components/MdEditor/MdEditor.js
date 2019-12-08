@@ -8,7 +8,7 @@ import { hidden } from 'ansi-colors';
 import { connect } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";
-import { mapStateToProps, mapDispatchToProps } from "./connector";
+import Actions from "./Actions";
 
 class MdEditor extends React.Component {
     render() {
@@ -140,4 +140,22 @@ class MdEditorLg extends React.Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MdEditor)
+export default connect((state) => ({
+    usergroups: state.usergroups,
+    tabIndex: state.tabIndex,
+    is_edit: state.is_edit,
+    is_changed: state.is_changed,
+    is_editable: state.is_editable,
+    readable_group_id: state.readable_group_id,
+    editable_group_id: state.editable_group_id,
+    is_draft: state.is_draft,
+    is_public: state.is_public,
+}), {
+    handleChangeTab: Actions.changeTab,
+    handleOnClickEdit: Actions.onClickEdit,
+    handleOnClickCancel: Actions.onClickCancel,
+    handleOnClickIsDraft: Actions.onClickIsDraft,
+    handleOnClickIsPublic: Actions.onClickIsPublic,
+    handleChangeReadableGroup: Actions.changeReadableGroup,
+    handleChangeEditableGroup: Actions.changeEditableGroup,
+})(MdEditor);
