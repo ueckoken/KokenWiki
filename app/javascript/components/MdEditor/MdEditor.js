@@ -19,7 +19,7 @@ const MdEditor = ({
     handleOnClickIsPublic,
     handleChangeReadableGroup,
     handleChangeEditableGroup,
-  }) => {
+}) => {
     const is_changed = useSelector(selectors.isChanged);
     if (!is_edit) {
         return (
