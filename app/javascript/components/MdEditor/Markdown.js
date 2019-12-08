@@ -138,7 +138,7 @@ export class Markdown extends React.Component {
     render() {
         const html = marked((this.props.markdown))
         return (
-            <div ref={this.myRef} className="" dangerouslySetInnerHTML={{
+            <div ref={this.myRef} className="markdown-body" dangerouslySetInnerHTML={{
                 __html: html
             }}>
             </div>);
