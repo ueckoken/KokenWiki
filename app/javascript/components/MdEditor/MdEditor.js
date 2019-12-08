@@ -1,10 +1,5 @@
-import marked, { options } from 'marked';
-import PropTypes from 'prop-types'
 import React from 'react'
-import ReactDOM from 'react-dom'
-import * as escape from 'escape-html';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { hidden } from 'ansi-colors';
 import { connect, useSelector } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { end } from 'worker-farm';
 import TextareaAutosize from 'react-autosize-textarea';
 import { changeText } from "./Actions"
 

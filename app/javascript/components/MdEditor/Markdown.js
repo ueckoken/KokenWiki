@@ -2,9 +2,6 @@ import React, { useEffect } from 'react'
 import marked from 'marked';
 import * as escape from 'escape-html';
 import { connect } from 'react-redux';
-//import hljs from 'highlight.js';
-//import 'highlight.js/styles/vs.css';
-//hljs.configure({useBR: true});
 marked.Parser.prototype.parse = function(src) {
     this.inline = new marked.InlineLexer(src.links, this.options)
     this.inlineText = new marked.InlineLexer(
@@ -124,30 +121,7 @@ export const Markdown = ({ markdown }) => {
         </div>
     );
 };
-function html_escape(str) {
-    if (!str) return "";
-    return str.replace(/[<>&"'`]/g, function(match) {
-      const escape = {
-        '<': '&lt;',
-        '>': '&gt;',
-        '&': '&amp;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '`': '&#x60;'
-      };
-      return escape[match];
-    });
-}
 
-function amp_escape(str) {
-    if (!str) return "";
-    return str.replace(/[&]/g, function(match) {
-      const escape = {
-        '&': '&amp;',
-      };
-      return escape[match];
-    });
-}
 export default connect(state => ({
     markdown: state.markdown
 }), null)(Markdown);
