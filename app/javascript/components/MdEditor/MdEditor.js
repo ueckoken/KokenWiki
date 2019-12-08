@@ -5,30 +5,12 @@ import ReactDOM from 'react-dom'
 import * as escape from 'escape-html';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { hidden } from 'ansi-colors';
-import { Provider, connect } from 'react-redux';
-import { createStore } from 'redux';
+import { connect } from 'react-redux';
 import Markdown from "./Markdown";
 import Editor from "./Editor";
 import { mapStateToProps, mapDispatchToProps } from "./connector";
-import MdEditorReducer from "./MdEditorReducer"
-import Actions from "./Actions";
-
 
 class MdEditor extends React.Component {
-    
-    constructor(props) {
-        super(props);
-    }
-    componentDidMount() {
-        const root = document.getElementById("mdEditor");
-        const usergroups = JSON.parse(root.getAttribute("usergroups"));
-        const is_editable = (root.getAttribute("editable") == "true");
-        const readable_group_id = Number(root.getAttribute("readable_group_id"));
-        const editable_group_id = Number(root.getAttribute("editable_group_id"));
-        const is_draft = (root.getAttribute("is_draft") == "true");
-        const is_public = (root.getAttribute("is_public") == "true");
-        this.props.handleSetContent(root.getAttribute("markdown"),usergroups,is_editable,readable_group_id,editable_group_id,is_draft,is_public);
-    }
     render() {
         if (!this.props.is_edit) {
             return (
@@ -89,7 +71,6 @@ class MdEditor extends React.Component {
         });
     }*/
 }
-MdEditor = connect(mapStateToProps, mapDispatchToProps)(MdEditor)
 
 class MdEditorSm extends React.Component{
 
@@ -159,14 +140,4 @@ class MdEditorLg extends React.Component {
     }
 }
 
-let store = createStore(MdEditorReducer);
-
-export default () => {
-    ReactDOM.render(
-        <Provider store={store}>
-            <MdEditor />
-        </Provider>,
-        document.getElementById("mdEditor")
-    )
-}
-//export default MdEditor;
+export default connect(mapStateToProps, mapDispatchToProps)(MdEditor)

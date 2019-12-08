@@ -12,14 +12,21 @@
         <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
         <p>last edited by <%=if @page.user != nil then @page.user.user_id else "???" end%></p>
-        <%#react_component("MdEditor",{markdown:"マークダウン"})%>
         <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
                 <%form.submit "削除", {class: "btn btn-danger", style: "float:right;", data:{confirm: "本当に削除しますか"}}%>
             <%end%>
         <%end%>
         <%=form_with scope: :page, method: :put do%>
-        <div id="mdEditor" is_draft="<%=@page.is_draft%>" is_public="<%=@page.is_public%>" readable_group_id="<%=@page.readable_group_id%>" editable_group_id="<%=@page.editable_group_id%>" editable="<%=@editable%>" markdown="<%=@page.content%>" usergroups="<%=if current_user != nil then current_user.usergroups.select(:id,:name).to_json else [] end%>"></div>
+        <%= react_component("MdEditor",
+            markdown: @page.content,
+            is_draft: @page.is_draft,
+            is_public: @page.is_public,
+            readable_group_id: @page.readable_group_id,
+            editable_group_id: @page.editable_group_id,
+            editable: @editable,
+            usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
+        )%>
         <%end%>
         <!--こめんと-->
         <h3>コメント</h3>
@@ -74,4 +81,3 @@
         <%=render partial: "pages/right"%>
     </div>
 </div>
-<%= javascript_pack_tag "show_page"%>
