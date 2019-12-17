@@ -2,26 +2,26 @@ class UsergroupsController < ApplicationController
   before_action :authenticate_user!
   def index
     force_trailing_slash
-    @usergroups=Usergroup.all
-    @users=User.all
+    @usergroups = Usergroup.all
+    @users = User.all
   end
   def new
-    @users=User.all
+    @users = User.all
   end
   def create
-    usergroup_param = params.require(:usergroup).permit(:name, check_id:[])
+    usergroup_param = params.require(:usergroup).permit(:name, check_id: [])
     name = usergroup_param[:name]
-    usergroup=Usergroup.new(
+    usergroup = Usergroup.new(
       create_user: current_user,
       name: name
     )
     usergroup_param[:check_id].each do |s|
-      user = User.find_by(id:s.to_i)
+      user = User.find_by(id: s.to_i)
       if user != nil
-        usergroup.users<<user
+        usergroup.users << user
       end
     end
-    if usergroup.users.size==0
+    if usergroup.users.size == 0
       raise ActiveRecord::RecordNotFound
     end
     respond_to do |format|
@@ -35,44 +35,44 @@ class UsergroupsController < ApplicationController
     end
   end
   def show
-    #force_trailing_slash
-    id=params[:id]
-    @usergroup=Usergroup.find(id.to_i)
+    # force_trailing_slash
+    id = params[:id]
+    @usergroup = Usergroup.find(id.to_i)
     if is_editable? @usergroup
       @editable = true
     end
   end
   def edit
-    id=params[:id]
-    
-    @usergroup=Usergroup.find(id.to_i)
+    id = params[:id]
+
+    @usergroup = Usergroup.find(id.to_i)
     if !is_editable? @usergroup
       raise ActiveRecord::RecordNotFound
       return
     end
-    @users=User.all
+    @users = User.all
   end
   def update
-    usergroup=Usergroup.find(params[:id])
+    usergroup = Usergroup.find(params[:id])
     if ! is_editable? usergroup
       raise ActiveRecord::RecordNotFound
       return
     end
-    #usergroup.update(
+    # usergroup.update(
     #  name:params[:usergroup][:name]
-    #)
-    usergroup_param = params.require(:usergroup).permit(check_id:[])
-    users=usergroup.users.all.to_ary
+    # )
+    usergroup_param = params.require(:usergroup).permit(check_id: [])
+    users = usergroup.users.all.to_ary
     usergroup.users.clear
     usergroup_param[:check_id].each do |s|
-      user =User.find_by(id:s.to_i)
-      if(user)
-        usergroup.users<<user
+      user = User.find_by(id: s.to_i)
+      if user
+        usergroup.users << user
       end
     end
     if usergroup.users.size == 0
       users.each do |user|
-        usergroup.users<<user
+        usergroup.users << user
       end
       raise ActiveRecord::RecordNotFound
     end
@@ -83,9 +83,9 @@ class UsergroupsController < ApplicationController
   end
   def destroy
     id = params[:id]
-    
-    usergroup=Usergroup.find(id.to_i)
-    if(is_editable? usergroup)
+
+    usergroup = Usergroup.find(id.to_i)
+    if is_editable? usergroup
       usergroup.destroy!
     else
 
@@ -95,7 +95,7 @@ class UsergroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  def is_editable? usergroup
+  def is_editable?(usergroup)
     if !user_signed_in?
       return false
     end
@@ -105,7 +105,7 @@ class UsergroupsController < ApplicationController
     if usergroup == nil
       return false
     end
-    if ((usergroup.users.include? current_user))
+    if usergroup.users.include? current_user
       return true
     end
     return false
