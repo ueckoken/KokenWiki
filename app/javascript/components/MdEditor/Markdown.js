@@ -1,11 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import marked from 'marked';
 import * as escape from 'escape-html';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps} from "./connector";
-//import hljs from 'highlight.js';
-//import 'highlight.js/styles/vs.css';
-//hljs.configure({useBR: true});
 marked.Parser.prototype.parse = function(src) {
     this.inline = new marked.InlineLexer(src.links, this.options)
     this.inlineText = new marked.InlineLexer(
@@ -104,9 +100,8 @@ marked.Renderer.prototype.image = function(href, title, text) {
     }                                                                                                                         
     return ('<img src="' + href + '" alt="' + text + '" ' + size + '>');                                                      
 };
-export class Markdown extends React.Component {
-    constructor(props) {
-        
+export const Markdown = ({ markdown }) => {
+    useEffect(() => {
         marked.setOptions({
             gfm: true,
             tables: true,
@@ -117,55 +112,16 @@ export class Markdown extends React.Component {
             smartypants: false,
             langPrefix: '',
         });
-        super(props);
-        this.myRef = React.createRef();
-    }
-    componentDidMount() {
-      //this.updateCodeSyntaxHighlighting();
-    }
-  
-    componentDidUpdate() {
-      //this.updateCodeSyntaxHighlighting();
-    }
-  
-    updateCodeSyntaxHighlighting = () => {
-        /*if(!this.props.highlight){return;}
-        this.myRef.current.querySelectorAll("pre code").forEach(block => {
-            hljs.highlightBlock(block);
-        });*/
-    };
-  
-    render() {
-        const html = marked((this.props.markdown))
-        return (
-            <div ref={this.myRef} className="markdown-body" dangerouslySetInnerHTML={{
-                __html: html
-            }}>
-            </div>);
-    }
+    }, []);
+    const html = marked(markdown)
+    return (
+        <div className="markdown-body" dangerouslySetInnerHTML={{
+            __html: html
+        }}>
+        </div>
+    );
 };
-function html_escape(str) {
-    if (!str) return "";
-    return str.replace(/[<>&"'`]/g, function(match) {
-      const escape = {
-        '<': '&lt;',
-        '>': '&gt;',
-        '&': '&amp;',
-        '"': '&quot;',
-        "'": '&#39;',
-        '`': '&#x60;'
-      };
-      return escape[match];
-    });
-}
 
-function amp_escape(str) {
-    if (!str) return "";
-    return str.replace(/[&]/g, function(match) {
-      const escape = {
-        '&': '&amp;',
-      };
-      return escape[match];
-    });
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Markdown);
+export default connect(state => ({
+    markdown: state.markdown
+}), null)(Markdown);
