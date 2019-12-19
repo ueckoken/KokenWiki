@@ -9,7 +9,6 @@ class Page < ApplicationRecord
   belongs_to :parent, class_name: "Page", optional: true
 
   has_many :update_histories
-  has_many :comments
 
   has_many_attached :files
 

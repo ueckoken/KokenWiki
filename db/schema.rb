@@ -33,16 +33,6 @@ ActiveRecord::Schema.define(version: 2019_12_25_114344) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "page_id"
-    t.text "comment"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["page_id"], name: "index_comments_on_page_id"
-    t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
   create_table "pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "readable_group_id"
     t.bigint "editable_group_id"

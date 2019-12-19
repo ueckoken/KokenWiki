@@ -7,7 +7,6 @@ class User < ApplicationRecord
 
 
   has_many :pages
-  has_many :comments
   has_many :update_histories
 
   has_one_attached :image
