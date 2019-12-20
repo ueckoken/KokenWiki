@@ -11,7 +11,11 @@
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
         <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
-        <p>last edited by <%=if @page.user != nil then @page.user.user_id else "???" end%></p>
+        <p>
+            <%=if @page.user != nil then @page.user.user_id else "???" end%>
+            edited
+            <relative-time datetime="<%=@page.updated_at.strftime("%FT%T%:z")%>"><%=@page.updated_at%></relative-time>
+        </p>
         <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
                 <%form.submit "削除", {class: "btn btn-danger", style: "float:right;", data:{confirm: "本当に削除しますか"}}%>
@@ -73,7 +77,11 @@
         <h3>更新履歴</h3>
         <div>
             <%@page.update_histories.order("created_at DESC").limit(10).each do |hist|%>
-                <p><%=hist.created_at%> edited by <%=if hist.user != nil then hist.user.user_id else "???" end%></p>
+                <p>
+                    <relative-time datetime="<%=hist.created_at.strftime("%FT%T%:z")%>"><%=hist.created_at%></relative-time>
+                    edited by
+                    <%=if hist.user != nil then hist.user.user_id else "???" end%>
+                </p>
             <%end%>
         </div>
     </div>
@@ -81,3 +89,4 @@
         <%=render partial: "pages/right"%>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@github/time-elements@3.0.10/dist/time-elements-legacy.min.js" module async></script>
