@@ -67,7 +67,7 @@ class PagesController < ApplicationController
   end
 
   def render_right
-    @updated_pages = Page.accessible_by(current_ability, :read).order("updated_at DESC").select(:readable_group_id, :is_draft, :updated_at, :path, :user_id).limit(50)
+    @updated_pages = Page.accessible_by(current_ability, :read).order("updated_at DESC").select(:readable_group_id, :updated_at, :path, :user_id).limit(50)
   end
 
   # index
@@ -126,7 +126,6 @@ class PagesController < ApplicationController
         title: title,
         path: path,
         parent: parent,
-        is_draft: false,
         )
     else
       raise MajorError.bad_request
@@ -159,13 +158,12 @@ class PagesController < ApplicationController
     end
     authorize! :write, @page
 
-    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft)
+    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
     success_flag = @page.update(
       user: current_user,
       content: page_params[:content],
       readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
       editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
-      is_draft: page_params[:is_draft],
     )
     respond_to do |format|
       if success_flag

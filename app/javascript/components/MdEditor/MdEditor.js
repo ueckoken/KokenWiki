@@ -9,7 +9,6 @@ const MdEditor = () => {
     const usergroups = useSelector((state) => state.usergroups)
     const readable_group_id = useSelector((state) => state.readable_group_id)
     const editable_group_id = useSelector((state) => state.editable_group_id)
-    const is_draft = useSelector((state) => state.is_draft)
     const is_editable = useSelector((state) => state.is_editable)
     const is_changed = useSelector(selectors.isChanged)
     const is_edit = useSelector((state) => state.is_edit)
@@ -17,7 +16,6 @@ const MdEditor = () => {
     const dispatch = useDispatch()
     const handleOnClickEdit = () => dispatch(actions.onClickEdit())
     const handleOnClickCancel = () => dispatch(actions.onClickCancel())
-    const handleOnClickIsDraft = () => dispatch(actions.onClickIsDraft())
     const handleChangeReadableGroup = (e) =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
     const handleChangeEditableGroup = (e) =>
@@ -98,16 +96,6 @@ const MdEditor = () => {
                         </option>
                     ))}
                 </select>
-            </div>
-            <div className="form-check">
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={is_draft}
-                    onChange={handleOnClickIsDraft}
-                />
-                <label className="form-check-label">下書き</label>
-                <input type="hidden" name="page[is_draft]" value={is_draft} />
             </div>
         </div>
     )

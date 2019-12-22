@@ -14,7 +14,6 @@ export default ({
     editable,
     readable_group_id,
     editable_group_id,
-    is_draft,
 }) => {
     useEffect(() => {
         store.dispatch(
@@ -24,7 +23,6 @@ export default ({
                 is_editable: editable,
                 readable_group_id,
                 editable_group_id,
-                is_draft,
             })
         )
     }, [
@@ -33,7 +31,6 @@ export default ({
         editable,
         readable_group_id,
         editable_group_id,
-        is_draft,
     ])
     return (
         <Provider store={store}>
