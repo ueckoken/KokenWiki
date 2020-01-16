@@ -12,9 +12,7 @@
         <div><%=render partial: "pages/pankuzu"%></div>
         <h1><%=@page.title%></h1>
         <p>
-            <%=if @page.user != nil then @page.user.user_id else "???" end%>
-            edited
-            <relative-time datetime="<%=@page.updated_at.strftime("%FT%T%:z")%>"><%=@page.updated_at%></relative-time>
+            <%= render "update-timestamp", history: @page %>
         </p>
         <%if @page.children.size == 0 && @editable%>
             <%=form_with scope: :page, method: :delete do |form|%>
@@ -75,15 +73,26 @@
             <%end%>
         <%end%>
         <h3>更新履歴</h3>
-        <div>
-            <%@page.update_histories.order("created_at DESC").limit(10).each do |hist|%>
-                <p>
-                    <relative-time datetime="<%=hist.created_at.strftime("%FT%T%:z")%>"><%=hist.created_at%></relative-time>
-                    edited by
-                    <%=if hist.user != nil then hist.user.user_id else "???" end%>
-                </p>
+        <ol style="list-style-type: none; padding-left: 0">
+            <%@update_histories.limit(10).each_cons(2) do |newHist, oldHist|%>
+                <li>
+                    <details>
+                        <summary>
+                            <%= render "update-timestamp", history: newHist %>
+                        </summary>
+                        <%= react_component("DiffViewer",
+                            oldValue: oldHist.content,
+                            newValue: newHist.content
+                        )%>
+                    </details>
+                </li>
             <%end%>
-        </div>
+            <%if @update_histories.present?%>
+                <li>
+                    <%= render "update-timestamp", history: @update_histories.last %>
+                </li>
+            <%end%>
+        </ol>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
         <%=render partial: "pages/right"%>

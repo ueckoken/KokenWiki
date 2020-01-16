@@ -141,6 +141,7 @@ class PagesController < ApplicationController
       if is_readable? @page
         @pankuzu = render_pankuzu_list @page.parent
         @editable = is_editable?(@page)
+        @update_histories = @page.update_histories.order("created_at DESC")
         render_right
         render_left
         render "show"
