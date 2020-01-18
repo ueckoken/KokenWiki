@@ -58,9 +58,9 @@
         <h3>ファイル</h3>
         <div>
           <%@page.files.each do |file| %>
-            <%=link_to file.blob.filename.to_s, @path + "/" + file.blob.filename.to_s%>       
+            <%=link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s%>
             <%if @editable%>
-                <%=form_with url:URI.encode(@path + "/" + file.blob.filename.to_s), method: :delete, html:{style: "display:inline"} ,remote: true do |form|%>
+                <%=form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html:{style: "display:inline"} ,remote: true do |form|%>
                     <%form.submit "削除", {style: "display:inline",class: "btn btn-danger btn-sm", data:{confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}}%>
                 <%end%>
             <%end%>

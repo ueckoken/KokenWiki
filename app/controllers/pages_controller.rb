@@ -1,3 +1,7 @@
+require "pathname"
+
+ROOT_PATHNAME = Pathname.new("/")
+
 class PagesController < ApplicationController
   # before_action :set_page, only: [:show, :edit, :update, :destroy]
   # before_action :force_trailing_slash
@@ -47,9 +51,10 @@ class PagesController < ApplicationController
   end
   def show_search
     # とりあえずの表示
-    @path = get_formal_path params[:pages]
+    @pathname = get_formal_pathname params[:pages]
+    @path = @pathname.to_s
     @page = Page.find_by(path: @path)
-    @title = get_title @path
+    @title = get_title @pathname
     if @page != nil
       @pankuzu = render_pankuzu_list @page.parent
     else
@@ -80,30 +85,26 @@ class PagesController < ApplicationController
   end
 
   def render_left
-    path = get_formal_path params[:pages]
-    parent_path = get_parent_path path
-    page = Page.find_by(path: path)
-    if path == ""
-      if page == nil
+    if @pathname == ROOT_PATHNAME
+      if @page == nil
         @brothers_pages = []
         @children_pages = []
-      else
-        @brothers_pages = [page]
-        @children_pages = page.children
+        return
       end
-      @brothers_pages = filter_readable_pages @brothers_pages
-      @children_pages = filter_readable_pages @children_pages
+      @brothers_pages = filter_readable_pages [@page]
+      @children_pages = filter_readable_pages @page.children
       return
     end
-    if page != nil
-      parent = page.parent
+    if @page != nil
+      parent = @page.parent
     else
-      parent = Page.find_by(path: parent_path)
+      parent_pathname = @pathname.parent
+      parent = Page.find_by(path: parent_pathname.to_s)
     end
     # parent shold not null
     @brothers_pages = parent.children
-    if page != nil
-      @children_pages = page.children
+    if @page != nil
+      @children_pages = @page.children
     else
       @children_pages = []
     end
@@ -132,31 +133,13 @@ class PagesController < ApplicationController
     if force_trailing_slash
       return
     end
-    @path = get_formal_path params[:pages]
+    @pathname = get_formal_pathname params[:pages]
+    @path = @pathname.to_s
     @page = Page.find_by(path: @path)
-    @title = get_title @path
-    # render "show"
-    # return
-    if @page != nil
-      if is_readable? @page
-        @pankuzu = render_pankuzu_list @page.parent
-        @editable = is_editable?(@page)
-        @update_histories = @page.update_histories.order("created_at DESC")
-        render_right
-        render_left
-        render "show"
-        return
-      else
-        # if !user_signed_in?
-        #  authenticate_user!
-        # else
-        raise ActiveRecord::RecordNotFound
-        # end
-      end
-    else
-      parent = get_parent_path @path
-      parent = Page.find_by(path: parent)
-      if (parent == nil || !is_readable?(parent)) && @path != ""
+    if @page.nil?
+      parent_pathname = @pathname.parent
+      parent = Page.find_by(path: parent_pathname.to_s)
+      if (parent.nil? || !is_readable?(parent)) && @pathname != ROOT_PATHNAME
         # 見えない人は下部ページ作れないでいいよね
         # if !user_signed_in?
         #  authenticate_user!
@@ -166,30 +149,40 @@ class PagesController < ApplicationController
       end
       # if parent is not found, render 404
       # render createnewpage
-      if user_signed_in?
-        @pankuzu = render_pankuzu_list parent
-        @page = Page.new(title: get_title(params[:pages]))
-        render_left
-        render_right
-        render "new"
-        return
-      else
-        # if get_formal_path(params[:pages]) == ""
-        # authenticate_user!
-        # else
+      if not user_signed_in?
         raise ActiveRecord::RecordNotFound
-        # end
       end
+
+      @title = get_title @pathname
+      @pankuzu = render_pankuzu_list parent
+      @page = Page.new(title: @title, path: @path, parent: parent)
+      render_left
+      render_right
+      render "new"
+      return
     end
+
+    if not is_readable? @page
+      raise ActiveRecord::RecordNotFound
+    end
+
+    @update_histories = @page.update_histories.order(created_at: :desc)
+    @title = @page.title
+    @pankuzu = render_pankuzu_list @page.parent
+    @editable = is_editable?(@page)
+    @update_histories = @page.update_histories.order("created_at DESC")
+
+    render_right
+    render_left
+    render "show"
   end
 
   def show_file
-    path = params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    parentPathname = pathname.parent
     # filename以外のpathを取得
-    filename = get_title path
-    path = get_parent_path path
-    filename += "." + params[:format]
-    page = Page.find_by(path: path)
+    filename = pathname.basename.to_s + "." + params[:format]
+    page = Page.find_by(path: parentPathname.to_s)
     if page == nil || !is_readable?(page)
       raise ActiveRecord::RecordNotFound
     end
@@ -223,11 +216,12 @@ class PagesController < ApplicationController
   end
 
   def create_page
-    path = get_formal_path params[:pages]
-    parent = get_parent_path path
-    parent = Page.find_by(path: parent)
-    title = get_title path
-    if Page.find_by(path: path) == nil && (parent != nil || path == "")
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
+    parent_pathname = pathname.parent
+    parent = Page.find_by(path: parent_pathname.to_s)
+    title = get_title pathname
+    if !Page.exists?(path: path) && (parent != nil || pathname == ROOT_PATHNAME)
       @page = Page.new(
         user: current_user,
         content: "new page",
@@ -244,7 +238,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_back fallback_location: path + "/", notice: 'Page was successfully created.' }
+        format.html { redirect_back fallback_location: path, notice: 'Page was successfully created.' }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -254,7 +248,8 @@ class PagesController < ApplicationController
   end
 
   def create_comment
-    path = get_formal_path params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
     page = Page.find_by(path: path)
     if page == nil || !is_readable?(page)
       raise ActiveRecord::RecordNotFound
@@ -272,7 +267,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
-        format.html { redirect_to path + "/", notice: 'Comment was successfully createed.' }
+        format.html { redirect_to path, notice: 'Comment was successfully createed.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Comment was not created, something wrong' }
@@ -282,7 +277,8 @@ class PagesController < ApplicationController
   end
 
   def create_file
-    path = get_formal_path params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
     page = Page.find_by(path: path)
     if page == nil || !is_readable?(page)
       raise ActiveRecord::RecordNotFound
@@ -307,7 +303,7 @@ class PagesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
-        format.html { redirect_to path + "/", notice: 'Files were successfully uploaded.' }
+        format.html { redirect_to path, notice: 'Files were successfully uploaded.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Files were not updated, something wrong' }
@@ -320,7 +316,8 @@ class PagesController < ApplicationController
 
   # updateはpageのみ
   def update
-    path = get_formal_path params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
     @page = Page.find_by(path: path)
     if @page == nil || !is_editable?(@page)
       raise ActiveRecord::RecordNotFound
@@ -344,7 +341,7 @@ class PagesController < ApplicationController
       if success_flag
         history = UpdateHistory.new(user: @page.user, content: @page.content)
         @page.update_histories << history
-        format.html { redirect_to path + "/", notice: 'Page was successfully updated.' }
+        format.html { redirect_to path, notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: path }
       else
         format.html { render :show, alert: 'Page was not updated, something wrong' }
@@ -366,20 +363,22 @@ class PagesController < ApplicationController
     end
   end
   def destroy_page
-    path = get_formal_path params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
     page = Page.find_by(path: path)
     if page == nil || page.children.size != 0 || !is_editable?(page)
       raise ActiveRecord::RecordNotFound
     end
     page.destroy
     respond_to do |format|
-      format.html { redirect_to path + "/", notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def destroy_comment
-    path = get_formal_path params[:pages]
+    pathname = get_formal_pathname params[:pages]
+    path = pathname.to_s
     page = Page.find_by(path: path)
     if page == nil
       raise ActiveRecord::RecordNotFound
@@ -393,18 +392,17 @@ class PagesController < ApplicationController
       raise ActiveRecord::RecordNotFound
     end
     respond_to do |format|
-      format.html { redirect_to path + "/", notice: 'Comment was successfully destroyed.' }
+      format.html { redirect_to path, notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def destroy_file
-    path = params[:pages]
+    pathname = get_formal_pathname params[:pages]
     # filename以外のpathを取得
-    filename = get_title path
-    path = get_parent_path path
-    filename += "." + params[:format]
-    page = Page.find_by(path: path)
+    filename = pathname.basename.to_s + "." + params[:format]
+    parent_pathname = pathname.parent
+    page = Page.find_by(path: parent_pathname.to_s)
     if page == nil || !is_editable?(page)
       raise ActiveRecord::RecordNotFound
     end
@@ -415,7 +413,7 @@ class PagesController < ApplicationController
       file.purge
     end
 
-    redirect_to path + "/", notice: 'File was successfully destroyed.'
+    redirect_to parent_pathname.to_s, notice: 'File was successfully destroyed.'
   end
 
   # private
@@ -429,49 +427,21 @@ class PagesController < ApplicationController
     params.fetch(:page, {})
   end
 
-  # "/" -> ""
+  # "/" -> "/"
   # "a/b" -> "/a/b"
   # "a/b/"-> "/a/b"
-  def get_formal_path(path)
-    if path == "" || path == "/" || path == nil
-      return ""
+  def get_formal_pathname(path)
+    if path.nil?
+      return Pathname.new("/")
     end
-    if path[0] != "/"
-      path = "/" + path
-    end
-    if path[path.size - 1] == "/"
-      path = path[0, path.size - 1]
-    end
-    # "/a/b"の形になっていることが望まれる
-
-    if path.include?("//") ||
-      path.include?("?") ||
-      path.include?(".") ||
-      path.start_with?("/rails") ||
-      path.start_with?("/settings") then
-      return nil
-    end
-    return path
+    return Pathname.new(params[:pages]).expand_path("/").cleanpath
   end
 
-  def get_parent_path(path)
-    path = get_formal_path path
-    if path == ""
-      return nil
-    end
-    path_ = path.split("/")[0, path.size - 1]
-    parent = path_[0, path_.size - 1].join("/")
-    return parent
-  end
-
-  def get_title(path)
-    path = get_formal_path path
-    if path == ""
+  def get_title(pathname)
+    if pathname == ROOT_PATHNAME
       return ""
     end
-    path_ = path.split("/")
-    title = path_[path_.size - 1]
-    return title
+    return pathname.basename
   end
 
   def is_editable?(page)
