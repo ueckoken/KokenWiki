@@ -35,3 +35,12 @@ body,ol,ul,li{
 a:hover {
   background-color: initial;
 }
+
+.d-contents {
+  display: contents;
+}
+
+.navbar.fixed-top {
+  position: sticky;
+}
+

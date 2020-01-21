@@ -10,12 +10,18 @@
     <%= javascript_pack_tag 'application' %>
     <%#= stylesheet_pack_tag 'application' %>
   </head>
-  <body class = "clearfix container-fluid">
+  <body class="clearfix container-fluid">
     <%=render partial: "layouts/navbar"%>
-    <div >
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-      <%= yield %>
+    <div class="mt-3">
+      <% if notice %>
+        <p class="alert alert-info"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="alert alert-danger"><%= alert %></p>
+      <% end %>
+      <main>
+        <%= yield %>
+      </main>
     </div>
     <%=render partial: "layouts/footer"%>
   </body>
