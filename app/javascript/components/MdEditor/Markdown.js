@@ -128,8 +128,8 @@ export const Markdown = ({ markdown }) => {
             '*': ["style"],
             a: ["href"],
             img: ["src", "width", "height"],
-            video: ["src", "width", "height"],
-            audio: ["src", "width", "height"],
+            video: ["src", "width", "height", "controls"],
+            audio: ["src", "controls"],
             table: ["class"],
         },
         allowedStyles: {
