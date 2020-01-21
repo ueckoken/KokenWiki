@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import marked from 'marked';
 import * as escape from 'escape-html';
+import sanitizeHtml from 'sanitize-html';
 import { connect } from 'react-redux';
 marked.Parser.prototype.parse = function(src) {
     this.inline = new marked.InlineLexer(src.links, this.options)
@@ -100,6 +101,8 @@ marked.Renderer.prototype.image = function(href, title, text) {
     }                                                                                                                         
     return ('<img src="' + href + '" alt="' + text + '" ' + size + '>');                                                      
 };
+
+
 export const Markdown = ({ markdown }) => {
     useEffect(() => {
         marked.setOptions({
@@ -107,14 +110,52 @@ export const Markdown = ({ markdown }) => {
             tables: true,
             breaks: true,
             pedantic: false,
-            sanitize: true,
+            sanitize: false,
             smartLists: true,
             smartypants: false,
             langPrefix: '',
         });
     }, []);
-    const html = marked(markdown)
+
+    let html = marked(markdown)
+    html = sanitizeHtml(html,{
+        allowedTags: [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+        'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+        'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'summary', 'details', 'span', 'img', 'video', 'audio'],
+        disallowedTagsMode: 'escape',
+        allowedSchemes: [ 'http', 'https' ],
+        allowedAttributes: {
+            '*': ["style"],
+            a: ["href"],
+            img: ["src", "width", "height"],
+            video: ["src", "width", "height"],
+            audio: ["src", "width", "height"],
+            table: ["class"],
+        },
+        allowedStyles: {
+            '*': {
+              // Match HEX and RGB
+              'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+              'background-color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+              'text-align': [/^left$/, /^right$/, /^center$/],
+              // Match any number with px, em, or %
+              'font-size': [/^\d+(?:px|em|%)$/]
+            },
+        },
+        
+        allowedClasses: {
+            table: [ 'table', 'table-hober' ],
+        },
+        transformTags: {
+            table: sanitizeHtml.simpleTransform('table', {class: 'table table-hober'}),
+        },
+
+    })
     return (
+        /*<div className="markdown-body">
+            <iframe srcdoc={html} width="100%" height="100%" sandbox="allow-same-origin allow-top-navigation-by-user-activation"/>
+        </div>*/
+        //iframe で制限強めようとしてheight可変わからん
         <div className="markdown-body" dangerouslySetInnerHTML={{
             __html: html
         }}>
