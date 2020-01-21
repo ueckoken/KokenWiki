@@ -32,6 +32,18 @@ body,ol,ul,li{
     overflow-wrap: break-word;
 }
 
+.list-gruop-heading {
+  padding: 0.6rem 1rem;
+  background-color: #f8f9fa ;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.list-group-dense .list-group-item {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
 a:hover {
   background-color: initial;
 }
