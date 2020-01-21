@@ -1,14 +1,26 @@
-<p>
-<%=link_to "ユーザーグループ","/setting/usergroups"%>
-</p>
-<p>
-<%=link_to"プロフィール変更",edit_user_registration_path%>
-</p>
-<%if current_user.is_admin%>
-管理者のみ
-<p>
-<%=link_to "ユーザーのロック","/setting/userlock"%>
-</p><p>
-<%=link_to "管理者の変更","/setting/admin"%>
-</p>
-<%end%>
+<nav class="left-nav">
+  <div class="border rounded">
+    <p class="list-gruop-heading mb-0">設定</p>
+    <ul class="list-group list-group-flush list-group-dense">
+      <li class="list-group-item">
+        <%=link_to "ユーザーグループ","/setting/usergroups"%>
+      </li>
+      <li class="list-group-item">
+        <%=link_to"プロフィール変更",edit_user_registration_path%>
+      </li>
+    </ul>
+  </div>
+  <%if current_user.is_admin%>
+  <div class="admin-setting-nav border rounded mt-3">
+    <p class="list-gruop-heading mb-0">管理者設定</p>
+    <ul class="list-group list-group-flush list-group-dense">
+      <li class="list-group-item">
+        <%=link_to "ユーザーのロック","/setting/userlock"%>
+      </li>
+      <li class="list-group-item">
+        <%=link_to "管理者の変更","/setting/admin"%>
+      </li>
+    </ul>
+  </div>
+  <%end%>
+</nav>
