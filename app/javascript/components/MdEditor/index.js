@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { Provider } from 'react-redux';
-import { configureStore } from "@reduxjs/toolkit";
-import { reducer, actions } from "./redux";
+import React, { useEffect } from "react"
+import { Provider } from "react-redux"
+import { configureStore } from "@reduxjs/toolkit"
+import { reducer, actions } from "./redux"
 import MdEditor from "./MdEditor"
 
 const store = configureStore({
     reducer: reducer
-});
+})
 
 export default ({
     markdown,
@@ -28,7 +28,7 @@ export default ({
                 is_draft,
                 is_public
             })
-        );
+        )
     }, [
         markdown,
         usergroups,
@@ -37,10 +37,10 @@ export default ({
         editable_group_id,
         is_draft,
         is_public
-    ]);
+    ])
     return (
         <Provider store={store}>
             <MdEditor />
         </Provider>
-    );
-};
+    )
+}

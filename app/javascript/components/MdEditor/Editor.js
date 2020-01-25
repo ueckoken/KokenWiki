@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import TextareaAutosize from 'react-autosize-textarea';
-import { actions } from "./redux";
+import React from "react"
+import { connect } from "react-redux"
+import TextareaAutosize from "react-autosize-textarea"
+import { actions } from "./redux"
 
 export const Editor = ({ markdown, handleChangeText }) => (
     <div>
@@ -13,10 +13,13 @@ export const Editor = ({ markdown, handleChangeText }) => (
             name="page[content]"
         />
     </div>
-);
+)
 
-export default connect(state => ({
-    markdown: state.markdown
-}), {
-    handleChangeText: actions.changeText
-})(Editor);
+export default connect(
+    state => ({
+        markdown: state.markdown
+    }),
+    {
+        handleChangeText: actions.changeText
+    }
+)(Editor)
