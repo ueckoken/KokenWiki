@@ -5,23 +5,6 @@ ROOT_PATHNAME = Pathname.new("/")
 class PagesController < ApplicationController
   # before_action :set_page, only: [:show, :edit, :update, :destroy]
   # before_action :force_trailing_slash
-  # settings/以外のgetで呼ばれる
-  # paramによって処理を分ける
-  # 　?search 検索
-  # 　?new   新規ページ作成
-  # 　?edit 既存ページ編集
-  # 　?format /[.]/があった時 ファイル表示
-  # それらの要素がなかった時 ページ表示
-  def show_route
-    if params[:search] != nil
-      show_search
-      return
-    elsif params[:format] == nil
-      show_page
-    else
-      show_file
-    end
-  end
 
   def filter_readable_pages(pages)
     if is_admin? current_user
@@ -204,18 +187,9 @@ class PagesController < ApplicationController
 
   # POST /pages
   # POST /pages.json
-  def create_route
-    authenticate_user!
-    if params[:file] != nil
-      create_file
-    elsif params[:comment] != nil
-      create_comment
-    else
-      create_page
-    end
-  end
 
   def create_page
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     parent_pathname = pathname.parent
@@ -248,6 +222,7 @@ class PagesController < ApplicationController
   end
 
   def create_comment
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
@@ -277,6 +252,7 @@ class PagesController < ApplicationController
   end
 
   def create_file
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
@@ -352,17 +328,9 @@ class PagesController < ApplicationController
 
   # DELETE /pages/1
   # DELETE /pages/1.json
-  def destroy_route
-    authenticate_user!
-    if params[:format] != nil
-      destroy_file
-    elsif params[:comment] != nil
-      destroy_comment
-    else
-      destroy_page
-    end
-  end
+
   def destroy_page
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
@@ -377,6 +345,7 @@ class PagesController < ApplicationController
   end
 
   def destroy_comment
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
@@ -398,6 +367,7 @@ class PagesController < ApplicationController
   end
 
   def destroy_file
+    authenticate_user!
     pathname = get_formal_pathname params[:pages]
     # filename以外のpathを取得
     filename = pathname.basename.to_s + "." + params[:format]
