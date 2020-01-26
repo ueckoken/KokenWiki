@@ -1,6 +1,9 @@
 {
   "name": "kokencontest",
   "private": true,
+  "scripts": {
+    "prettier": "prettier --tab-width 4 --no-semi --write \"app/**/*.{js,jsx}\""
+  },
   "dependencies": {
     "@babel/preset-react": "^7.8.3",
     "@rails/webpacker": "^4.2.2",
@@ -23,6 +26,7 @@
     "sanitize-html": "^1.21.1"
   },
   "devDependencies": {
+    "prettier": "^1.19.1",
     "webpack-dev-server": "^3.10.1"
   }
 }
