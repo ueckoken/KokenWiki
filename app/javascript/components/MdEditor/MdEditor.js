@@ -147,7 +147,14 @@ const MdEditorLg = () => (
                 </TabList>
 
                 <TabPanel>
-                    <Markdown highlight={false} />
+                    <div
+                        style={{
+                            maxHeight: 600,
+                            overflowY: "auto"
+                        }}
+                    >
+                        <Markdown highlight={false} />
+                    </div>
                 </TabPanel>
             </Tabs>
         </div>

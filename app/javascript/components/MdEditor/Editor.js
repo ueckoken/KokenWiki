@@ -1,18 +1,21 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { connect } from "react-redux"
-import TextareaAutosize from "react-autosize-textarea"
 import { actions } from "./redux"
+import MonacoEditor from "react-monaco-editor"
 
 export const Editor = ({ markdown, handleChangeText }) => (
-    <div>
-        <TextareaAutosize
-            className="form-control"
-            row={5}
+    <Fragment>
+        <MonacoEditor
             value={markdown}
-            onChange={e => handleChangeText(e.target.value)}
-            name="page[content]"
+            onChange={newValue => handleChangeText(newValue)}
+            language="markdown"
+            height="600"
+            options={{
+                wordWrap: "on"
+            }}
         />
-    </div>
+        <textarea hidden value={markdown} name="page[content]" />
+    </Fragment>
 )
 
 export default connect(
