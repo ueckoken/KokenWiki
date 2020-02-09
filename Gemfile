@@ -70,7 +70,6 @@ gem 'webpacker'
 
 gem 'devise'
 gem 'devise-bootstrap-views'
-gem 'unicorn'
 
 gem 'rubocop'
 gem 'rubocop-rails'
