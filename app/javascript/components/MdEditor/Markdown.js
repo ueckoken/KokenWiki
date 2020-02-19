@@ -131,6 +131,7 @@ export const Markdown = ({ markdown }) => {
             "nl",
             "li",
             "b",
+            "del",
             "i",
             "strong",
             "em",
