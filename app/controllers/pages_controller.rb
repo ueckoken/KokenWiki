@@ -92,7 +92,7 @@ class PagesController < ApplicationController
         return
       end
       @brothers_pages = filter_readable_pages [@page]
-      @children_pages = filter_readable_pages @page.children
+      @children_pages = filter_readable_pages @page.children.order(:title)
       return
     end
     if @page != nil
@@ -102,9 +102,9 @@ class PagesController < ApplicationController
       parent = Page.find_by(path: parent_pathname.to_s)
     end
     # parent shold not null
-    @brothers_pages = parent.children
+    @brothers_pages = parent.children.order(:title)
     if @page != nil
-      @children_pages = @page.children
+      @children_pages = @page.children.order(:title)
     else
       @children_pages = []
     end
