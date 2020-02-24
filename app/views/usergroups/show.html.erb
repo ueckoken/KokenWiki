@@ -11,7 +11,7 @@
         
         <h3><%=@usergroup.name%></h3>
         <div style= "float:left;">
-            <%=button_to "編集",{:action => "edit"},:class=>"btn btn-default",:method=>:get %>
+            <%=link_to "編集", edit_usergroup_path(@usergroup), :class=>"btn btn-default"%>
         </div><div style= "float:right;">
             <%=button_to "削除",{:action => "destroy"},:class=>"btn btn-danger",:method=>:delete  %>
         </div>

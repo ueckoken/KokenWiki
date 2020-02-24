@@ -11,7 +11,7 @@
         
   <h3>ユーザーグループの作成</h3>
   <div>
-    <%=form_with(url: "/setting/usergroups",scope: :usergroup,method: "post") do |form|%>
+    <%=form_with(url: usergroups_path,scope: :usergroup,method: "post") do |form|%>
         <div class="form-group">
         <%=form.label "グループ名"%>
         <%=form.text_field("name",{placeholder: "グループ名(重複不可)", class: "form-control"})%><br/>

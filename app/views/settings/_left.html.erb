@@ -3,7 +3,7 @@
     <p class="list-gruop-heading mb-0">設定</p>
     <ul class="list-group list-group-flush list-group-dense">
       <li class="list-group-item">
-        <%=link_to "ユーザーグループ","/setting/usergroups"%>
+        <%=link_to "ユーザーグループ",usergroups_path%>
       </li>
       <li class="list-group-item">
         <%=link_to"プロフィール変更",edit_user_registration_path%>
@@ -15,10 +15,10 @@
     <p class="list-gruop-heading mb-0">管理者設定</p>
     <ul class="list-group list-group-flush list-group-dense">
       <li class="list-group-item">
-        <%=link_to "ユーザーのロック","/setting/userlock"%>
+        <%=link_to "ユーザーのロック",userlock_path%>
       </li>
       <li class="list-group-item">
-        <%=link_to "管理者の変更","/setting/admin"%>
+        <%=link_to "管理者の変更",admin_path%>
       </li>
     </ul>
   </div>

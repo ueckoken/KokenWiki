@@ -24,7 +24,7 @@
           </li>
         <%else%>
           <li class="nav-item d-md-none">
-            <%=link_to(current_user.name,"/setting/user/edit",class: "dropdown-item")%>
+            <%=link_to(current_user.name, edit_user_registration_path, class: "dropdown-item")%>
           </li>
           <li class="nav-item d-md-none">
             <%=link_to("設定","/setting",class: "dropdown-item")%>
@@ -37,7 +37,7 @@
               <%= current_user.name =%>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <%=link_to("プロフィール","/setting/user/edit",class: "dropdown-item")%>
+              <%=link_to("プロフィール",edit_user_registration_path,class: "dropdown-item")%>
               <%=link_to("設定","/setting",class: "dropdown-item")%>
               <%=link_to("ログアウト",destroy_user_session_path,method: :delete,class: "dropdown-item")%>
             </div>

@@ -9,20 +9,20 @@
     </div>
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
         <h3>ユーザーグループ設定</h3>
-        <input type="button" class="btn btn-primary" onClick="location.href='new'" value="新規作成">
-        <div><table class="table">
+        <%= link_to "新規作成", new_usergroup_path, :class => "btn btn-primary" %>
+        <table class="table">
             <tr><th>グループ名</th><th>人数</th></tr>
-            <%@usergroups.each do |usergroup|%>
+            <%@usergroups.each do |a_usergroup|%>
                 <tr>
                     <td>
-                        <%=link_to usergroup.name,usergroup.id.to_s%>
+                        <%=link_to a_usergroup.name, a_usergroup%>
                     </td>
                     <td>
-                        <%=usergroup.users.size%>
+                        <%=a_usergroup.users.size%>
                     </td>
                 </tr>
             <%end%>
-        </table></div>
+        </table>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
         <%=render partial: "settings/right"%>
