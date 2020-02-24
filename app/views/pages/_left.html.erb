@@ -12,17 +12,17 @@
             <%if page.path == "/"%>
                 <strong><%=link_to "/", "/"%></strong>
             <%else%>
-                <strong><%=link_to page.title, page.path + "/"%></strong>
+                <strong><%=link_to page.title, page.path%></strong>
             <%end%>
             <ul>
             <%@children_pages.each do |child|%>
                 <li>
-                    <%=link_to child.title, child.path + "/"%>
+                    <%=link_to child.title, child.path%>
                 </li>
             <%end%>
             </ul>
         <%else%>
-            <%=link_to page.title, page.path + "/"%>
+            <%=link_to page.title, page.path%>
         <%end%>
     </li>
     <%end%>
