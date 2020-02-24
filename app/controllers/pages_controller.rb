@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   def filter_readable_pages(pages)
-    if is_admin? current_user
+    if current_user.is_admin?
       return pages
     end
     readable_pages = []

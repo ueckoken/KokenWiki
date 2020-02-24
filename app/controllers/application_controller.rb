@@ -42,17 +42,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def is_admin?(user)
-    if user == nil
-      return false
-    end
-    if user.is_admin
-      return true
-    end
-    return false
-  end
-
-
   def basic_auth
     if !ENV["BASIC_AUTH"] then return end
     authenticate_or_request_with_http_basic do |username, password|
