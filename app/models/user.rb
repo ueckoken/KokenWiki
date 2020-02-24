@@ -29,4 +29,7 @@ class User < ApplicationRecord
   def email_changed?
     false
   end
+  def is_admin?
+    return self.is_admin
+  end
 end
