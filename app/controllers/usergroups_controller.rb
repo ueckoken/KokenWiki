@@ -38,7 +38,7 @@ class UsergroupsController < ApplicationController
     # force_trailing_slash
     id = params[:id]
     @usergroup = Usergroup.find(id.to_i)
-    if is_editable? @usergroup
+    if @usergroup.is_editable_user?(current_user)
       @editable = true
     end
   end
@@ -46,7 +46,7 @@ class UsergroupsController < ApplicationController
     id = params[:id]
 
     @usergroup = Usergroup.find(id.to_i)
-    if !is_editable? @usergroup
+    if ! @usergroup.is_editable_user?(current_user)
       raise ActiveRecord::RecordNotFound
       return
     end
@@ -54,7 +54,7 @@ class UsergroupsController < ApplicationController
   end
   def update
     usergroup = Usergroup.find(params[:id])
-    if ! is_editable? usergroup
+    if ! usergroup.is_editable_user?(current_user)
       raise ActiveRecord::RecordNotFound
       return
     end
@@ -85,7 +85,7 @@ class UsergroupsController < ApplicationController
     id = params[:id]
 
     usergroup = Usergroup.find(id.to_i)
-    if is_editable? usergroup
+    if usergroup.is_editable_user?(current_user)
       usergroup.destroy!
     else
 
@@ -94,20 +94,5 @@ class UsergroupsController < ApplicationController
       format.html { redirect_to usergroups_url, notice: 'Usergroup was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-  def is_editable?(usergroup)
-    if !user_signed_in?
-      return false
-    end
-    if is_admin? current_user
-      return true
-    end
-    if usergroup == nil
-      return false
-    end
-    if usergroup.users.include? current_user
-      return true
-    end
-    return false
   end
 end

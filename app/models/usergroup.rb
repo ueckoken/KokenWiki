@@ -13,4 +13,11 @@ class Usergroup < ApplicationRecord
                         foreign_key: "editable_group_id"
 
   validates :name, uniqueness: true, length: { in: 1..50 }
+
+  def is_editable_user?(user)
+    if user.is_admin?
+      return true
+    end
+    return usergroup.users.include? user
+  end
 end
