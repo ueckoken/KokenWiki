@@ -1,9 +1,3 @@
-<script type="text/javascript">
-  function  search() {
-    window.location.href="/?search="+document.forms.searchform.elements.searchtext.value
-    return false
-  }
-</script>
 <header class="d-contents">
   <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="/">KokenWiki</a>
@@ -11,11 +5,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <form class="form-inline my-2 my-lg-0" name="searchform" onsubmit="return search()">
+      <form class="form-inline my-2 my-lg-0" name="searchform" method="get">
         <div class="input-group">
-          <input class="form-control" type="text" placeholder="Search" aria-label="Search" name="searchtext">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search" name="search">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" onclick="search">Search</button>
+            <button class="btn btn-outline-secondary">Search</button>
           </div>
         </div>
       </form>
