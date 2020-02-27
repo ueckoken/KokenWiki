@@ -2,14 +2,14 @@
 class UserlockController < ApplicationController
   before_action :authenticate_user!
   def index
-    if !is_editable?
+    if ! current_user.is_admin?
       raise ActionController::RoutingError
       return
     end
     @users = User.all.order("locked_at DESC")
   end
   def update
-    if !is_editable?
+    if ! current_user.is_admin?
       raise ActionController::RoutingError
       return
     end
@@ -24,11 +24,5 @@ class UserlockController < ApplicationController
       user.unlock_access!
     end
     redirect_to action: "index"
-  end
-  def is_editable?
-    if is_admin? current_user
-      return true
-    end
-    return false
   end
 end

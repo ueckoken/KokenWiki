@@ -17,4 +17,46 @@ class Page < ApplicationRecord
   validates :title, exclusion: { in: [nil] }, format: { with: /\A[^?\.]*\z/ }
   validates :path, format: { with: /\A[^?\.]*\z/ }
   validates :content, exclusion: { in: [nil] }
+
+  def is_editable_user?(user)
+    if user.nil?
+      return false
+    end
+
+    if user.is_admin?
+      return true
+    end
+    if self.is_draft
+      return self.user == user
+    end
+    if self.editable_group == nil
+      return true
+    end
+
+    return page.editable_group.users.include? user
+  end
+
+  def is_readable_user?(user)
+    if self.is_draft
+      return user == self.user
+    end
+    if self.is_public
+      return true
+    end
+    if user.nil?
+      return false
+    end
+
+    if user.is_admin?
+      return true
+    end
+    if self.is_draft
+      return self.user == user
+    end
+    if self.readable_group == nil
+      return true
+    end
+
+    return self.readable_group.users.include? user
+  end
 end
