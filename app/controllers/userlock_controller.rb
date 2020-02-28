@@ -1,18 +1,12 @@
 
 class UserlockController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_admin!
+
   def index
-    if ! current_user.is_admin?
-      raise ActionController::RoutingError
-      return
-    end
     @users = User.all.order("locked_at DESC")
   end
   def update
-    if ! current_user.is_admin?
-      raise ActionController::RoutingError
-      return
-    end
     user = User.find_by(id: params[:user_id].to_i)
     if user == current_user
       redirect_to action: "index"

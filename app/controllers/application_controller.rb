@@ -29,6 +29,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_admin!
+    if ! current_user.is_admin?
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
   def basic_auth
     if !ENV["BASIC_AUTH"] then return end
     authenticate_or_request_with_http_basic do |username, password|
