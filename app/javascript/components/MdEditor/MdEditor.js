@@ -38,6 +38,25 @@ const MdEditor = ({
     }
     return (
         <div>
+            <div className="btn-toolbar justify-content-between">
+                <div className="btn-group">
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => handleOnClickCancel()}
+                    >
+                        破棄
+                    </button>
+                </div>
+                <div className="btn-group">
+                    <input
+                        type="submit"
+                        value="保存"
+                        className="btn btn-primary"
+                        hidden={!is_changed}
+                    />
+                </div>
+            </div>
             <div className="d-xl-none">
                 <MdEditorSm />
             </div>
@@ -101,25 +120,6 @@ const MdEditor = ({
                 />
                 <label className="form-check-label">一般公開</label>
                 <input type="hidden" name="page[is_public]" value={is_public} />
-            </div>
-            <div className="btn-toolbar justify-content-between">
-                <div className="btn-group">
-                    <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => handleOnClickCancel()}
-                    >
-                        破棄
-                    </button>
-                </div>
-                <div className="btn-group">
-                    <input
-                        type="submit"
-                        value="保存"
-                        className="btn btn-primary"
-                        hidden={!is_changed}
-                    />
-                </div>
             </div>
         </div>
     )
