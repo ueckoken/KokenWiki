@@ -15,17 +15,17 @@
         </div><div style= "float:right;">
             <%=button_to "削除",{:action => "destroy"},:class=>"btn btn-danger",:method=>:delete  %>
         </div>
-        <div>
-            <table class="table">
+        <table class="table">
+            <thead>
                 <tr><td>名前</td><td>ユーザーID</td></tr>
-                <%@usergroup.users.each do |user|%>
-                    <tr>
-                        <td><%=user.name%></td>
-                        <td><%=user.user_id%></td>
-                    </tr>
-                <%end%>
-            </table>
-        </div>
+            </thead>
+            <%@usergroup.users.each do |user|%>
+                <tr>
+                    <td><%=user.name%></td>
+                    <td><%=user.user_id%></td>
+                </tr>
+            <%end%>
+        </table>
     </div>
     <div class="col-xl-2 col-lg-3 d-none d-lg-block">
         <%=render partial: "settings/right"%>

@@ -11,7 +11,9 @@
         <h3>ユーザーグループ設定</h3>
         <%= link_to "新規作成", new_usergroup_path, :class => "btn btn-primary" %>
         <table class="table">
-            <tr><th>グループ名</th><th>人数</th></tr>
+            <thead>
+                <tr><th>グループ名</th><th>人数</th></tr>
+            </thead>
             <%@usergroups.each do |a_usergroup|%>
                 <tr>
                     <td>

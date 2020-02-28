@@ -18,7 +18,9 @@
       </div>
       <p>グループに入れたいユーザーにチェックしてください</p><br>
       <table class="table">
-        <tr><th></th><th>名前</th><th>ユーザーID</th></tr>
+        <thead>
+          <tr><th></th><th>名前</th><th>ユーザーID</th></tr>
+        </thead>
         <%@users.each do |user|%>
           <tr>
             <td><%=form.check_box("check_id",{:checked=>false,:multiple=> true},user.id.to_s)%></td>

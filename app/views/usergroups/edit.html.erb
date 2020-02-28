@@ -8,13 +8,15 @@
         </div>
    </div>
     <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        
+
   <h3>ユーザーグループ <%=@usergroup.name%>の編集</h3>
   <div>
   <%=form_with(url: @usergroup,scope: :usergroup,method: "put") do |form|%>
       <p>グループに入れたいユーザーにチェックしてください</p><br>
       <table class="table">
-        <tr><th></th><th>名前</th><th>ユーザーID</th></tr>
+        <thead>
+          <tr><th></th><th>名前</th><th>ユーザーID</th></tr>
+        </thead>
         <%@users.each do |user|%>
           <tr>
             <%flag_ = @usergroup.users.include?(user)%>
