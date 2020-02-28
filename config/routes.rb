@@ -127,8 +127,8 @@ Rails.application.routes.draw do
 
 
     resources :usergroups
-    get "/userlock" => "userlock#index"
-    put "/userlock" => "userlock#update"
+    get "/userlock" => "userlocks#index"
+    put "/userlock" => "userlocks#update"
     get "/admin" => "admin_settings#index"
     put "/admin" => "admin_settings#update"
     get "/" => "settings#index"
