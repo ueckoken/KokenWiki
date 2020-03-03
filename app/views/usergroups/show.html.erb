@@ -1,13 +1,8 @@
 <div class="row">
     <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "settings/left"%>
-        </div>
-        <div class="d-lg-none">
-            <%=render partial: "settings/right"%>
-        </div>
-   </div>
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
+        <%=render partial: "settings/left"%>
+    </div>
+    <div class="col">
         <h3><%=@usergroup.name%></h3>
         <div class="btn-toolbar justify-content-between">
             <div class="btn-group">
@@ -28,8 +23,5 @@
                 </tr>
             <%end%>
         </table>
-    </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "settings/right"%>
     </div>
 </div>

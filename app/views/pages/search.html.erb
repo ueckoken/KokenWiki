@@ -1,15 +1,13 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "pages/left"%>
-        </div>
-        <div class="d-lg-none">
-            <%=render partial: "pages/right"%>
-        </div>
-   </div>
+<div id="page-container">
+    <div id="left">
+        <%=render partial: "pages/left"%>
+    </div>
+    <div id="right">
+        <%=render partial: "pages/right"%>
+    </div>
 
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        <h3><strong><%=params[:search]%></strong>の検索結果</h3>
+    <div id="center">
+        <h1 class="font-weight-normal"><strong><%=params[:search]%></strong>の検索結果</h1>
         <%@search_pages.each do |page|%>
         <div class="card">
             <div class="card-header">
@@ -24,8 +22,5 @@
             </div>
         </div>
         <%end%>
-    </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "pages/right"%>
     </div>
 </div>
