@@ -33,7 +33,7 @@ class Page < ApplicationRecord
       return true
     end
 
-    return page.editable_group.users.include? user
+    return self.editable_group.users.include? user
   end
 
   def is_readable_user?(user)
