@@ -1,11 +1,15 @@
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb bg-transparent">
-    <li class="breadcrumb-item"><%=link_to "HOME", "/"%></li>
-    <%@pankuzu.each do |page|%>
-      <%if not page.parent_id.nil? %>
-        <li class="breadcrumb-item"><%=link_to page.title, page.path%></li>
-      <%end%>
-    <%end%>
-    <li class="breadcrumb-item" aria-current="page"><%=link_to @title, @path%></li>
-  </ol>
+    <ol class="breadcrumb bg-transparent">
+        <li class="breadcrumb-item">
+            <%=link_to "HOME", "/"%>
+        </li>
+        <%@pankuzu.each do |page|%>
+            <%if not page.parent_id.nil? %>
+                <li class="breadcrumb-item"><%=link_to page.title, page.path%></li>
+            <%end%>
+        <%end%>
+        <li class="breadcrumb-item" aria-current="page">
+            <%=link_to @title, @path%>
+        </li>
+    </ol>
 </nav>

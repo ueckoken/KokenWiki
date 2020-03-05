@@ -1,31 +1,45 @@
 <nav class="navbar-expand-sm navbar-light bg-light">
     <div style="padding:10px;">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#leftbarNav" aria-controls="leftbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button><h5 style="display:inline;">ページ</h5></div>
-<div class="collapse navbar-collapse" id="leftbarNav">
-<%#%=render partial: "pages/pankuzu"%>
-<ul class="pagelist">
-    <%@brothers_pages.each do |page|%>
-    <li>
-        <%if page == @page %>
-            <%if page.path == "/"%>
-                <strong><%=link_to "/", "/"%></strong>
-            <%else%>
-                <strong><%=link_to page.title, page.path%></strong>
-            <%end%>
-            <ul>
-            <%@children_pages.each do |child|%>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#leftbarNav"
+            aria-controls="leftbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <h5 style="display:inline;">ページ</h5>
+    </div>
+    <div class="collapse navbar-collapse" id="leftbarNav">
+        <%#%=render partial: "pages/pankuzu"%>
+        <ul class="pagelist">
+            <%@brothers_pages.each do |page|%>
                 <li>
-                    <%=link_to child.title, child.path%>
+                    <%if page == @page %>
+                        <%if page.path == "/"%>
+                            <strong>
+                                <%=link_to "/", "/"%>
+                            </strong>
+                        <%else%>
+                            <strong>
+                                <%=link_to page.title, page.path%>
+                            </strong>
+                        <%end%>
+                        <ul>
+                            <%@children_pages.each do |child|%>
+                                <li>
+                                    <%=link_to child.title, child.path%>
+                                </li>
+                            <%end%>
+                        </ul>
+                    <%else%>
+                        <%=link_to page.title, page.path%>
+                    <%end%>
                 </li>
             <%end%>
-            </ul>
-        <%else%>
-            <%=link_to page.title, page.path%>
-        <%end%>
-    </li>
-    <%end%>
-</ul>
-</div>
+        </ul>
+    </div>
 </nav>
