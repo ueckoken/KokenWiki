@@ -9,18 +9,20 @@
     <div id="center">
         <h1 class="font-weight-normal"><strong><%=params[:search]%></strong>の検索結果</h1>
         <%@search_pages.each do |page|%>
-        <div class="card">
-            <div class="card-header">
-                <%if page.path == ""%>
-                    <%=link_to "/", "/"%>
-                <%else%>
-                    <%=link_to page.path, page.path%>
-                <%end%>
-            </div>
-            <div class="card-body">
-                <%=page.content[0,500]%>
-            </div>
-        </div>
+            <article class="mb-4">
+                <span class="text-muted"><%= page.path %></span>
+                <h1 class="h4 font-weight-normal">
+                    <a href="<%= page.path %>" class="text-decoration-none">
+                        <%= page.title %>
+                    </a>
+                </h1>
+                <p>
+                    <span class="text-muted">
+                        <%= page.updated_at.strftime("%Y/%m/%d") %>
+                    </span>
+                    - <%=page.content[0,500]%>
+                </p>
+            </article>
         <%end%>
     </div>
 </div>
