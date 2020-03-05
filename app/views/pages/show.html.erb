@@ -54,16 +54,18 @@
         <%end%>
         <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
         <h3>ファイル</h3>
-        <div>
-          <%@page.files.each do |file| %>
-            <%=link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s%>
-            <%if @editable%>
-                <%=form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html:{style: "display:inline"} ,remote: true do |form|%>
-                    <%form.submit "削除", {style: "display:inline",class: "btn btn-danger btn-sm", data:{confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}}%>
-                <%end%>
+        <ul class="list-group">
+            <%@page.files.each do |file| %>
+                <li class="list-group-item d-flex justify-content-between">
+                    <%=link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s%>
+                    <%if @editable%>
+                        <%=form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html:{style: "display:inline"} ,remote: true do |form|%>
+                            <%form.submit "削除", {class: "btn btn-danger btn-sm", data:{confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}}%>
+                        <%end%>
+                    <%end%>
+                </li>
             <%end%>
-          <%end%>
-        </div><br>
+        </ul>
         <%if user_signed_in?%>
             <%=form_with scope: :file, method: :post do |form|%>
                 <%=form.file_field :files, :multiple => true%>
