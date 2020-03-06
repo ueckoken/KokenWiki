@@ -29,7 +29,7 @@
             ) %>
         <% end %>
         <!--こめんと-->
-        <h3>コメント</h3>
+        <h2 class="h3">コメント</h2>
         <% @page.comments.each do |comment| %>
             <div class="card">
                 <div class="card-header">
@@ -53,14 +53,14 @@
             </div>
         <% end %>
         <% if user_signed_in? %>
-            <h4>新しいコメント</h4>
+            <h2 class="h4">新しいコメント</h2>
             <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
                 <%= form.text_area :content, class: "form-control" %>
                 <%= form.submit "投稿", class: "btn btn-primary" %>
             <% end %>
         <% end %>
         <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
-        <h3>ファイル</h3>
+        <h2 class="h3">ファイル</h2>
         <ul class="list-group">
             <% @page.files.each do |file| %>
                 <li class="list-group-item d-flex justify-content-between">
@@ -79,7 +79,7 @@
                 <%= form.submit "送信", class: "btn btn-primary" %>
             <% end %>
         <% end %>
-        <h3>更新履歴</h3>
+        <h2 class="h3">更新履歴</h2>
         <ol style="list-style-type: none; padding-left: 0">
             <% @update_histories.limit(10).each_cons(2) do |newHist, oldHist| %>
                 <li>
