@@ -11,7 +11,7 @@
         <%= stylesheet_pack_tag 'application' %>
     </head>
     <body class="clearfix container-fluid">
-        <%=render partial: "layouts/navbar"%>
+        <%= render partial: "layouts/navbar" %>
         <div class="mt-3">
             <% if notice %>
                 <p class="alert alert-info"><%= notice %></p>
@@ -23,6 +23,6 @@
                 <%= yield %>
             </main>
         </div>
-        <%=render partial: "layouts/footer"%>
+        <%= render partial: "layouts/footer" %>
     </body>
 </html>

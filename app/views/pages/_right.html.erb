@@ -15,15 +15,15 @@
     </div>
     <div class="collapse navbar-collapse" id="rightbarNav">
         <ul class="pagelist">
-            <%@updated_pages.each do |page|%>
+            <% @updated_pages.each do |page| %>
                 <li>
-                    <%if page.path == "/"%>
-                        <%=link_to "/", "/"%>
-                    <%else%>
-                        <%=link_to page.path, page.path%>
-                    <%end%>
+                    <% if page.path == "/" %>
+                        <%= link_to "/", "/" %>
+                    <% else %>
+                        <%= link_to page.path, page.path %>
+                    <% end %>
                 </li>
-            <%end%>
+            <% end %>
         </ul>
     </div>
 </nav>

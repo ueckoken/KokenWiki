@@ -1,23 +1,23 @@
 <div id="page-container">
     <div id="left">
-        <%=render partial: "pages/left"%>
+        <%= render partial: "pages/left" %>
     </div>
     <div id="right">
-        <%=render partial: "pages/right"%>
+        <%= render partial: "pages/right" %>
     </div>
 
     <div id="center">
-        <div><%=render partial: "pages/pankuzu"%></div>
-        <h1><%=@page.title%></h1>
+        <div><%= render partial: "pages/pankuzu" %></div>
+        <h1><%= @page.title %></h1>
         <p>
             <%= render "update-timestamp", history: @page %>
         </p>
-        <%if @page.children.size == 0 && @editable%>
-            <%=form_with scope: :page, method: :delete do |form|%>
-                <%form.submit "削除", {class: "btn btn-danger", style: "float:right;", data:{confirm: "本当に削除しますか"}}%>
-            <%end%>
-        <%end%>
-        <%=form_with scope: :page, method: :put do%>
+        <% if @page.children.size == 0 && @editable %>
+            <%= form_with scope: :page, method: :delete do |form| %>
+                <% form.submit "削除", {class: "btn btn-danger", style: "float: right;", data: {confirm: "本当に削除しますか"}} %>
+            <% end %>
+        <% end %>
+        <%= form_with scope: :page, method: :put do %>
             <%= react_component("MdEditor",
                 markdown: @page.content,
                 is_draft: @page.is_draft,
@@ -26,62 +26,62 @@
                 editable_group_id: @page.editable_group_id || 0,
                 editable: @editable,
                 usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
-            )%>
-        <%end%>
+            ) %>
+        <% end %>
         <!--こめんと-->
         <h3>コメント</h3>
-        <%@page.comments.each do |comment|%>
+        <% @page.comments.each do |comment| %>
             <div class="card">
                 <div class="card-header">
-                    <%=if comment.user != nil then comment.user.name else "???" end%>
+                    <%= if comment.user != nil then comment.user.name else "???" end %>
                     /
-                    <%=if comment.user != nil then comment.user.user_id else "???" end%>
-                    <%=comment.created_at%>
+                    <%= if comment.user != nil then comment.user.user_id else "???" end %>
+                    <%= comment.created_at %>
                 </div>
                 <div class="card-body">
-                    <%=react_component "Markdown", {
+                    <%= react_component "Markdown", {
                         markdown: comment.comment,
                         highlight:true
-                    }%>
-                    <%if @editable || comment.user == current_user%>
-                        <%=form_with scope: "comment", method: :delete do |form|%>
-                            <%=form.hidden_field "comment_id", value: comment.id%>
-                            <%=form.submit "削除", {class: "btn btn-danger", data:{confirm: "本当に削除しますか"}}%>
-                        <%end%>
-                    <%end%>
+                    } %>
+                    <% if @editable || comment.user == current_user %>
+                        <%= form_with scope: "comment", method: :delete do |form| %>
+                            <%= form.hidden_field "comment_id", value: comment.id %>
+                            <%= form.submit "削除", {class: "btn btn-danger", data: {confirm: "本当に削除しますか"}} %>
+                        <% end %>
+                    <% end %>
                 </div>
             </div>
-        <%end%>
-        <%if user_signed_in?%>
+        <% end %>
+        <% if user_signed_in? %>
             <h4>新しいコメント</h4>
-            <%=form_with scope: :comment, method: :post, url: URI.encode(@path) do |form|%>
-                <%=form.text_area :content, class: "form-control"%>
-                <%=form.submit "投稿", class: "btn btn-primary"%>
-            <%end%>
-        <%end%>
+            <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
+                <%= form.text_area :content, class: "form-control" %>
+                <%= form.submit "投稿", class: "btn btn-primary" %>
+            <% end %>
+        <% end %>
         <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
         <h3>ファイル</h3>
         <ul class="list-group">
-            <%@page.files.each do |file| %>
+            <% @page.files.each do |file| %>
                 <li class="list-group-item d-flex justify-content-between">
-                    <%=link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s%>
-                    <%if @editable%>
-                        <%=form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html:{style: "display:inline"} ,remote: true do |form|%>
-                            <%form.submit "削除", {class: "btn btn-danger btn-sm", data:{confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}}%>
-                        <%end%>
-                    <%end%>
+                    <%= link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s %>
+                    <% if @editable %>
+                        <%= form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html: {style: "display:inline"}, remote: true do |form| %>
+                            <% form.submit "削除", {class: "btn btn-danger btn-sm", data: {confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}} %>
+                        <% end %>
+                    <% end %>
                 </li>
-            <%end%>
+            <% end %>
         </ul>
-        <%if user_signed_in?%>
-            <%=form_with scope: :file, method: :post do |form|%>
-                <%=form.file_field :files, :multiple => true%>
-                <%=form.submit "送信", class: "btn btn-primary"%>
-            <%end%>
-        <%end%>
+        <% if user_signed_in? %>
+            <%= form_with scope: :file, method: :post do |form| %>
+                <%= form.file_field :files, :multiple => true %>
+                <%= form.submit "送信", class: "btn btn-primary" %>
+            <% end %>
+        <% end %>
         <h3>更新履歴</h3>
         <ol style="list-style-type: none; padding-left: 0">
-            <%@update_histories.limit(10).each_cons(2) do |newHist, oldHist|%>
+            <% @update_histories.limit(10).each_cons(2) do |newHist, oldHist| %>
                 <li>
                     <details>
                         <summary>
@@ -93,12 +93,12 @@
                         )%>
                     </details>
                 </li>
-            <%end%>
-            <%if @update_histories.present?%>
+            <% end %>
+            <% if @update_histories.present? %>
                 <li>
                     <%= render "update-timestamp", history: @update_histories.last %>
                 </li>
-            <%end%>
+            <% end %>
         </ol>
     </div>
 </div>

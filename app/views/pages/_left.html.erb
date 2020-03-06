@@ -16,30 +16,30 @@
     <div class="collapse navbar-collapse" id="leftbarNav">
         <%#%=render partial: "pages/pankuzu"%>
         <ul class="pagelist">
-            <%@brothers_pages.each do |page|%>
+            <% @brothers_pages.each do |page| %>
                 <li>
-                    <%if page == @page %>
-                        <%if page.path == "/"%>
+                    <% if page == @page %>
+                        <% if page.path == "/" %>
                             <strong>
-                                <%=link_to "/", "/"%>
+                                <%= link_to "/", "/" %>
                             </strong>
-                        <%else%>
+                        <% else %>
                             <strong>
-                                <%=link_to page.title, page.path%>
+                                <%= link_to page.title, page.path %>
                             </strong>
-                        <%end%>
+                        <% end %>
                         <ul>
-                            <%@children_pages.each do |child|%>
+                            <% @children_pages.each do |child| %>
                                 <li>
-                                    <%=link_to child.title, child.path%>
+                                    <%= link_to child.title, child.path %>
                                 </li>
-                            <%end%>
+                            <% end %>
                         </ul>
-                    <%else%>
-                        <%=link_to page.title, page.path%>
-                    <%end%>
+                    <% else %>
+                        <%= link_to page.title, page.path %>
+                    <% end %>
                 </li>
-            <%end%>
+            <% end %>
         </ul>
     </div>
 </nav>

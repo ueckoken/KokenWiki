@@ -1,16 +1,16 @@
 <div id="page-container">
     <div id="left">
-        <%=render partial: "pages/left"%>
+        <%= render partial: "pages/left" %>
     </div>
     <div id="right">
-        <%=render partial: "pages/right"%>
+        <%= render partial: "pages/right" %>
     </div>
 
     <div id="center">
         <h1 class="font-weight-normal">
-            <strong><%=params[:search]%></strong>の検索結果
+            <strong><%= params[:search] %></strong>の検索結果
         </h1>
-        <%@search_pages.each do |page|%>
+        <% @search_pages.each do |page| %>
             <article class="mb-4">
                 <span class="text-muted"><%= page.path %></span>
                 <h1 class="h4 font-weight-normal">
@@ -22,9 +22,9 @@
                     <span class="text-muted">
                         <%= page.updated_at.strftime("%Y/%m/%d") %>
                     </span>
-                    - <%=page.content[0,500]%>
+                    - <%= page.content[0, 500] %>
                 </p>
             </article>
-        <%end%>
+        <% end %>
     </div>
 </div>

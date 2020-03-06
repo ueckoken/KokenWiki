@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <%=render partial: "settings/left"%>
+        <%= render partial: "settings/left" %>
     </div>
     <div class="col">
         <table class="table">
@@ -12,20 +12,20 @@
                     <td>ロック</td>
                 </tr>
             </thead>
-            <%@users.each do |user|%>
+            <% @users.each do |user| %>
                 <tr>
-                    <td><%=user.name%></td>
-                    <td><%=user.user_id%></td>
-                    <td><%=user.email%></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.user_id %></td>
+                    <td><%= user.email %></td>
                     <td>
-                        <%if user.access_locked?%>
-                            <%=button_to("ロック解除",{:action =>"update",:user_id=>user.id,:lock=>"false"},:class=>"btn btn-primary",:method=>:put)%>
-                        <%else%>
-                            <%=button_to("ロック",{:action =>"update",:user_id=>user.id,:lock=>"true"},:class=>"btn btn-danger",:method=>:put)%>
-                        <%end%>
+                        <% if user.access_locked? %>
+                            <%= button_to "ロック解除", {:action => "update", :user_id => user.id, :lock => "false"}, :class => "btn btn-primary", :method => :put %>
+                        <% else %>
+                            <%= button_to "ロック", {:action => "update", :user_id => user.id, :lock => "true"}, :class => "btn btn-danger", :method => :put %>
+                        <% end %>
                     </td>
                 </tr>
-            <%end%>
+            <% end %>
         </table>
     </div>
 </div>

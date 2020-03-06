@@ -2,7 +2,7 @@
 
 <div class="card mx-auto" style="max-width: 360px">
     <div class="card-body">
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <%= form_for resource, as: resource_name, url: session_path(resource_name) do |f| %>
             <div class="form-group">
                 <%= f.label "ユーザーID" %>
                 <%= f.text_field :user_id, autofocus: true, autocomplete: "user_id", class: "form-control" %>
@@ -19,7 +19,7 @@
                     <%= f.label "ログイン情報を保持" %>
                 </div>
             <% end %>
-            <%= f.submit "ログイン" ,class: "btn btn-primary btn-block" %>
+            <%= f.submit "ログイン", class: "btn btn-primary btn-block" %>
         <% end %>
     </div>
 </div>
