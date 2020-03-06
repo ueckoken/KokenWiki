@@ -1,18 +1,16 @@
-<nav class="navbar-expand-sm navbar-light bg-light">
-    <div style="padding:10px;">
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#rightbarNav"
-            aria-controls="rightbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <h5 style="display:inline;">更新履歴</h5>
-    </div>
+<nav class="navbar-expand-sm navbar-light bg-light p-3">
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#rightbarNav"
+        aria-controls="rightbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <h5 class="d-inline">更新履歴</h5>
     <div class="collapse navbar-collapse" id="rightbarNav">
         <ul class="pagelist">
             <% @updated_pages.each do |page| %>
