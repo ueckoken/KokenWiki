@@ -1,35 +1,30 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <%= render partial: "settings/left" %>
-    </div>
-    <div class="col">
-        <h1>ユーザーグループの作成</h1>
-        <%= form_with url: usergroups_path, scope: :usergroup, method: "post" do |form| %>
-            <div class="form-group">
-                <%= form.label "グループ名" %>
-                <%= form.text_field "name", {placeholder: "グループ名(重複不可)", class: "form-control"} %>
-            </div>
-            <p>グループに入れたいユーザーにチェックしてください</p>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>名前</th>
-                        <th>ユーザーID</th>
-                    </tr>
-                </thead>
-                <% @users.each do |user| %>
-                    <tr>
-                        <td>
-                            <%= form.check_box "check_id", {:checked => false, :multiple => true}, user.id.to_s %>
-                        </td>
-                        <td><%= user.name %></td>
-                        <td><%= user.user_id %></td>
-                    </tr>
-                <% end %>
-            </table>
+<%= render "settings/layout" do %>
+    <h1>ユーザーグループの作成</h1>
+    <%= form_with url: usergroups_path, scope: :usergroup, method: "post" do |form| %>
+        <div class="form-group">
+            <%= form.label "グループ名" %>
+            <%= form.text_field "name", {placeholder: "グループ名(重複不可)", class: "form-control"} %>
+        </div>
+        <p>グループに入れたいユーザーにチェックしてください</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>名前</th>
+                    <th>ユーザーID</th>
+                </tr>
+            </thead>
+            <% @users.each do |user| %>
+                <tr>
+                    <td>
+                        <%= form.check_box "check_id", {:checked => false, :multiple => true}, user.id.to_s %>
+                    </td>
+                    <td><%= user.name %></td>
+                    <td><%= user.user_id %></td>
+                </tr>
+            <% end %>
+        </table>
 
-            <%= form.submit "登録", :class => "btn btn-primary" %>
-        <% end %>
-    </div>
-</div>
+        <%= form.submit "登録", :class => "btn btn-primary" %>
+    <% end %>
+<% end %>

@@ -1,31 +1,26 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <%= render partial: "settings/left" %>
-    </div>
-    <div class="col">
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>名前</td>
-                    <td>ユーザーID</td>
-                    <td>メールアドレス</td>
-                    <td>管理者</td>
-                </tr>
-            </thead>
-            <% @users.each do |user| %>
-                <tr>
-                    <td><%= user.name %></td>
-                    <td><%= user.user_id %></td>
-                    <td><%= user.email %></td>
-                    <td>
-                        <% if user.is_admin %>
-                            <%= button_to "管理者から外す", {:action => "update", :user_id => user.id, :admin => "false"}, :class => "btn btn-danger", :method => :put %>
-                        <% else %>
-                            <%= button_to "管理者にする", {:action => "update", :user_id => user.id, :admin => "true"}, :class => "btn btn-default", :method => :put %>
-                        <% end %>
-                    </td>
-                </tr>
-            <% end %>
-        </table>
-    </div>
-</div>
+<%= render "settings/layout" do %>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>名前</td>
+                <td>ユーザーID</td>
+                <td>メールアドレス</td>
+                <td>管理者</td>
+            </tr>
+        </thead>
+        <% @users.each do |user| %>
+            <tr>
+                <td><%= user.name %></td>
+                <td><%= user.user_id %></td>
+                <td><%= user.email %></td>
+                <td>
+                    <% if user.is_admin %>
+                        <%= button_to "管理者から外す", {:action => "update", :user_id => user.id, :admin => "false"}, :class => "btn btn-danger", :method => :put %>
+                    <% else %>
+                        <%= button_to "管理者にする", {:action => "update", :user_id => user.id, :admin => "true"}, :class => "btn btn-default", :method => :put %>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </table>
+<% end %>

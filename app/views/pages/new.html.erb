@@ -1,16 +1,7 @@
-<div id="page-container">
-    <div id="left">
-        <%= render partial: "pages/left" %>
-    </div>
-    <div id="right">
-        <%= render partial: "pages/right" %>
-    </div>
-
-    <div id="center">
-        <%= render partial: "pages/pankuzu" %>
-        <h1><%= @title %></h1>
-        <%= form_with scope: :page, method: :post do |form| %>
-            <%= form.submit "新規作成", class: "btn btn-primary" %>
-        <% end %>
-    </div>
-</div>
+<%= render "pages/layout" do %>
+    <%= render partial: "pages/pankuzu" %>
+    <h1><%= @title %></h1>
+    <%= form_with scope: :page, method: :post do |form| %>
+        <%= form.submit "新規作成", class: "btn btn-primary" %>
+    <% end %>
+<% end %>
