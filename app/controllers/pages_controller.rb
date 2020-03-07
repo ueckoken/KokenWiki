@@ -3,7 +3,7 @@ require "pathname"
 class PagesController < ApplicationController
   include PathHelper
   # before_action :set_page, only: [:show, :edit, :update, :destroy]
-  before_action :force_trailing_slash
+  before_action :force_trailing_slash, only: [:show_page]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   def filter_readable_pages(pages)
