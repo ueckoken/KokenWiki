@@ -1,16 +1,3 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "settings/left"%>
-        </div>
-        <div class="d-lg-none">
-            <%=render partial: "settings/right"%>
-        </div>
-   </div>
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        <h3>各種設定ができます</h3>
-    </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "settings/right"%>
-    </div>
-</div>
+<%= render "settings/layout" do %>
+    <h1>各種設定ができます</h1>
+<% end %>

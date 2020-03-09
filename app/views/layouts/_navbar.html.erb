@@ -1,55 +1,80 @@
-<script type="text/javascript">
-  function  search() {
-    window.location.href="/?search="+document.forms.searchform.elements.searchtext.value
-    return false
-  }
-</script>
 <header class="d-contents">
-  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="/">KokenWiki</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <form class="form-inline my-2 my-lg-0" name="searchform" onsubmit="return search()">
-        <div class="input-group">
-          <input class="form-control" type="text" placeholder="Search" aria-label="Search" name="searchtext">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" onclick="search">Search</button>
-          </div>
-        </div>
-      </form>
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="/">KokenWiki</a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form
+                class="form-inline my-2 my-lg-0"
+                name="searchform"
+                method="get"
+            >
+                <div class="input-group">
+                    <input
+                        class="form-control"
+                        type="text"
+                        placeholder="Search"
+                        aria-label="Search"
+                        name="search"
+                    />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-      <ul class="navbar-nav ml-auto">
-        <%if !user_signed_in?%>
-          <li class="nav-item">
-            <%=link_to("ログイン",new_user_session_path,class: "nav-link")%>
-          </li>
-          <li class="nav-item">
-            <%=link_to("新規登録",new_user_registration_path,class: "nav-link")%>
-          </li>
-        <%else%>
-          <li class="nav-item d-md-none">
-            <%=link_to(current_user.name,"/setting/user/edit",class: "dropdown-item")%>
-          </li>
-          <li class="nav-item d-md-none">
-            <%=link_to("設定","/setting",class: "dropdown-item")%>
-          </li>
-          <li class="nav-item d-md-none">
-            <%=link_to("ログアウト",destroy_user_session_path,method: :delete,class: "dropdown-item")%>
-          </li>
-          <li class="nav-item dropdown d-none d-md-block">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-target="#navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <%= current_user.name =%>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <%=link_to("プロフィール","/setting/user/edit",class: "dropdown-item")%>
-              <%=link_to("設定","/setting",class: "dropdown-item")%>
-              <%=link_to("ログアウト",destroy_user_session_path,method: :delete,class: "dropdown-item")%>
-            </div>
-          </li>
-        <%end%>
-      </ul>
-    </div>
-  </nav>
+            <ul class="navbar-nav ml-auto">
+                <% if !user_signed_in? %>
+                    <li class="nav-item">
+                        <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to "新規登録", new_user_registration_path, class: "nav-link" %>
+                    </li>
+                <% else %>
+                    <li class="nav-item d-md-none">
+                        <%= link_to current_user.name, edit_user_registration_path, class: "dropdown-item" %>
+                    </li>
+                    <li class="nav-item d-md-none">
+                        <%= link_to "設定", "/setting", class: "dropdown-item" %>
+                    </li>
+                    <li class="nav-item d-md-none">
+                        <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+                    </li>
+                    <li class="nav-item dropdown d-none d-md-block">
+                        <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            role="button"
+                            data-target="#navbarDropdown"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            <%= current_user.name %>
+                        </a>
+                        <div
+                            class="dropdown-menu dropdown-menu-right"
+                            aria-labelledby="navbarDropdown"
+                        >
+                            <%= link_to "プロフィール", edit_user_registration_path, class: "dropdown-item" %>
+                            <%= link_to "設定", "/setting", class: "dropdown-item" %>
+                            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+                        </div>
+                    </li>
+                <% end %>
+            </ul>
+        </div>
+    </nav>
 </header>

@@ -1,43 +1,66 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { connect, useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import Markdown from "./Markdown"
 import Editor from "./Editor"
 import { actions, selectors } from "./redux"
 
-const MdEditor = ({
-    usergroups,
-    is_edit,
-    is_editable,
-    readable_group_id,
-    editable_group_id,
-    is_draft,
-    is_public,
-    handleOnClickEdit,
-    handleOnClickCancel,
-    handleOnClickIsDraft,
-    handleOnClickIsPublic,
-    handleChangeReadableGroup,
-    handleChangeEditableGroup
-}) => {
+const MdEditor = () => {
+    const usergroups = useSelector(state => state.usergroups)
+    const readable_group_id = useSelector(state => state.readable_group_id)
+    const editable_group_id = useSelector(state => state.editable_group_id)
+    const is_draft = useSelector(state => state.is_draft)
+    const is_public = useSelector(state => state.is_public)
+    const is_editable = useSelector(state => state.is_editable)
     const is_changed = useSelector(selectors.isChanged)
+    const is_edit = useSelector(state => state.is_edit)
+
+    const dispatch = useDispatch()
+    const handleOnClickEdit = () => dispatch(actions.onClickEdit())
+    const handleOnClickCancel = () => dispatch(actions.onClickCancel())
+    const handleOnClickIsDraft = () => dispatch(actions.onClickIsDraft())
+    const handleOnClickIsPublic = () => dispatch(actions.onClickIsPublic())
+    const handleChangeReadableGroup = e =>
+        dispatch(actions.changeReadableGroup(Number(e.target.value)))
+    const handleChangeEditableGroup = e =>
+        dispatch(actions.changeEditableGroup(Number(e.target.value)))
+
     if (!is_edit) {
         return (
-            <div>
+            <Fragment>
                 <button
                     type="button"
                     hidden={!is_editable}
                     className="btn btn-secondary"
-                    onClick={() => handleOnClickEdit()}
+                    onClick={handleOnClickEdit}
                 >
                     編集
                 </button>
                 <Markdown highlight={!is_edit}></Markdown>
-            </div>
+            </Fragment>
         )
     }
     return (
         <div>
+            <div className="btn-toolbar justify-content-between">
+                <div className="btn-group">
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={handleOnClickCancel}
+                    >
+                        破棄
+                    </button>
+                </div>
+                <div className="btn-group">
+                    <input
+                        type="submit"
+                        value="保存"
+                        className="btn btn-primary"
+                        hidden={!is_changed}
+                    />
+                </div>
+            </div>
             <div className="d-xl-none">
                 <MdEditorSm />
             </div>
@@ -50,9 +73,7 @@ const MdEditor = ({
                     value={readable_group_id}
                     name="page[readable_group_id]"
                     className="form-control"
-                    onChange={e =>
-                        handleChangeReadableGroup(Number(e.target.value))
-                    }
+                    onChange={handleChangeReadableGroup}
                 >
                     <option key={0} value={0}>
                         部員全員
@@ -70,9 +91,7 @@ const MdEditor = ({
                     value={editable_group_id}
                     name="page[editable_group_id]"
                     className="form-control"
-                    onChange={e =>
-                        handleChangeEditableGroup(Number(e.target.value))
-                    }
+                    onChange={handleChangeEditableGroup}
                 >
                     <option value={0}>部員全員</option>
                     {usergroups.map((usergroup, i) => (
@@ -87,7 +106,7 @@ const MdEditor = ({
                     type="checkbox"
                     className="form-check-input"
                     checked={is_draft}
-                    onChange={() => handleOnClickIsDraft()}
+                    onChange={handleOnClickIsDraft}
                 />
                 <label className="form-check-label">下書き</label>
                 <input type="hidden" name="page[is_draft]" value={is_draft} />
@@ -97,25 +116,11 @@ const MdEditor = ({
                     type="checkbox"
                     className="form-check-input"
                     checked={is_public}
-                    onChange={() => handleOnClickIsPublic()}
+                    onChange={handleOnClickIsPublic}
                 />
                 <label className="form-check-label">一般公開</label>
                 <input type="hidden" name="page[is_public]" value={is_public} />
             </div>
-            <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => handleOnClickCancel()}
-            >
-                破棄
-            </button>
-            <input
-                type="submit"
-                value="保存"
-                className="btn btn-primary"
-                style={{ float: "right" }}
-                hidden={!is_changed}
-            ></input>
         </div>
     )
 }
@@ -171,22 +176,4 @@ const MdEditorLg = () => (
     </div>
 )
 
-export default connect(
-    state => ({
-        usergroups: state.usergroups,
-        is_edit: state.is_edit,
-        is_editable: state.is_editable,
-        readable_group_id: state.readable_group_id,
-        editable_group_id: state.editable_group_id,
-        is_draft: state.is_draft,
-        is_public: state.is_public
-    }),
-    {
-        handleOnClickEdit: actions.onClickEdit,
-        handleOnClickCancel: actions.onClickCancel,
-        handleOnClickIsDraft: actions.onClickIsDraft,
-        handleOnClickIsPublic: actions.onClickIsPublic,
-        handleChangeReadableGroup: actions.changeReadableGroup,
-        handleChangeEditableGroup: actions.changeEditableGroup
-    }
-)(MdEditor)
+export default MdEditor

@@ -1,3 +1,5 @@
+require "uri"
+
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -17,28 +19,19 @@ class ApplicationController < ActionController::Base
     if params[:format] != nil
       return
     end
-    url = request.original_url
-    url_ = url.split("?")
-    if url_.size > 1
-      option = url_.pop
-    end
-    if option != "" && option != nil
-      option = "?" + option
-    end
-    url_body = url_.join
-    if url_body == nil
-      url_body = ""
-    end
-    redirecturl = url_body
-    redirecturl += "/" unless url_body.match?(/\/$/)
-    if option != nil
-      redirecturl += option
-    end
-    if redirecturl != url
-      redirect_to redirecturl
+    url = URI.parse(request.original_url)
+    url.path = url.path.chomp("/") + "/"
+    if url.to_s != request.original_url
+      redirect_to url.to_s
       return true
     else
       return false
+    end
+  end
+
+  def authenticate_admin!
+    if ! current_user.is_admin?
+      raise ActiveRecord::RecordNotFound
     end
   end
 

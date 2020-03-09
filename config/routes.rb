@@ -21,7 +21,6 @@ def is_comment_upload?(request)
 end
 
 class PageConstraint
-
   def self.get(request)
     if is_file?(request)
       return false
@@ -72,7 +71,6 @@ class SearchConstraint
 end
 
 class FileConstraint
-
   def self.get(request)
     return is_file?(request)
   end
@@ -99,7 +97,6 @@ class FileConstraint
 end
 
 class CommentConstraint
-
   def self.post(request)
     return is_comment_upload?(request)
   end
@@ -125,21 +122,12 @@ Rails.application.routes.draw do
       sessions: 'users/sessions'
     }
 
-
     resources :usergroups
-    get "/usergroups/*id/edit/" => "usergroups#edit"
-    get "/userlock" => "userlock#index"
-    put "/userlock" => "userlock#update"
+    get "/userlock" => "userlocks#index"
+    put "/userlock" => "userlocks#update"
     get "/admin" => "admin_settings#index"
     put "/admin" => "admin_settings#update"
-    get "*pages" => "settings#index"
-    post "*pages" => "settings#index"
-    put "*pages" => "settings#index"
-    delete "*pages" => "settings#index"
     get "/" => "settings#index"
-    post "/" => "settings#index"
-    put "/" => "settings#index"
-    delete "/" => "settings#index"
   end
 
 

@@ -1,33 +1,25 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "settings/left"%>
+<%= render "settings/layout" do %>
+    <h1><%= @usergroup.name %></h1>
+    <div class="btn-toolbar justify-content-between">
+        <div class="btn-group">
+            <%= link_to "編集", edit_usergroup_path(@usergroup), :class => "btn btn-default" %>
         </div>
-        <div class="d-lg-none">
-            <%=render partial: "settings/right"%>
-        </div>
-   </div>
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        
-        <h3><%=@usergroup.name%></h3>
-        <div style= "float:left;">
-            <%=button_to "編集",{:action => "edit"},:class=>"btn btn-default",:method=>:get %>
-        </div><div style= "float:right;">
-            <%=button_to "削除",{:action => "destroy"},:class=>"btn btn-danger",:method=>:delete  %>
-        </div>
-        <div>
-            <table class="table">
-                <tr><td>名前</td><td>ユーザーID</td></tr>
-                <%@usergroup.users.each do |user|%>
-                    <tr>
-                        <td><%=user.name%></td>
-                        <td><%=user.user_id%></td>
-                    </tr>
-                <%end%>
-            </table>
+        <div class="btn-group">
+            <%= button_to "削除", {:action => "destroy"}, :class => "btn btn-danger", :method => :delete %>
         </div>
     </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "settings/right"%>
-    </div>
-</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>名前</td>
+                <td>ユーザーID</td>
+            </tr>
+        </thead>
+        <% @usergroup.users.each do |user| %>
+            <tr>
+                <td><%= user.name %></td>
+                <td><%= user.user_id %></td>
+            </tr>
+        <% end %>
+    </table>
+<% end %>

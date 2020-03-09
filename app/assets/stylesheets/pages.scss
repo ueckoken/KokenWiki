@@ -1,3 +1,35 @@
 // Place all the styles related to the Pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@media (min-width: 992px) {
+  #page-container {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 196px 1fr 256px;
+    grid-template-areas: "left center right";
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  #page-container {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: minmax(30%, 256px) 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "left center"
+      "right center"
+    ;
+  }
+}
+
+#left {
+  grid-area: left;
+}
+#center {
+  grid-area: center;
+}
+#right {
+  grid-area: right;
+}

@@ -1,21 +1,7 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "pages/left"%>
-        </div>
-        <div class="d-lg-none">
-            <%=render partial: "pages/right"%>
-        </div>
-   </div>
-
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        <%=render partial: "pages/pankuzu"%>
-        <h1><%=@title%></h1>
-        <%=form_with scope: :page ,method: :post do |form|%>
-            <%=form.submit "新規作成", class: "btn btn-primary"%>
-        <%end%>
-    </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "pages/right"%>
-    </div>
-</div>
+<%= render "pages/layout" do %>
+    <%= render partial: "pages/pankuzu" %>
+    <h1><%= @title %></h1>
+    <%= form_with scope: :page, method: :post do |form| %>
+        <%= form.submit "新規作成", class: "btn btn-primary" %>
+    <% end %>
+<% end %>

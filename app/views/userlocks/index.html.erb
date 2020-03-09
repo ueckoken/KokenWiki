@@ -5,7 +5,7 @@
                 <td>名前</td>
                 <td>ユーザーID</td>
                 <td>メールアドレス</td>
-                <td>管理者</td>
+                <td>ロック</td>
             </tr>
         </thead>
         <% @users.each do |user| %>
@@ -14,10 +14,10 @@
                 <td><%= user.user_id %></td>
                 <td><%= user.email %></td>
                 <td>
-                    <% if user.is_admin %>
-                        <%= button_to "管理者から外す", {:action => "update", :user_id => user.id, :admin => "false"}, :class => "btn btn-danger", :method => :put %>
+                    <% if user.access_locked? %>
+                        <%= button_to "ロック解除", {:action => "update", :user_id => user.id, :lock => "false"}, :class => "btn btn-primary", :method => :put %>
                     <% else %>
-                        <%= button_to "管理者にする", {:action => "update", :user_id => user.id, :admin => "true"}, :class => "btn btn-default", :method => :put %>
+                        <%= button_to "ロック", {:action => "update", :user_id => user.id, :lock => "true"}, :class => "btn btn-danger", :method => :put %>
                     <% end %>
                 </td>
             </tr>

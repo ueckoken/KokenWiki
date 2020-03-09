@@ -1,30 +1,22 @@
-<div class="row">
-    <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
-        <div>
-            <%=render partial: "settings/left"%>
-        </div>
-        <div class="d-lg-none">
-            <%=render partial: "settings/right"%>
-        </div>
-    </div>
-    <div class="col-xl-8 col-lg-6 col-sm-8 col-xs-12">
-        <h3>ユーザーグループ設定</h3>
-        <input type="button" class="btn btn-primary" onClick="location.href='new'" value="新規作成">
-        <div><table class="table">
-            <tr><th>グループ名</th><th>人数</th></tr>
-            <%@usergroups.each do |usergroup|%>
-                <tr>
-                    <td>
-                        <%=link_to usergroup.name,usergroup.id.to_s%>
-                    </td>
-                    <td>
-                        <%=usergroup.users.size%>
-                    </td>
-                </tr>
-            <%end%>
-        </table></div>
-    </div>
-    <div class="col-xl-2 col-lg-3 d-none d-lg-block">
-        <%=render partial: "settings/right"%>
-    </div>
-</div>
+<%= render "settings/layout" do %>
+    <h1>ユーザーグループ設定</h1>
+    <%= link_to "新規作成", new_usergroup_path, :class => "btn btn-primary" %>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>グループ名</th>
+                <th>人数</th>
+            </tr>
+        </thead>
+        <% @usergroups.each do |a_usergroup| %>
+            <tr>
+                <td>
+                    <%= link_to a_usergroup.name, a_usergroup %>
+                </td>
+                <td>
+                    <%= a_usergroup.users.size %>
+                </td>
+            </tr>
+        <% end %>
+    </table>
+<% end %>
