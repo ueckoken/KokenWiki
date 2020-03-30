@@ -18,6 +18,6 @@ class Usergroup < ApplicationRecord
     if user.is_admin?
       return true
     end
-    return usergroup.users.include? user
+    return self.users.include? user
   end
 end
