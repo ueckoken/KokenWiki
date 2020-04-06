@@ -41,8 +41,10 @@ class FilesController < ApplicationController
           prev_file.purge
         end
 
-        if filename.include?(".") && !filename.include?("?") && !filename.include?("/")
+        if /\A^[^?#]*\.[^?#]*$\Z/.match(filename) && is_valid_uri?(filename)
           page.files.attach file
+        else
+          success_flag = false
         end
       end
     else
@@ -53,7 +55,7 @@ class FilesController < ApplicationController
         format.html { redirect_to path, notice: 'Files were successfully uploaded.' }
         format.json { render :show, status: :ok, location: path }
       else
-        format.html { render :show, alert: 'Files were not updated, something wrong' }
+        format.html { redirect_to path, alert: 'Files were not updated, something wrong' }
         format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
@@ -76,5 +78,14 @@ class FilesController < ApplicationController
     end
 
     redirect_to parent_pathname.to_s, notice: 'File was successfully destroyed.'
+  end
+
+  def is_valid_uri? filename
+    begin
+      URI.parse filename
+    rescue URI::InvalidURIError
+      return false
+    end
+    return true
   end
 end
