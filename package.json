@@ -16,7 +16,7 @@
     "jquery": "^3.4.1",
     "kind-of": "^6.0.3",
     "marked": "^0.7.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.3",
     "monaco-editor": "^0.19.3",
     "monaco-editor-webpack-plugin": "^1.8.2",
     "popper.js": "^1.16.0",
