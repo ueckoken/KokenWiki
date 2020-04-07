@@ -41,7 +41,7 @@ class FilesController < ApplicationController
           prev_file.purge
         end
 
-        if /\A^[^?#]*\.[^?#]*$\Z/.match(filename) && is_valid_uri?(filename)
+        if /\A^[^?#]*\.[^?#]*$\Z/.match?(filename) && is_valid_uri?(filename)
           page.files.attach file
         else
           success_flag = false
@@ -82,7 +82,7 @@ class FilesController < ApplicationController
 
   def is_valid_uri? filename
     begin
-      URI.parse filename
+      URI.parse(URI.escape filename)
     rescue URI::InvalidURIError
       return false
     end
