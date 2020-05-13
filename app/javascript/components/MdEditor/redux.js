@@ -11,9 +11,7 @@ const initialState = {
     default_readable_group_id: 0,
     default_editable_group_id: 0,
     default_is_draft: false,
-    default_is_public: false,
-    is_draft: false,
-    is_public: false
+    is_draft: false
 }
 
 const { reducer, actions } = createSlice({
@@ -54,7 +52,6 @@ const { reducer, actions } = createSlice({
             state.readable_group_id = state.default_readable_group_id
             state.editable_group_id = state.default_editable_group_id
             state.is_draft = state.default_is_draft
-            state.is_public = state.default_is_public
             return state
         },
         onClickIsDraft: state => {
@@ -62,13 +59,6 @@ const { reducer, actions } = createSlice({
                 return state
             }
             state.is_draft = !state.is_draft
-            return state
-        },
-        onClickIsPublic: state => {
-            if (state.is_editable == false) {
-                return state
-            }
-            state.is_public = !state.is_public
             return state
         },
         setContent: (state, action) => {
@@ -81,9 +71,7 @@ const { reducer, actions } = createSlice({
             state.default_readable_group_id = action.payload.readable_group_id
             state.default_editable_group_id = action.payload.editable_group_id
             state.default_is_draft = action.payload.is_draft
-            state.default_is_public = action.payload.is_public
             state.is_draft = action.payload.is_draft
-            state.is_public = action.payload.is_public
             state.is_edit = false
             return state
         }
@@ -94,8 +82,7 @@ const isChangedSelector = state =>
     state.markdown !== state.default_markdown ||
     state.readable_group_id !== state.default_readable_group_id ||
     state.editable_group_id !== state.default_editable_group_id ||
-    state.is_draft !== state.default_is_draft ||
-    state.is_public !== state.default_is_public
+    state.is_draft !== state.default_is_draft
 
 const selectors = {
     isChanged: isChangedSelector

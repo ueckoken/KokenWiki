@@ -19,7 +19,6 @@ class PagesController < ApplicationController
     return readable_pages
   end
   def get_readable_pages
-    pages = Page.where(is_public: true, is_draft: false)
     if !user_signed_in?
       return pages
     end
@@ -108,7 +107,7 @@ class PagesController < ApplicationController
       #  end
     end
     # @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id)
-    @updated_pages = filter_readable_pages(Page.order("updated_at DESC").select(:readable_group_id, :is_draft, :is_public, :updated_at, :path, :user_id).limit(50))
+    @updated_pages = filter_readable_pages(Page.order("updated_at DESC").select(:readable_group_id, :is_draft, :updated_at, :path, :user_id).limit(50))
   end
 
   # index
@@ -178,7 +177,6 @@ class PagesController < ApplicationController
         path: path,
         parent: parent,
         is_draft: false,
-        is_public: false
         )
     else
       raise MajorError.bad_request
@@ -208,7 +206,7 @@ class PagesController < ApplicationController
       raise ActiveRecord::RecordNotFound
       return
     end
-    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft, :is_public)
+    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft)
     success_flag = true
     if @page.is_editable_user?(current_user)
       success_flag = @page.update(
@@ -217,7 +215,6 @@ class PagesController < ApplicationController
         readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
         editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
         is_draft: page_params[:is_draft],
-        is_public: page_params[:is_public]
       )
     else
       success_flag = false

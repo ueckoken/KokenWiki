@@ -40,9 +40,6 @@ class Page < ApplicationRecord
     if self.is_draft
       return user == self.user
     end
-    if self.is_public
-      return true
-    end
     if user.nil?
       return false
     end

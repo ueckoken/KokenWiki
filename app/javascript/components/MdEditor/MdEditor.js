@@ -10,7 +10,6 @@ const MdEditor = () => {
     const readable_group_id = useSelector(state => state.readable_group_id)
     const editable_group_id = useSelector(state => state.editable_group_id)
     const is_draft = useSelector(state => state.is_draft)
-    const is_public = useSelector(state => state.is_public)
     const is_editable = useSelector(state => state.is_editable)
     const is_changed = useSelector(selectors.isChanged)
     const is_edit = useSelector(state => state.is_edit)
@@ -19,7 +18,6 @@ const MdEditor = () => {
     const handleOnClickEdit = () => dispatch(actions.onClickEdit())
     const handleOnClickCancel = () => dispatch(actions.onClickCancel())
     const handleOnClickIsDraft = () => dispatch(actions.onClickIsDraft())
-    const handleOnClickIsPublic = () => dispatch(actions.onClickIsPublic())
     const handleChangeReadableGroup = e =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
     const handleChangeEditableGroup = e =>
@@ -110,16 +108,6 @@ const MdEditor = () => {
                 />
                 <label className="form-check-label">下書き</label>
                 <input type="hidden" name="page[is_draft]" value={is_draft} />
-            </div>
-            <div className="form-check">
-                <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={is_public}
-                    onChange={handleOnClickIsPublic}
-                />
-                <label className="form-check-label">一般公開</label>
-                <input type="hidden" name="page[is_public]" value={is_public} />
             </div>
         </div>
     )
