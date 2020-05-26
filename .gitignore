@@ -40,3 +40,5 @@ yarn-debug.log*
 /pukiwiki/*
 pukiwiki_migrate.log
 /config/database.yml
+
+keyfile.json
