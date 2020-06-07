@@ -5,7 +5,7 @@ import { reducer, actions } from "./redux"
 import MdEditor from "./MdEditor"
 
 const store = configureStore({
-    reducer: reducer
+    reducer: reducer,
 })
 
 export default ({
@@ -14,7 +14,7 @@ export default ({
     editable,
     readable_group_id,
     editable_group_id,
-    is_draft
+    is_draft,
 }) => {
     useEffect(() => {
         store.dispatch(
@@ -24,7 +24,7 @@ export default ({
                 is_editable: editable,
                 readable_group_id,
                 editable_group_id,
-                is_draft
+                is_draft,
             })
         )
     }, [
@@ -33,7 +33,7 @@ export default ({
         editable,
         readable_group_id,
         editable_group_id,
-        is_draft
+        is_draft,
     ])
     return (
         <Provider store={store}>

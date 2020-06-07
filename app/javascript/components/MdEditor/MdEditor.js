@@ -6,21 +6,21 @@ import Editor from "./Editor"
 import { actions, selectors } from "./redux"
 
 const MdEditor = () => {
-    const usergroups = useSelector(state => state.usergroups)
-    const readable_group_id = useSelector(state => state.readable_group_id)
-    const editable_group_id = useSelector(state => state.editable_group_id)
-    const is_draft = useSelector(state => state.is_draft)
-    const is_editable = useSelector(state => state.is_editable)
+    const usergroups = useSelector((state) => state.usergroups)
+    const readable_group_id = useSelector((state) => state.readable_group_id)
+    const editable_group_id = useSelector((state) => state.editable_group_id)
+    const is_draft = useSelector((state) => state.is_draft)
+    const is_editable = useSelector((state) => state.is_editable)
     const is_changed = useSelector(selectors.isChanged)
-    const is_edit = useSelector(state => state.is_edit)
+    const is_edit = useSelector((state) => state.is_edit)
 
     const dispatch = useDispatch()
     const handleOnClickEdit = () => dispatch(actions.onClickEdit())
     const handleOnClickCancel = () => dispatch(actions.onClickCancel())
     const handleOnClickIsDraft = () => dispatch(actions.onClickIsDraft())
-    const handleChangeReadableGroup = e =>
+    const handleChangeReadableGroup = (e) =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
-    const handleChangeEditableGroup = e =>
+    const handleChangeEditableGroup = (e) =>
         dispatch(actions.changeEditableGroup(Number(e.target.value)))
 
     if (!is_edit) {
@@ -143,7 +143,7 @@ const MdEditorLg = () => (
                     <div
                         style={{
                             maxHeight: 600,
-                            overflowY: "auto"
+                            overflowY: "auto",
                         }}
                     >
                         <Markdown highlight={false} />

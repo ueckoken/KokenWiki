@@ -21,13 +21,13 @@ export default ({ markdown }) => {
         <div
             className="markdown-body"
             dangerouslySetInnerHTML={{
-                __html: html
+                __html: html,
             }}
         ></div>
     )
 }
 
-marked.Parser.prototype.parse = function(src) {
+marked.Parser.prototype.parse = function (src) {
     this.inline = new marked.InlineLexer(src.links, this.options)
     this.inlineText = new marked.InlineLexer(
         src.links,
@@ -48,7 +48,7 @@ marked.Parser.prototype.parse = function(src) {
     return out
 }
 
-marked.InlineLexer.prototype.outputLink = function(cap, link) {
+marked.InlineLexer.prototype.outputLink = function (cap, link) {
     const href = link.href
     const title = link.title ? escape(link.title) : null
 
@@ -64,11 +64,11 @@ marked.InlineLexer.prototype.outputLink = function(cap, link) {
     }
 }
 
-marked.Renderer.prototype.video = function(href, title, alt) {
+marked.Renderer.prototype.video = function (href, title, alt) {
     if (href.search(/^javascript:/) >= 0) {
         return alt
     } else {
-        const isNumber = function(value) {
+        const isNumber = function (value) {
             return typeof value === "number" && isFinite(value)
         }
         let size = ""
@@ -91,18 +91,18 @@ marked.Renderer.prototype.video = function(href, title, alt) {
     }
 }
 
-marked.Renderer.prototype.audio = function(href, alt) {
+marked.Renderer.prototype.audio = function (href, alt) {
     if (href.search(/^javascript:/) >= 0) {
         return alt
     } else {
         return `<audio src="${href}" controls>${alt}</audio>`
     }
 }
-marked.Renderer.prototype.image = function(href, title, text) {
+marked.Renderer.prototype.image = function (href, title, text) {
     if (href.search(/^javascript:/) >= 0) {
         return alt
     }
-    const isNumber = function(value) {
+    const isNumber = function (value) {
         return typeof value === "number" && isFinite(value)
     }
     let size = ""
@@ -162,7 +162,7 @@ const sanitizationOption = {
         "span",
         "img",
         "video",
-        "audio"
+        "audio",
     ],
     disallowedTagsMode: "escape",
     allowedSchemes: ["http", "https"],
@@ -172,33 +172,33 @@ const sanitizationOption = {
         img: ["src", "width", "height"],
         video: ["src", "width", "height", "controls"],
         audio: ["src", "controls"],
-        table: ["class"]
+        table: ["class"],
     },
     allowedStyles: {
         "*": {
             // Match HEX and RGB
             color: [
                 /^#(0x)?[0-9a-f]+$/i,
-                /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/
+                /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
             ],
             "background-color": [
                 /^#(0x)?[0-9a-f]+$/i,
-                /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/
+                /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,
             ],
             "text-align": [/^left$/, /^right$/, /^center$/],
             // Match any number with px, em, or %
-            "font-size": [/^\d+(?:px|em|%)$/]
-        }
+            "font-size": [/^\d+(?:px|em|%)$/],
+        },
     },
 
     allowedClasses: {
-        table: ["table", "table-hober"]
+        table: ["table", "table-hober"],
     },
     transformTags: {
         table: sanitizeHtml.simpleTransform("table", {
-            class: "table table-hober"
-        })
-    }
+            class: "table table-hober",
+        }),
+    },
 }
 
 const markedOptions = {
@@ -209,5 +209,5 @@ const markedOptions = {
     sanitize: false,
     smartLists: true,
     smartypants: false,
-    langPrefix: ""
+    langPrefix: "",
 }
