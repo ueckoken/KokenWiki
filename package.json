@@ -1,5 +1,5 @@
 {
-  "name": "kokencontest",
+  "name": "kokenwiki",
   "private": true,
   "scripts": {
     "prettier": "prettier --tab-width 4 --no-semi --write \"app/**/*.{js,jsx}\""
