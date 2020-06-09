@@ -11,7 +11,7 @@ const initialState = {
     default_readable_group_id: 0,
     default_editable_group_id: 0,
     default_is_draft: false,
-    is_draft: false
+    is_draft: false,
 }
 
 const { reducer, actions } = createSlice({
@@ -39,14 +39,14 @@ const { reducer, actions } = createSlice({
             state.editable_group_id = action.payload
             return state
         },
-        onClickEdit: state => {
+        onClickEdit: (state) => {
             if (state.is_editable == false) {
                 return state
             }
             state.is_edit = true
             return state
         },
-        onClickCancel: state => {
+        onClickCancel: (state) => {
             state.markdown = state.default_markdown
             state.is_edit = false
             state.readable_group_id = state.default_readable_group_id
@@ -54,7 +54,7 @@ const { reducer, actions } = createSlice({
             state.is_draft = state.default_is_draft
             return state
         },
-        onClickIsDraft: state => {
+        onClickIsDraft: (state) => {
             if (state.is_editable == false) {
                 return state
             }
@@ -74,18 +74,18 @@ const { reducer, actions } = createSlice({
             state.is_draft = action.payload.is_draft
             state.is_edit = false
             return state
-        }
-    }
+        },
+    },
 })
 
-const isChangedSelector = state =>
+const isChangedSelector = (state) =>
     state.markdown !== state.default_markdown ||
     state.readable_group_id !== state.default_readable_group_id ||
     state.editable_group_id !== state.default_editable_group_id ||
     state.is_draft !== state.default_is_draft
 
 const selectors = {
-    isChanged: isChangedSelector
+    isChanged: isChangedSelector,
 }
 
 export { reducer, actions, selectors }

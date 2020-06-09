@@ -4,9 +4,10 @@ import { actions } from "./redux"
 import MonacoEditor from "react-monaco-editor"
 
 export default () => {
-    const markdown = useSelector(state => state.markdown)
+    const markdown = useSelector((state) => state.markdown)
     const dispatch = useDispatch()
-    const handleChangeText = newValue => dispatch(actions.changeText(newValue))
+    const handleChangeText = (newValue) =>
+        dispatch(actions.changeText(newValue))
     return (
         <Fragment>
             <MonacoEditor
@@ -15,7 +16,7 @@ export default () => {
                 language="markdown"
                 height="600"
                 options={{
-                    wordWrap: "on"
+                    wordWrap: "on",
                 }}
             />
             <textarea hidden readOnly value={markdown} name="page[content]" />

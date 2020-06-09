@@ -32,7 +32,7 @@
     "sanitize-html": "^1.21.1"
   },
   "devDependencies": {
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "webpack-dev-server": "^3.10.1"
   }
 }
