@@ -20,9 +20,9 @@ class PagesController < ApplicationController
   end
   def get_readable_pages
     if !user_signed_in?
-      return pages
+      return Page.none
     end
-    pages = pages.or(Page.where(readable_group: nil, is_draft: false))
+    pages = Page.where(readable_group: nil, is_draft: false)
     if current_user != nil
       current_user.usergroups.each do |id|
         pages = pages.or(Page.where(readable_group: id, is_draft: false))
