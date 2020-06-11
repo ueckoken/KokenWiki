@@ -18,7 +18,17 @@ local:
 google:
   service: GCS
   project: <%= Rails.application.credentials.dig(:gcs, :project_id) %>
-  credentials: <%= Rails.root.join("keyfile.json") %>
+  credentials:
+    type: service_account
+    project_id: <%= Rails.application.credentials.dig(:gcs, :project_id) %>
+    private_key_id: <%= Rails.application.credentials.dig(:gcs, :private_key_id) %>
+    private_key: <%= Rails.application.credentials.dig(:gcs, :private_key).dump %>
+    client_email: <%= Rails.application.credentials.dig(:gcs, :client_email) %>
+    client_id: <%= Rails.application.credentials.dig(:gcs, :client_id) %>
+    auth_uri: <%= Rails.application.credentials.dig(:gcs, :auth_uri) %>
+    token_url: <%= Rails.application.credentials.dig(:gcs, :token_url) %>
+    auth_provider_x509_cert_url: <%= Rails.application.credentials.dig(:gcs, :auth_provider_x509_cert_url) %>
+    client_x509_cert_url: <%= Rails.application.credentials.dig(:gcs, :client_x509_cert_url) %>
   bucket: <%= Rails.application.credentials.dig(:gcs, :bucket_name) %>
 
 # Use rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
