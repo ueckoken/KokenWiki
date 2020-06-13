@@ -1,11 +1,6 @@
 class User < ApplicationRecord
-  has_many :user_usergroups
-  has_many :usergroups, through: :user_usergroups
-
-
+  has_and_belongs_to_many :usergroups
   has_many :create_groups, class_name: "Usergroup", foreign_key: "create_user_id"
-
-
   has_many :pages
   has_many :comments
   has_many :update_histories
