@@ -10,16 +10,20 @@
             </li>
         </ul>
     </div>
-    <% if current_user.is_admin %>
+    <% if can?(:manage, :userlock) || can?(:manage, :admin_user) %>
         <div class="admin-setting-nav border rounded mt-3">
             <p class="list-gruop-heading mb-0">管理者設定</p>
             <ul class="list-group list-group-flush list-group-dense">
-                <li class="list-group-item">
-                    <%= link_to "ユーザーのロック", userlock_path %>
-                </li>
-                <li class="list-group-item">
-                    <%= link_to "管理者の変更", admin_path %>
-                </li>
+                <% if can? :manage, :userlock %>
+                    <li class="list-group-item">
+                        <%= link_to "ユーザーのロック", userlock_path %>
+                    </li>
+                <% end %>
+                <% if can? :manage, :admin_user %>
+                    <li class="list-group-item">
+                        <%= link_to "管理者の変更", admin_path %>
+                    </li>
+                <% end %>
             </ul>
         </div>
     <% end %>

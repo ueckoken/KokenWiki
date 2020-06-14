@@ -17,7 +17,7 @@
             <% @users.each do |user| %>
                 <tr>
                     <td>
-                        <%= form.check_box "check_id", {:checked => false, :multiple => true}, user.id.to_s %>
+                        <%= form.check_box "user_ids", {:checked => false, :multiple => true}, user.id.to_s, nil %>
                     </td>
                     <td><%= user.name %></td>
                     <td><%= user.user_id %></td>

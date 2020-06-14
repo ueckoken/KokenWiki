@@ -9,10 +9,4 @@ class Usergroup < ApplicationRecord
 
   validates :name, uniqueness: true, length: { in: 1..50 }
 
-  def is_editable_user?(user)
-    if user.is_admin?
-      return true
-    end
-    return self.users.include? user
-  end
 end

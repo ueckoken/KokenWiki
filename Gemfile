@@ -71,6 +71,8 @@ gem 'webpacker'
 gem 'devise'
 gem 'devise-bootstrap-views'
 
+gem 'cancancan'
+
 gem "google-cloud-storage", "~> 1.8", require: false
 
 gem 'rubocop'

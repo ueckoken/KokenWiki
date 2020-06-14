@@ -1,6 +1,5 @@
 class AdminSettingsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :authenticate_admin!
+  authorize_resource :class => :admin_user
 
   def index
     @users = User.all.order("is_admin DESC")

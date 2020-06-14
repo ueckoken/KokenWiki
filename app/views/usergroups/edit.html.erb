@@ -12,9 +12,8 @@
             </thead>
             <% @users.each do |user| %>
                 <tr>
-                    <% flag_ = @usergroup.users.include?(user) %>
                     <td>
-                        <%= form.check_box "check_id", {:checked => flag_, :multiple => true}, user.id.to_s %>
+                        <%= form.check_box "user_ids", {:checked => @usergroup.users.include?(user), :multiple => true}, user.id.to_s, nil %>
                     </td>
                     <td><%= user.name %></td>
                     <td><%= user.user_id %></td>

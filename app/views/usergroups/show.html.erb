@@ -1,12 +1,16 @@
 <%= render "settings/layout" do %>
     <h1><%= @usergroup.name %></h1>
     <div class="btn-toolbar justify-content-between">
-        <div class="btn-group">
-            <%= link_to "編集", edit_usergroup_path(@usergroup), :class => "btn btn-default" %>
-        </div>
-        <div class="btn-group">
-            <%= button_to "削除", {:action => "destroy"}, :class => "btn btn-danger", :method => :delete %>
-        </div>
+        <% if can? :update, @usergroup %>
+            <div class="btn-group">
+                <%= link_to "編集", edit_usergroup_path(@usergroup), :class => "btn btn-default" %>
+            </div>
+        <% end %>
+        <% if can? :destroy, @usergroup %>
+            <div class="btn-group">
+                <%= button_to "削除", {:action => "destroy"}, :class => "btn btn-danger", :method => :delete %>
+            </div>
+        <% end %>
     </div>
     <table class="table">
         <thead>
