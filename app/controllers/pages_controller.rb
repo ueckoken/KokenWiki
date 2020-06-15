@@ -16,7 +16,7 @@ class PagesController < ApplicationController
     else
       @pankuzu = Page.none
     end
-    @search_pages = get_readable_pages
+    @search_pages = Page.accessible_by(current_ability, :read)
     if params[:search] != ""
       searchstr = params[:search].split
       @search_pages = @search_pages.where("path LIKE ?", @path + "%")
