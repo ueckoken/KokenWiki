@@ -1,27 +1,25 @@
 class CommentsController < ApplicationController
   include PathHelper
-  before_action :authenticate_user!
 
   def create
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
-    if page == nil || !page.is_readable_user?(current_user)
+
+    if page == nil
       raise ActiveRecord::RecordNotFound
     end
+
+    authorize! :read, page
+
     comment_param = params.require(:comment).permit(:content)
-    success_flag = true
-    if page.is_readable_user?(current_user)
-      comment = Comment.create(
-        user: current_user,
-        page: page,
-        comment: comment_param[:content],
-      )
-    else
-      success_flag = false
-    end
+    comment = Comment.new(
+      user: current_user,
+      page: page,
+      comment: comment_param[:content],
+    )
     respond_to do |format|
-      if success_flag
+      if comment.save
         format.html { redirect_to path, notice: 'Comment was successfully createed.' }
         format.json { render :show, status: :ok, location: path }
       else
@@ -35,17 +33,20 @@ class CommentsController < ApplicationController
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
+
     if page == nil
       raise ActiveRecord::RecordNotFound
     end
+
     comment_param = params.require(:comment).permit(:comment_id)
     comment = page.comments.find(comment_param[:comment_id])
-    if page.is_editable_user?(current_user) || comment.user == current_user
-      comment.destroy
-    else
+
+    if cannot?(:write, page) && cannot?(:write, comment)
       # not permittedを返した方が…？
       raise ActiveRecord::RecordNotFound
     end
+
+    comment.destroy
     respond_to do |format|
       format.html { redirect_to path, notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }

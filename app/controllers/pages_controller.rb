@@ -4,33 +4,7 @@ class PagesController < ApplicationController
   include PathHelper
   # before_action :set_page, only: [:show, :edit, :update, :destroy]
   before_action :force_trailing_slash, only: [:show_page]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
 
-  def filter_readable_pages(pages)
-    if current_user != nil && current_user.is_admin?
-      return pages
-    end
-    readable_pages = []
-    pages.each do |page|
-      if page.is_readable_user?(current_user)
-        readable_pages += [page]
-      end
-    end
-    return readable_pages
-  end
-  def get_readable_pages
-    if !user_signed_in?
-      return Page.none
-    end
-    pages = Page.where(readable_group: nil, is_draft: false)
-    if current_user != nil
-      current_user.usergroups.each do |id|
-        pages = pages.or(Page.where(readable_group: id, is_draft: false))
-      end
-    end
-    pages = pages.or(Page.where(is_draft: true, user: current_user))
-    return pages
-  end
   def show_search
     # とりあえずの表示
     @pathname = get_formal_pathname params[:pages]
@@ -40,7 +14,7 @@ class PagesController < ApplicationController
     if @page != nil
       @pankuzu = render_pankuzu_list @page.parent
     else
-      @pankuzu = []
+      @pankuzu = Page.none
     end
     @search_pages = get_readable_pages
     if params[:search] != ""
@@ -51,7 +25,7 @@ class PagesController < ApplicationController
         @search_pages = @search_pages.where("CONCAT(title,content) LIKE ?", "%" + str + "%")
       end
     else
-      @search_pages = []
+      @search_pages = Page.none
     end
 
     render_left
@@ -61,7 +35,7 @@ class PagesController < ApplicationController
 
   def render_pankuzu_list(page)
     if page == nil
-      return []
+      return Page.none
     end
     return render_pankuzu_list(page.parent) + [page]
   end
@@ -69,12 +43,12 @@ class PagesController < ApplicationController
   def render_left
     if is_root_path?(@pathname)
       if @page == nil
-        @brothers_pages = []
-        @children_pages = []
+        @brothers_pages = Page.none
+        @children_pages = Page.none
         return
       end
-      @brothers_pages = filter_readable_pages [@page]
-      @children_pages = filter_readable_pages @page.children.order(:title)
+      @brothers_pages = [@page]
+      @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
       return
     end
     if @page != nil
@@ -84,30 +58,16 @@ class PagesController < ApplicationController
       parent = Page.find_by(path: parent_pathname.to_s)
     end
     # parent shold not null
-    @brothers_pages = parent.children.order(:title)
+    @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: parent).order(:title)
     if @page != nil
-      @children_pages = @page.children.order(:title)
+      @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
     else
-      @children_pages = []
+      @children_pages = Page.none
     end
-    @brothers_pages = filter_readable_pages @brothers_pages
-    @children_pages = filter_readable_pages @children_pages
   end
 
   def render_right
-    begin
-      # tmp_pages = Page.all.order("updated_at DESC").select(:readable_group_id,:is_draft,:updated_at,:path,:user_id)
-      # @updated_pages = []
-      # tmp_pages.each do |page|
-      #  if @updated_pages.size >= 50
-      #    break
-      #  end
-      #  if is_readable? page
-      #    @updated_pages += [page]
-      #  end
-    end
-    # @updated_pages = get_readable_pages().limit(50).order("updated_at DESC").select(:readable_group_id,:is_draft,:is_public,:updated_at,:path,:user_id)
-    @updated_pages = filter_readable_pages(Page.order("updated_at DESC").select(:readable_group_id, :is_draft, :updated_at, :path, :user_id).limit(50))
+    @updated_pages = Page.accessible_by(current_ability, :read).order("updated_at DESC").select(:readable_group_id, :is_draft, :updated_at, :path, :user_id).limit(50)
   end
 
   # index
@@ -118,19 +78,11 @@ class PagesController < ApplicationController
     if @page.nil?
       parent_pathname = @pathname.parent
       parent = Page.find_by(path: parent_pathname.to_s)
-      if (parent.nil? || !parent.is_readable_user?(current_user)) && !is_root_path?(@pathname)
-        # 見えない人は下部ページ作れないでいいよね
-        # if !user_signed_in?
-        #  authenticate_user!
-        # else
-        raise ActiveRecord::RecordNotFound
-        # end
-      end
-      # if parent is not found, render 404
-      # render createnewpage
-      if not user_signed_in?
+      if (parent.nil? || cannot?(:read, parent)) && !is_root_path?(@pathname)
         raise ActiveRecord::RecordNotFound
       end
+
+      authorize! :read, parent
 
       @title = get_title @pathname
       @pankuzu = render_pankuzu_list parent
@@ -141,14 +93,11 @@ class PagesController < ApplicationController
       return
     end
 
-    if not @page.is_readable_user?(current_user)
-      raise ActiveRecord::RecordNotFound
-    end
+    authorize! :read, @page
 
     @update_histories = @page.update_histories.order(created_at: :desc)
     @title = @page.title
     @pankuzu = render_pankuzu_list @page.parent
-    @editable = @page.is_editable_user?(current_user)
     @update_histories = @page.update_histories.order("created_at DESC")
 
     render_right
@@ -169,6 +118,7 @@ class PagesController < ApplicationController
     parent_pathname = pathname.parent
     parent = Page.find_by(path: parent_pathname.to_s)
     title = get_title pathname
+
     if !Page.exists?(path: path) && (parent != nil || is_root_path?(pathname))
       @page = Page.new(
         user: current_user,
@@ -202,23 +152,21 @@ class PagesController < ApplicationController
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     @page = Page.find_by(path: path)
-    if @page == nil || !@page.is_editable_user?(current_user)
+
+    if @page == nil
       raise ActiveRecord::RecordNotFound
       return
     end
+    authorize! :write, @page
+
     page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id, :is_draft)
-    success_flag = true
-    if @page.is_editable_user?(current_user)
-      success_flag = @page.update(
-        user: current_user,
-        content: page_params[:content],
-        readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
-        editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
-        is_draft: page_params[:is_draft],
-      )
-    else
-      success_flag = false
-    end
+    success_flag = @page.update(
+      user: current_user,
+      content: page_params[:content],
+      readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
+      editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
+      is_draft: page_params[:is_draft],
+    )
     respond_to do |format|
       if success_flag
         history = UpdateHistory.new(user: @page.user, content: @page.content)
@@ -239,20 +187,23 @@ class PagesController < ApplicationController
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     page = Page.find_by(path: path)
-    if page == nil || page.children.size != 0 || !page.is_editable_user?(current_user)
+
+    if page == nil
       raise ActiveRecord::RecordNotFound
     end
-    page.destroy
+
+    authorize! :write, page
+
+    if page.children.size != 0
+      raise ActiveRecord::RecordNotFound
+    end
+
+    page.destroy!
+
     respond_to do |format|
       format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-
-  # private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_page
-    @page = Page.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

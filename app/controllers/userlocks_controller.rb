@@ -1,6 +1,5 @@
 class UserlocksController < ApplicationController
-  before_action :authenticate_user!
-  before_action :authenticate_admin!
+  authorize_resource :class => :userlock
 
   def index
     @users = User.all.order("locked_at DESC")

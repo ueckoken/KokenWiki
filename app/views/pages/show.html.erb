@@ -4,7 +4,7 @@
     <p>
         <%= render "update-timestamp", history: @page %>
     </p>
-    <% if @page.children.size == 0 && @editable %>
+    <% if @page.children.size == 0 && can?(:write, @page) %>
         <%= form_with scope: :page, method: :delete do |form| %>
             <% form.submit "削除", {class: "btn btn-danger", style: "float: right;", data: {confirm: "本当に削除しますか"}} %>
         <% end %>
@@ -15,7 +15,7 @@
             is_draft: @page.is_draft,
             readable_group_id: @page.readable_group_id || 0,
             editable_group_id: @page.editable_group_id || 0,
-            editable: @editable,
+            editable: can?(:write, @page),
             usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
         ) %>
     <% end %>
@@ -34,7 +34,7 @@
                     markdown: comment.comment,
                     highlight:true
                 } %>
-                <% if @editable || comment.user == current_user %>
+                <% if can?(:write, @page) || can?(:write, comment) %>
                     <%= form_with scope: "comment", method: :delete do |form| %>
                         <%= form.hidden_field "comment_id", value: comment.id %>
                         <%= form.submit "削除", {class: "btn btn-danger", data: {confirm: "本当に削除しますか"}} %>
@@ -43,20 +43,17 @@
             </div>
         </div>
     <% end %>
-    <% if user_signed_in? %>
-        <h2 class="h4">新しいコメント</h2>
-        <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
-            <%= form.text_area :content, class: "form-control" %>
-            <%= form.submit "投稿", class: "btn btn-primary" %>
-        <% end %>
+    <h2 class="h4">新しいコメント</h2>
+    <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
+        <%= form.text_area :content, class: "form-control" %>
+        <%= form.submit "投稿", class: "btn btn-primary" %>
     <% end %>
-    <%#=react_component "CommentList", {comments: @page.comments.to_json(include:[:user]),csrfParams: request_forgery_protection_token, csrfToken: form_authenticity_token}%>
     <h2 class="h3">ファイル</h2>
     <ul class="list-group">
         <% @page.files.each do |file| %>
             <li class="list-group-item d-flex justify-content-between">
                 <%= link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s %>
-                <% if @editable %>
+                <% if can? :write, @page %>
                     <%= form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html: {style: "display:inline"}, remote: true do |form| %>
                         <% form.submit "削除", {class: "btn btn-danger btn-sm", data: {confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}} %>
                     <% end %>
@@ -64,7 +61,7 @@
             </li>
         <% end %>
     </ul>
-    <% if user_signed_in? %>
+    <% if can? :write, @page %>
         <%= form_with scope: :file, method: :post do |form| %>
             <%= form.file_field :files, :multiple => true %>
             <%= form.submit "送信", class: "btn btn-primary" %>
