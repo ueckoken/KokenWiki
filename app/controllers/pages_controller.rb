@@ -78,15 +78,18 @@ class PagesController < ApplicationController
     if @page.nil?
       parent_pathname = @pathname.parent
       parent = Page.find_by(path: parent_pathname.to_s)
-      if (parent.nil? || cannot?(:read, parent)) && !is_root_path?(@pathname)
-        raise ActiveRecord::RecordNotFound
-      end
 
-      authorize! :read, parent
+      if !is_root_path?(@pathname)
+        if parent.nil?
+          raise ActiveRecord::RecordNotFound
+        end
+        authorize! :write, parent
+      end
 
       @title = get_title @pathname
       @pankuzu = render_pankuzu_list parent
       @page = Page.new(title: @title, path: @path, parent: parent)
+
       render_left
       render_right
       render "new"
