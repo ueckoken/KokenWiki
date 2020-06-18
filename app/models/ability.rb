@@ -44,11 +44,9 @@ class Ability
     can :read, :setting
     can :read, Page, readable_group: nil
     can :read, Page, readable_group: { id: user.usergroup_ids }
-    can :read, Page, user_id: user.id, is_draft: true
     can [:read, :create], Usergroup
     can :write, Page, editable_group: nil
     can :write, Page, editable_group: { id: user.usergroup_ids }
-    can :write, Page, user_id: user.id, is_draft: true
     can :write, Comment, user_id: user.id
     can :write, Usergroup, users: { id: user.id }
 

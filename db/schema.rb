@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_184732) do
+ActiveRecord::Schema.define(version: 2020_06_16_171405) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 2020_06_13_184732) do
     t.string "title", null: false
     t.text "content", size: :long
     t.string "path", null: false
-    t.boolean "is_draft", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
