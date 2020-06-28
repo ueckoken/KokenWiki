@@ -54,4 +54,4 @@ production:
   <<: *default
   database: wiki1_production
   username: rails
-  password: <%= ENV['WIKI1_DATABASE_PASSWORD'] %>
+  password: <%= Rails.application.credentials.production_db_password! %>
