@@ -17,4 +17,6 @@ class Page < ApplicationRecord
   validates :title, exclusion: { in: [nil] }, format: { with: /\A[^?\.]*\z/ }
   validates :path, format: { with: /\A[^?\.]*\z/ }
   validates :content, exclusion: { in: [nil] }
+
+  scope :search, ->(search_text) { where("CONCAT(title,content) LIKE ?", "%" + search_text + "%") if search_text.present? }
 end

@@ -6,30 +6,19 @@ class PagesController < ApplicationController
   before_action :force_trailing_slash, only: [:show_page]
 
   def show_search
-    # とりあえずの表示
-    @pathname = get_formal_pathname params[:pages]
-    @path = @pathname.to_s
-    @page = Page.find_by(path: @path)
-    @title = get_title @pathname
-    if @page != nil
-      @pankuzu = render_pankuzu_list @page.parent
-    else
-      @pankuzu = Page.none
+    if params[:search] == ""
+      @search_pages = Page.none
+
+      render "search"
+      return
     end
     @search_pages = Page.accessible_by(current_ability, :read)
-    if params[:search] != ""
-      searchstr = params[:search].split
-      @search_pages = @search_pages.where("path LIKE ?", @path + "%")
-      @search_pages = @search_pages.where("CONCAT(title,content) LIKE ?", "%" + searchstr.pop + "%")
-      searchstr.each do |str|
-        @search_pages = @search_pages.where("CONCAT(title,content) LIKE ?", "%" + str + "%")
-      end
-    else
-      @search_pages = Page.none
+
+    searchstr = params[:search].split
+    searchstr.each do |str|
+      @search_pages = @search_pages.search(str)
     end
 
-    render_left
-    render_right
     render "search"
   end
 

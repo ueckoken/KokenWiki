@@ -1,11 +1,6 @@
 require "uri"
 require "pathname"
 
-def is_search?(request)
-  params = Rack::Utils.parse_query(request.query_string)
-  return params["search"].present?
-end
-
 def is_file?(request)
   url = URI.parse(request.url)
   path = Pathname.new(url.path)
@@ -23,9 +18,6 @@ end
 class PageConstraint
   def self.get(request)
     if is_file?(request)
-      return false
-    end
-    if is_search?(request)
       return false
     end
     return true
@@ -61,12 +53,6 @@ class PageConstraint
     if request.delete?
       return self.delete(request)
     end
-  end
-end
-
-class SearchConstraint
-  def self.matches?(request)
-    return is_search?(request)
   end
 end
 
@@ -138,8 +124,10 @@ Rails.application.routes.draw do
   # のちに使いたいかもしれない
 
   root to: 'pages#show_page', constraints: PageConstraint
-  get '/' => 'pages#show_search', constraints: SearchConstraint
   get '/' => 'files#show', constraints: FileConstraint
+
+  get '/search' => 'pages#show_search'
+
   # get    '/new'        => 'pages#new'
   # get    '/edit'       => 'pages#edit'
   post   '/'           => 'pages#create', constraints: PageConstraint
@@ -152,7 +140,6 @@ Rails.application.routes.draw do
   # get    '*pages/new'  => 'pages#new'
   # get    '*pages/edit' => 'pages#edit'
   get    '*pages/'     => 'pages#show_page', constraints: PageConstraint
-  get    '*pages/'     => 'pages#show_search', constraints: SearchConstraint
   get    '*pages/'     => 'files#show', constraints: FileConstraint
   post   '*pages/'     => 'pages#create', constraints: PageConstraint
   post   '*pages/'     => 'files#create', constraints: FileConstraint
