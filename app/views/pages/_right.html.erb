@@ -19,11 +19,7 @@
                 </dt>
                 <% pages.each do |page| %>
                     <dd>
-                        <% if page.path == "/" %>
-                            <%= link_to "/", "/" %>
-                        <% else %>
-                            <%= link_to page.path, page.path %>
-                        <% end %>
+                        <%= link_to page.path, page.path %>
                     </dd>
                 <% end %>
             <% end %>

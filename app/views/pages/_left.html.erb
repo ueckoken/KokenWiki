@@ -15,8 +15,8 @@
         <ul class="pagelist">
             <% if @page.parent %>
             <li>
-                <% if @page.parent.path == "/" %>
-                    <%= link_to "/", "/" %>
+                <% if @page.parent.root? %>
+                    <%= link_to "/", @page.parent.path %>
                 <% else %>
                     <%= link_to @page.parent.title, @page.parent.path %>
                 <% end %>
@@ -24,8 +24,8 @@
             <% end %>
                 <li>
                     <strong>
-                        <% if @page.path == "/" %>
-                            <%= link_to "/", "/" %>
+                        <% if @page.root? %>
+                            <%= link_to "/", @page.path %>
                         <% else %>
                             <%= link_to @page.title, @page.path %>
                         <% end %>

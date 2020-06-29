@@ -67,7 +67,7 @@
             </article>
         <% end %>
     </div>
-    <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
+    <%= form_with scope: :comment, method: :post, url: URI.encode(@page.path) do |form| %>
         <%= form.text_area :content, class: "form-control", placeholder: "新しいコメント" %>
         <p class="text-right">
             <%= form.submit "投稿", class: "btn btn-primary" %>
