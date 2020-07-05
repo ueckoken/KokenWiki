@@ -79,3 +79,5 @@ gem 'rubocop-rails'
 gem 'rubocop-performance'
 
 gem "mysql2", "~> 0.5.3"
+
+gem "appengine", "~> 0.5.0"
