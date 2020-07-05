@@ -331,7 +331,7 @@ DEPENDENCIES
   google-cloud-storage (~> 1.8)
   jbuilder (~> 2.5)
   listen (>= 3.0.5)
-  mysql2
+  mysql2 (~> 0.5.3)
   pry-byebug
   puma (~> 4.3)
   rails (~> 6.0)
