@@ -55,3 +55,4 @@ production:
   database: wiki1_production
   username: rails
   password: <%= Rails.application.credentials.production_db_password! %>
+  socket: <%= Rails.application.credentials.production_db_socket! %>
