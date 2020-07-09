@@ -65,6 +65,11 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.default_url_options = {
+    host: Rails.application.credentials.dig(:production_url, :host),
+    protocol: Rails.application.credentials.dig(:production_url, :protocol)
+  }
+
   config.action_mailer.smtp_settings = {
     user_name: Rails.application.credentials.dig(:production_smtp, :user_name),
     password: Rails.application.credentials.dig(:production_smtp, :password),
