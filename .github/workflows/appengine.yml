@@ -2,7 +2,7 @@ name: DeployToAppEngine
 
 on:
   push:
-    branch: [ master ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
