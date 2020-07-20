@@ -1,21 +1,18 @@
-import React, { Fragment } from "react"
+import React from "react"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
+import "react-tabs/style/react-tabs.css"
 import { useSelector, useDispatch } from "react-redux"
 import Markdown from "./Markdown"
 import Editor from "./Editor"
-import { actions, selectors } from "./redux"
+import { actions } from "../redux"
 
 const MdEditor = () => {
     const usergroups = useSelector((state) => state.usergroups)
     const readable_group_id = useSelector((state) => state.readable_group_id)
     const editable_group_id = useSelector((state) => state.editable_group_id)
-    const is_editable = useSelector((state) => state.is_editable)
-    const is_changed = useSelector(selectors.isChanged)
     const is_edit = useSelector((state) => state.is_edit)
 
     const dispatch = useDispatch()
-    const handleOnClickEdit = () => dispatch(actions.onClickEdit())
-    const handleOnClickCancel = () => dispatch(actions.onClickCancel())
     const handleChangeReadableGroup = (e) =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
     const handleChangeEditableGroup = (e) =>
@@ -23,44 +20,15 @@ const MdEditor = () => {
 
     if (!is_edit) {
         return (
-            <Fragment>
-                <button
-                    type="button"
-                    hidden={!is_editable}
-                    className="btn btn-secondary"
-                    onClick={handleOnClickEdit}
-                >
-                    編集
-                </button>
-                <Markdown highlight={!is_edit}></Markdown>
-            </Fragment>
+            <Markdown highlight={!is_edit}></Markdown>
         )
     }
     return (
         <div>
-            <div className="btn-toolbar justify-content-between">
-                <div className="btn-group">
-                    <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={handleOnClickCancel}
-                    >
-                        破棄
-                    </button>
-                </div>
-                <div className="btn-group">
-                    <input
-                        type="submit"
-                        value="保存"
-                        className="btn btn-primary"
-                        hidden={!is_changed}
-                    />
-                </div>
-            </div>
             <div className="d-xl-none">
                 <MdEditorSm />
             </div>
-            <div className="d-none d-xl-flex width100">
+            <div className="d-none d-xl-flex w-100">
                 <MdEditorLg />
             </div>
             <div>
@@ -120,34 +88,21 @@ const MdEditorSm = () => (
 )
 
 const MdEditorLg = () => (
-    <div className="row width100">
+    <div className="row w-100">
         <div className="col-6">
-            <Tabs>
-                <TabList>
-                    <Tab>プレビュー</Tab>
-                </TabList>
-
-                <TabPanel>
-                    <div
-                        style={{
-                            maxHeight: 600,
-                            overflowY: "auto",
-                        }}
-                    >
-                        <Markdown highlight={false} />
-                    </div>
-                </TabPanel>
-            </Tabs>
+            <p>プレビュー</p>
+            <div
+                style={{
+                    maxHeight: 600,
+                    overflowY: "auto",
+                }}
+            >
+                <Markdown highlight={false} />
+            </div>
         </div>
         <div className="col-6">
-            <Tabs>
-                <TabList>
-                    <Tab>編集</Tab>
-                </TabList>
-                <TabPanel>
-                    <Editor />
-                </TabPanel>
-            </Tabs>
+            <p>編集</p>
+            <Editor />
         </div>
     </div>
 )

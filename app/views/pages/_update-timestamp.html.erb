@@ -1,3 +1,3 @@
-<%= if history.user != nil then history.user.name else "???" end %>
+<%= history.user&.name || "???" %>
 edited
-<relative-time datetime="<%= history.updated_at.strftime("%FT%T%:z") %>"><%= history.updated_at %></relative-time>
+<%= render "shared/relative-time", timestamp: history.updated_at %>

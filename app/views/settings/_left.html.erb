@@ -1,30 +1,22 @@
 <nav class="left-nav">
     <div class="border rounded">
-        <p class="list-gruop-heading mb-0">設定</p>
-        <ul class="list-group list-group-flush list-group-dense">
-            <li class="list-group-item">
-                <%= link_to "ユーザーグループ", usergroups_path %>
-            </li>
-            <li class="list-group-item">
-                <%= link_to "プロフィール変更", edit_user_registration_path %>
-            </li>
-        </ul>
+        <p class="list-group-heading mb-0">設定</p>
+        <div class="list-group list-group-flush">
+            <%= link_to "ユーザーグループ", usergroups_path, class: "list-group-item list-group-item-action" %>
+            <%= link_to "プロフィール変更", edit_user_registration_path, class: "list-group-item list-group-item-action" %>
+        </div>
     </div>
     <% if can?(:manage, :userlock) || can?(:manage, :admin_user) %>
         <div class="admin-setting-nav border rounded mt-3">
-            <p class="list-gruop-heading mb-0">管理者設定</p>
-            <ul class="list-group list-group-flush list-group-dense">
+            <p class="list-group-heading mb-0">管理者設定</p>
+            <div class="list-group list-group-flush list-group-dense">
                 <% if can? :manage, :userlock %>
-                    <li class="list-group-item">
-                        <%= link_to "ユーザーのロック", userlock_path %>
-                    </li>
+                    <%= link_to "ユーザーのロック", userlock_path, class: "list-group-item list-group-item-action" %>
                 <% end %>
                 <% if can? :manage, :admin_user %>
-                    <li class="list-group-item">
-                        <%= link_to "管理者の変更", admin_path %>
-                    </li>
+                    <%= link_to "管理者の変更", admin_path, class: "list-group-item list-group-item-action" %>
                 <% end %>
-            </ul>
+            </div>
         </div>
     <% end %>
 </nav>

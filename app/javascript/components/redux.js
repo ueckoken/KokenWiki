@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, configureStore } from "@reduxjs/toolkit"
 
 const initialState = {
     markdown: "",
@@ -75,4 +75,8 @@ const selectors = {
     isChanged: isChangedSelector,
 }
 
-export { reducer, actions, selectors }
+const store = configureStore({
+    reducer: reducer,
+})
+
+export { store, actions, selectors }

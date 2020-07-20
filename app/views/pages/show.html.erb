@@ -1,15 +1,32 @@
 <%= render "pages/layout" do %>
     <%= render partial: "pages/pankuzu" %>
-    <h1><%= @page.title %></h1>
+    <div class="d-flex justify-content-between">
+        <h1><%= @page.title %></h1>
+        <div class="d-inline-flex">
+            <%= react_component("SaveButton", {
+                formId: "page-update-form"
+            }, {
+                style: "display: contents"
+            }) %>
+            <%= react_component("CancelButton", {}, {
+                style: "display: contents"
+            }) %>
+            <%= react_component("EditButton", {}, {
+                style: "display: contents"
+            }) %>
+            <% if @page.children.size == 0 && can?(:write, @page) %>
+                <%= form_with scope: :page, method: :delete, html: { style: "display: contents" } do %>
+                    <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に削除しますか" } do %>
+                        <%= octicon "trashcan" %>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
     <p>
         <%= render "update-timestamp", history: @page %>
     </p>
-    <% if @page.children.size == 0 && can?(:write, @page) %>
-        <%= form_with scope: :page, method: :delete do |form| %>
-            <% form.submit "削除", {class: "btn btn-danger", style: "float: right;", data: {confirm: "本当に削除しますか"}} %>
-        <% end %>
-    <% end %>
-    <%= form_with scope: :page, method: :put do %>
+    <%= form_with scope: :page, method: :put, html: { id: "page-update-form", style: "display: contents" } do |f| %>
         <%= react_component("MdEditor",
             markdown: @page.content,
             readable_group_id: @page.readable_group_id || 0,
@@ -18,43 +35,57 @@
             usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
         ) %>
     <% end %>
+    <hr>
     <!--こめんと-->
     <h2 class="h3">コメント</h2>
-    <% @page.comments.each do |comment| %>
-        <div class="card">
-            <div class="card-header">
-                <%= if comment.user != nil then comment.user.name else "???" end %>
-                /
-                <%= if comment.user != nil then comment.user.user_id else "???" end %>
-                <%= comment.created_at %>
-            </div>
-            <div class="card-body">
-                <%= react_component "Markdown", {
-                    markdown: comment.comment,
-                    highlight:true
-                } %>
-                <% if can?(:write, @page) || can?(:write, comment) %>
-                    <%= form_with scope: "comment", method: :delete do |form| %>
-                        <%= form.hidden_field "comment_id", value: comment.id %>
-                        <%= form.submit "削除", {class: "btn btn-danger", data: {confirm: "本当に削除しますか"}} %>
+    <div class="list-group">
+        <% @page.comments.each do |comment| %>
+            <article class="list-group-item">
+                <header class="d-flex justify-content-between">
+                    <div>
+                        <b><%= if comment.user != nil then comment.user.name else "???" end %></b>
+                        <span class="text-muted">
+                            commented
+                            <%= render "shared/relative-time", timestamp: comment.created_at %>
+                        </span>
+                    </div>
+                    <% if can?(:write, @page) || can?(:write, comment) %>
+                        <span class="dropdown">
+                            <button class="btn btn-light btn-sm rounded-circle dropdown-toggle" id="dropdownButtonForComment<%= comment.id %>" aria-controls="dropdownForComment<%= comment.id %>" data-toggle="dropdown" aria-label="もっと見る" aria-haspopup="true" aria-expanded="false"></button>
+                            <menu class="dropdown-menu" id="dropdownForComment<%= comment.id %>" aria-labelledby="dropdownButtonForComment<%= comment.id %>">
+                                <li role="menuitem">
+                                    <%= form_with scope: "comment", method: :delete do |form| %>
+                                        <%= form.hidden_field "comment_id", value: comment.id %>
+                                        <%= form.submit "削除", { class: "dropdown-item text-danger", data: { confirm: "本当に削除しますか" } } %>
+                                    <% end %>
+                                </li>
+                            </menu>
+                        <span>
                     <% end %>
-                <% end %>
-            </div>
-        </div>
-    <% end %>
-    <h2 class="h4">新しいコメント</h2>
+                </header>
+                <p class="mb-2" style="white-space: pre-line"><%= comment.comment %></p>
+            </article>
+        <% end %>
+    </div>
     <%= form_with scope: :comment, method: :post, url: URI.encode(@path) do |form| %>
-        <%= form.text_area :content, class: "form-control" %>
-        <%= form.submit "投稿", class: "btn btn-primary" %>
+        <%= form.text_area :content, class: "form-control", placeholder: "新しいコメント" %>
+        <p class="text-right">
+            <%= form.submit "投稿", class: "btn btn-primary" %>
+        </p>
     <% end %>
     <h2 class="h3">ファイル</h2>
     <ul class="list-group">
         <% @page.files.each do |file| %>
             <li class="list-group-item d-flex justify-content-between">
-                <%= link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s %>
+                <p class="m-0">
+                    <%= link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s %><br>
+                    <span class="text-muted" style="font-size: 0.75rem"><%= render "shared/relative-time", timestamp: file.created_at %></span>
+                </p>
                 <% if can? :write, @page %>
-                    <%= form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html: {style: "display:inline"}, remote: true do |form| %>
-                        <% form.submit "削除", {class: "btn btn-danger btn-sm", data: {confirm: "本当に"+file.blob.filename.to_s+"を削除しますか"}} %>
+                    <%= form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html: { style: "display: contents" }, remote: true do |form| %>
+                        <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に"+file.blob.filename.to_s+"を削除しますか" } do %>
+                            <%= octicon "trashcan" %>
+                        <% end %>
                     <% end %>
                 <% end %>
             </li>
@@ -88,4 +119,3 @@
         <% end %>
     </ol>
 <% end %>
-<script src="https://cdn.jsdelivr.net/npm/@github/time-elements@3.0.10/dist/time-elements-legacy.min.js" module async></script>

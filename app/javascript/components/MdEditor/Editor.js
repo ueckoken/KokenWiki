@@ -1,6 +1,6 @@
 import React, { Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { actions } from "./redux"
+import { actions } from "../redux"
 import MonacoEditor from "react-monaco-editor"
 
 export default () => {
