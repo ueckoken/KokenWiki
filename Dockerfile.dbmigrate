@@ -1,0 +1,28 @@
+# https://docs.docker.com/compose/rails/
+FROM ruby:2.5
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+RUN apt update -qq && apt upgrade -y && apt install -y nodejs default-mysql-client yarn google-cloud-sdk
+RUN gem update && gem update --system
+
+WORKDIR /app
+
+COPY ./Gemfile /app/Gemfile
+COPY ./Gemfile.lock /app/Gemfile.lock
+RUN bundle install
+
+COPY ./package.json /app/package.json
+COPY ./yarn.lock /app/yarn.lock
+RUN yarn install
+
+ARG PROJECT_ID
+
+COPY GCP_SA_KEY.json /app/GCP_SA_KEY.json
+RUN gcloud config set project $PROJECT_ID && gcloud auth activate-service-account --key-file GCP_SA_KEY.json
+
+COPY . /app
+
+CMD bundle exec rails appengine:exec -- bundle exec rails db:migrate

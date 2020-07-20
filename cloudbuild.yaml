@@ -1,0 +1,28 @@
+steps:
+  - id: prepare-master-key
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=${_MASTER_KEY_ID} > config/master.key' ]
+  - id: deploy
+    name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy']
+    waitFor:
+      - prepare-master-key
+  - id: prepare-gcp-sa-key
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=${_DEPLOY_SA_KEY_ID} > GCP_SA_KEY.json' ]
+    waitFor:
+      - deploy
+  - id: build
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--build-arg', 'PROJECT_ID=$PROJECT_ID', '-f', 'Dockerfile.dbmigrate', '-t', 'gcr.io/$PROJECT_ID/${_MIGRATION_IMAGE}', '.']
+    waitFor:
+      - prepare-master-key
+      - prepare-gcp-sa-key
+  - id: migration
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['run', 'gcr.io/$PROJECT_ID/${_MIGRATION_IMAGE}']
+    waitFor:
+      - build
+timeout: 1800s
