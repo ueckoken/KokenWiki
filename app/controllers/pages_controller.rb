@@ -36,18 +36,18 @@ class PagesController < ApplicationController
         @children_pages = Page.none
         return
       end
-      @brothers_pages = [@page]
+      @brothers_pages = Page.none
       @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
       return
     end
     if @page != nil
-      parent = @page.parent
+      @parent_page = @page.parent
     else
       parent_pathname = @pathname.parent
-      parent = Page.find_by(path: parent_pathname.to_s)
+      @parent_page = Page.find_by(path: parent_pathname.to_s)
     end
     # parent shold not null
-    @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: parent).order(:title)
+    @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: @parent_page).where.not(id: @page.id).order(:title)
     if @page != nil
       @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
     else
@@ -56,7 +56,9 @@ class PagesController < ApplicationController
   end
 
   def render_right
-    @updated_pages = Page.accessible_by(current_ability, :read).order("updated_at DESC").select(:readable_group_id, :updated_at, :path, :user_id).limit(50)
+    one_week_ago = Time.current.ago(7.day)
+    current_timezone = Time.zone.formatted_offset
+    @updated_pages = Page.accessible_by(current_ability, :read).where("updated_at > ?", one_week_ago).order(updated_at: :desc).select("DATE(CONVERT_TZ(updated_at, 'UTC', '#{current_timezone}')) as updated_date, path").limit(50)
   end
 
   # index

@@ -1,12 +1,7 @@
 import React, { useEffect } from "react"
 import { Provider } from "react-redux"
-import { configureStore } from "@reduxjs/toolkit"
-import { reducer, actions } from "./redux"
+import { store, actions } from "../redux"
 import MdEditor from "./MdEditor"
-
-const store = configureStore({
-    reducer: reducer,
-})
 
 export default ({
     markdown,
@@ -25,13 +20,7 @@ export default ({
                 editable_group_id,
             })
         )
-    }, [
-        markdown,
-        usergroups,
-        editable,
-        readable_group_id,
-        editable_group_id,
-    ])
+    }, [markdown, usergroups, editable, readable_group_id, editable_group_id])
     return (
         <Provider store={store}>
             <MdEditor />
