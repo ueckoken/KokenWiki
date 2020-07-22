@@ -113,7 +113,7 @@ Rails.application.routes.draw do
     put "/userlock" => "userlocks#update"
     get "/admin" => "admin_settings#index"
     put "/admin" => "admin_settings#update"
-    get "/" => "settings#index"
+    get "/" => "settings#index", as: "settings"
   end
 
 
