@@ -1,6 +1,4 @@
 import React from "react"
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import "react-tabs/style/react-tabs.css"
 import { useSelector, useDispatch } from "react-redux"
 import Markdown from "./Markdown"
 import Editor from "./Editor"
@@ -19,18 +17,11 @@ const MdEditor = () => {
         dispatch(actions.changeEditableGroup(Number(e.target.value)))
 
     if (!is_edit) {
-        return (
-            <Markdown highlight={!is_edit}></Markdown>
-        )
+        return <Markdown />
     }
     return (
         <div>
-            <div className="d-xl-none">
-                <MdEditorSm />
-            </div>
-            <div className="d-none d-xl-flex w-100">
-                <MdEditorLg />
-            </div>
+            <Editor />
             <div>
                 <label>閲覧可能グループ</label>
                 <select
@@ -68,43 +59,5 @@ const MdEditor = () => {
         </div>
     )
 }
-
-const MdEditorSm = () => (
-    <form>
-        <Tabs>
-            <TabList>
-                <Tab>プレビュー</Tab>
-                <Tab>編集</Tab>
-            </TabList>
-
-            <TabPanel>
-                <Markdown highlight={false} />
-            </TabPanel>
-            <TabPanel>
-                <Editor />
-            </TabPanel>
-        </Tabs>
-    </form>
-)
-
-const MdEditorLg = () => (
-    <div className="row w-100">
-        <div className="col-6">
-            <p>プレビュー</p>
-            <div
-                style={{
-                    maxHeight: 600,
-                    overflowY: "auto",
-                }}
-            >
-                <Markdown highlight={false} />
-            </div>
-        </div>
-        <div className="col-6">
-            <p>編集</p>
-            <Editor />
-        </div>
-    </div>
-)
 
 export default MdEditor

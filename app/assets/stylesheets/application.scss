@@ -12,7 +12,8 @@
  *
  *= require_tree .
  *= require_self
- *= require github-markdown-css/github-markdown.css
+ *= require codemirror/lib/codemirror.css
+ *= require @toast-ui/editor/dist/toastui-editor.css
  */
 
 $link-decoration: initial;
@@ -22,42 +23,6 @@ $link-decoration: initial;
 :root {
     font-size: 15px;
     --bs-font-sans-serif: sans-serif;
-}
-
-
-$font-size-base:              1rem; // Assumes the browser default, typically `16px`
-$h1-font-size:                $font-size-base * 2;
-$h2-font-size:                $font-size-base * 1.5;
-$h3-font-size:                $font-size-base * 1.25;
-$h4-font-size:                $font-size-base;
-$h5-font-size:                $font-size-base * 0.875;
-$h6-font-size:                $font-size-base * 0.75;
-
-.markdown-body {
-    h1 {
-        font-size: $h2-font-size;
-    }
-    h2 {
-        font-size: $h3-font-size;
-    }
-    h2 {
-        font-size: $h3-font-size;
-    }
-    h3 {
-        font-size: $h4-font-size;
-    }
-    h4 {
-        font-size: $h5-font-size;
-    }
-    h5 {
-        font-size: $h6-font-size;
-    }
-    h6 {
-        font-size: $font-size-base * 0.625;
-    }
-    code {
-        color: initial;
-    }
 }
 
 .pagelist {
@@ -112,4 +77,14 @@ a:hover {
     &:disabled {
         @extend .text-muted;
     }
+}
+
+// override Toast UI styles
+.tui-editor {
+    .CodeMirror {
+        font-family: initial !important;
+    }
+}
+.tui-editor-contents {
+    font-family: initial !important;
 }
