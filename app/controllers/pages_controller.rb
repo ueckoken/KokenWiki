@@ -56,9 +56,9 @@ class PagesController < ApplicationController
   end
 
   def render_right
-    one_week_ago = Time.current.ago(7.day)
+    one_month_ago = Time.current.ago(1.month)
     current_timezone = Time.zone.formatted_offset
-    @updated_pages = Page.accessible_by(current_ability, :read).where("updated_at > ?", one_week_ago).order(updated_at: :desc).select("DATE(CONVERT_TZ(updated_at, 'UTC', '#{current_timezone}')) as updated_date, path").limit(50)
+    @updated_pages = Page.accessible_by(current_ability, :read).where("updated_at > ?", one_month_ago).order(updated_at: :desc).select("DATE(CONVERT_TZ(updated_at, 'UTC', '#{current_timezone}')) as updated_date, path").limit(50)
   end
 
   # index
