@@ -1,6 +1,5 @@
 import React, { memo, useRef, useEffect, useState } from "react"
 import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer"
-import customHTMLSanitizer from "./html-sanitizer-for-tui-editor"
 
 const Markdown = ({ markdown }) => {
     const rootEl = useRef(null)
@@ -12,7 +11,6 @@ const Markdown = ({ markdown }) => {
         const inst = new Viewer({
             el: rootEl.current,
             initialValue: markdown,
-            customHTMLSanitizer: customHTMLSanitizer,
         })
         setViewerInst(inst)
         return () => {
