@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useRef, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { actions } from "../redux"
 import Editor from "@toast-ui/editor"
-import customHTMLSanitizer from "../html-sanitizer-for-tui-editor"
 
 export default () => {
     const markdown = useSelector((state) => state.markdown)
@@ -18,7 +17,6 @@ export default () => {
         const inst = new Editor({
             el: rootEl.current,
             initialValue: markdown,
-            customHTMLSanitizer: customHTMLSanitizer,
             previewStyle: "vertical",
             minHeight: "400px",
             height: "600px",
