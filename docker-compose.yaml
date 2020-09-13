@@ -3,27 +3,16 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: wiki1_development
       MYSQL_USER: rails
       MYSQL_PASSWORD: rails
-      HTTP_PROXY: http://proxy.uec.ac.jp:8080
-      HTTPS_PROXY: http://proxy.uec.ac.jp:8080
     volumes:
       - mysqlsockdir:/var/run/mysqld
-      - dbdata:/var/lib/mysql
-    network_mode: bridge
+    network_mode: none
   rails:
-    build:
-      context: .
-      args:
-        - http_proxy=http://proxy.uec.ac.jp:8080
-        - https_proxy=http://proxy.uec.ac.jp:8080
-    command: bundle exec rails s -p 3000 -b 0.0.0.0
-    environment:
-      HTTP_PROXY: http://proxy.uec.ac.jp:8080
-      HTTPS_PROXY: http://proxy.uec.ac.jp:8080
+    build: .
     volumes:
-      - .:/app
       - mysqlsockdir:/var/run/mysqld
     ports:
       - "3000:3000"
@@ -32,5 +21,4 @@ services:
       - mysql
 volumes:
   mysqlsockdir:
-  dbdata:
 

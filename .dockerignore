@@ -1,0 +1,8 @@
+node_modules
+vendor
+tmp
+Dockerfile
+Dockerfile.dbmigrate
+docker-compose.yaml
+.devcontainer
+README.md
