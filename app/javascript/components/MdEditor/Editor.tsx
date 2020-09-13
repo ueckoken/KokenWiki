@@ -1,21 +1,21 @@
-import React, { Fragment, useEffect, useRef, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import { actions } from "../redux"
-import Editor from "@toast-ui/editor"
+import React, { FC, Fragment, useEffect, useRef, useState } from "react"
+import { useDispatch } from "react-redux"
+import { actions, useTypedSelector } from "../redux"
+import ToastUIEditor from "@toast-ui/editor"
 import customHTMLSanitizer from "../html-sanitizer-for-tui-editor"
 
-export default () => {
-    const markdown = useSelector((state) => state.markdown)
+const Editor: FC<{}> = () => {
+    const markdown = useTypedSelector((state) => state.markdown)
     const dispatch = useDispatch()
-    const handleChangeText = (newValue) =>
+    const handleChangeText = (newValue: string) =>
         dispatch(actions.changeText(newValue))
-    const rootEl = useRef(null)
-    const [tuiEditor, setTuiEditor] = useState(null)
+    const rootEl = useRef<HTMLDivElement>(null)
+    const [tuiEditor, setTuiEditor] = useState<ToastUIEditor | null>(null)
     useEffect(() => {
         if (rootEl.current === null) {
             return
         }
-        const inst = new Editor({
+        const inst = new ToastUIEditor({
             el: rootEl.current,
             initialValue: markdown,
             customHTMLSanitizer: customHTMLSanitizer,
@@ -48,3 +48,5 @@ export default () => {
         </Fragment>
     )
 }
+
+export default Editor

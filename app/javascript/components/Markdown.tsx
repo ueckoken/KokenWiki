@@ -1,10 +1,14 @@
-import React, { memo, useRef, useEffect, useState } from "react"
+import React, { memo, useRef, useEffect, useState, FC } from "react"
 import Viewer from "@toast-ui/editor/dist/toastui-editor-viewer"
 import customHTMLSanitizer from "./html-sanitizer-for-tui-editor"
 
-const Markdown = ({ markdown }) => {
-    const rootEl = useRef(null)
-    const [viewerInst, setViewerInst] = useState(null)
+type Props = {
+    markdown: string
+}
+
+const Markdown: FC<Props> = ({ markdown }) => {
+    const rootEl = useRef<HTMLDivElement>(null)
+    const [viewerInst, setViewerInst] = useState<Viewer | null>(null)
     useEffect(() => {
         if (rootEl.current === null) {
             return

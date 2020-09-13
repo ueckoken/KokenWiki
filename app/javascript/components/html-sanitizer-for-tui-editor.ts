@@ -1,6 +1,6 @@
 import Dompurify from "dompurify"
 
-const customHTMLSanitizer = (domstring) =>
+const customHTMLSanitizer = (domstring: string): string =>
     Dompurify.sanitize(domstring, {
         FORBID_TAGS: [
             "script",
