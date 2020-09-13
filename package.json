@@ -6,10 +6,13 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.8.3",
+    "@babel/preset-typescript": "^7.10.4",
     "@primer/octicons-react": "^10.0.0",
     "@rails/webpacker": "^5.1.1",
     "@reduxjs/toolkit": "^1.5.0",
     "@toast-ui/editor": "^2.3.0",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
     "acorn": "^7.1.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap": "^5.0.0-alpha1",
@@ -24,7 +27,8 @@
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "react_ujs": "^2.6.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "typescript": "^4.0.2"
   },
   "devDependencies": {
     "prettier": "^2.0.5",
