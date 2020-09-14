@@ -1,10 +1,11 @@
 # https://docs.docker.com/compose/rails/
 FROM ruby:2.5
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt update -qq && apt upgrade -y && apt install -y nodejs default-mysql-client yarn
+# https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt update -qq && apt upgrade -y && apt install -y nodejs default-mysql-client && rm -rf /var/lib/apt/lists/*
 RUN gem update && gem update --system
+RUN npm install -g yarn
 
 WORKDIR /app
 
@@ -14,7 +15,7 @@ RUN bundle install
 
 COPY ./package.json /app/package.json
 COPY ./yarn.lock /app/yarn.lock
-RUN yarn install
+RUN yarn install --pure-lockfile
 
 COPY . /app
 
