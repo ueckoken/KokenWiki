@@ -3,6 +3,7 @@ entrypoint: bundle exec rails server -e production -p $PORT
 service: kokenwiki
 env_variables:
   BASIC_AUTH: 1
+instance_class: F1
 automatic_scaling:
   max_instances: 1
   max_idle_instances: 1
