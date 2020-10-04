@@ -5,5 +5,7 @@ env_variables:
   BASIC_AUTH: 1
 instance_class: F1
 automatic_scaling:
+  min_instances: 0
   max_instances: 1
+  min_idle_instances: 0
   max_idle_instances: 1
