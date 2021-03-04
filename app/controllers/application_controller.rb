@@ -9,11 +9,11 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, with: :render_404
 
   def render_404
-    render template: 'errors/error_404', status: 404, layout: 'application', content_type: 'text/html'
+    render template: 'errors/error_404', status: 404, layout: 'application', content_type: 'text/html', formats: [:html]
   end
 
   def render_500
-    render template: 'errors/error_500', status: 500, layout: 'application', content_type: 'text/html'
+    render template: 'errors/error_500', status: 500, layout: 'application', content_type: 'text/html', formats: [:html]
   end
 
   def force_trailing_slash
