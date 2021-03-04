@@ -1,8 +1,10 @@
 require "uri"
 require "pathname"
+require "webrick/httputils"
 
 def is_file?(request)
-  url = URI.parse(request.url)
+  parsable_url = WEBrick::HTTPUtils.escape(URI.decode(request.url))
+  url = URI.parse(parsable_url)
   path = Pathname.new(url.path)
   return path.extname != ""
 end

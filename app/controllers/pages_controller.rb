@@ -1,4 +1,5 @@
 require "pathname"
+require "webrick/httputils"
 
 class PagesController < ApplicationController
   include PathHelper
@@ -93,6 +94,21 @@ class PagesController < ApplicationController
     @title = @page.title
     @pankuzu = render_pankuzu_list @page.parent
     @update_histories = @page.update_histories.order("created_at DESC")
+
+    @attached_files = []
+    @page.files.each do |file|
+       filename = file.blob.filename.to_s
+       path = (@pathname / filename).to_s
+       escaped_path = WEBrick::HTTPUtils.escape(path)
+       created_at = file.created_at
+
+       @attached_files.append({
+         :filename => filename,
+         :path => path,
+         :escaped_path => escaped_path,
+         :created_at => created_at
+       })
+    end
 
     render_right
     render_left

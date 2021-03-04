@@ -89,7 +89,8 @@ class FilesController < ApplicationController
 
   def is_valid_uri? filename
     begin
-      URI.parse(URI.escape filename)
+      parsable_filename = ERB::Util.url_encode filename
+      URI.parse(parsable_filename)
     rescue URI::InvalidURIError
       return false
     end
