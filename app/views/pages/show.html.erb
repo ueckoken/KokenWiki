@@ -75,15 +75,15 @@
     <% end %>
     <h2 class="h3">ファイル</h2>
     <ul class="list-group">
-        <% @page.files.each do |file| %>
+        <% @attached_files.each do |file| %>
             <li class="list-group-item d-flex justify-content-between">
                 <p class="m-0">
-                    <%= link_to file.blob.filename.to_s, (@pathname + file.blob.filename.to_s).to_s %><br>
-                    <span class="text-muted" style="font-size: 0.75rem"><%= render "shared/relative-time", timestamp: file.created_at %></span>
+                    <%= link_to file[:filename], file[:path] %><br>
+                    <span class="text-muted" style="font-size: 0.75rem"><%= render "shared/relative-time", timestamp: file[:created_at] %></span>
                 </p>
                 <% if can? :write, @page %>
-                    <%= form_with url:URI.encode((@pathname + file.blob.filename.to_s).to_s), method: :delete, html: { style: "display: contents" }, remote: true do |form| %>
-                        <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に"+file.blob.filename.to_s+"を削除しますか" } do %>
+                    <%= form_with url: file[:escaped_path], method: :delete, html: { style: "display: contents" }, remote: true do |form| %>
+                        <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に"+file[:filename]+"を削除しますか" } do %>
                             <%= octicon "trashcan" %>
                         <% end %>
                     <% end %>
