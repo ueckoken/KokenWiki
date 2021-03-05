@@ -93,7 +93,6 @@ class PagesController < ApplicationController
     @update_histories = @page.update_histories.order(created_at: :desc)
     @title = @page.title
     @pankuzu = render_pankuzu_list @page.parent
-    @update_histories = @page.update_histories.order("created_at DESC")
 
     @attached_files = []
     @page.files.each do |file|
