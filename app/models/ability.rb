@@ -45,6 +45,9 @@ class Ability
     can :read, Page, readable_group: nil
     can :read, Page, readable_group: { id: user.usergroup_ids }
     can [:read, :create], Usergroup
+    can :create, Page, parent: nil, title: "" # root page
+    can :create, Page, parent: { editable_group: nil }
+    can :create, Page, parent: { editable_group: { id: user.usergroup_ids } }
     can :write, Page, editable_group: nil
     can :write, Page, editable_group: { id: user.usergroup_ids }
     can :write, Comment, user_id: user.id
