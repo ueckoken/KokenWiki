@@ -32,23 +32,10 @@ class PagesController < ApplicationController
 
   def render_left
     if is_root_path?(@pathname)
-      if @page == nil
-        @brothers_pages = Page.none
-        @children_pages = Page.none
-        return
-      end
       @brothers_pages = Page.none
-      @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
-      return
-    end
-    if @page != nil
-      @parent_page = @page.parent
     else
-      parent_pathname = @pathname.parent
-      @parent_page = Page.find_by(path: parent_pathname.to_s)
+      @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: @page.parent).where.not(id: @page.id).order(:title)
     end
-    # parent shold not null
-    @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: @parent_page).where.not(id: @page.id).order(:title)
     if @page.persisted?
       @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
     else
