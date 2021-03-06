@@ -49,9 +49,10 @@ class PagesController < ApplicationController
     end
     # parent shold not null
     @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: @parent_page).where.not(id: @page.id).order(:title)
-    if @page != nil
+    if @page.persisted?
       @children_pages = Page.accessible_by(current_ability, :read).where(parent: @page).order(:title)
     else
+      # new page but not saved to database has no children
       @children_pages = Page.none
     end
   end
