@@ -1,5 +1,3 @@
-ROOT_PATHNAME = Pathname.new("/")
-
 module PathHelper
   # "/" -> "/"
   # "a/b" -> "/a/b"
@@ -19,6 +17,6 @@ module PathHelper
   end
 
   def is_root_path?(pathname)
-    return pathname === ROOT_PATHNAME
+    return pathname.root?
   end
 end
