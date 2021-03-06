@@ -4,10 +4,8 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-      MYSQL_DATABASE: wiki1_development
-      MYSQL_USER: rails
-      MYSQL_PASSWORD: rails
     volumes:
+      - ./init-mysql-docker-compose.sql:/docker-entrypoint-initdb.d/init.sql
       - mysqlsockdir:/var/run/mysqld
     network_mode: none
   rails:
