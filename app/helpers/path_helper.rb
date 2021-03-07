@@ -6,7 +6,7 @@ module PathHelper
     if path.nil?
       return Pathname.new("/")
     end
-    return Pathname.new(params[:pages]).expand_path("/").cleanpath
+    return Pathname.new(path).expand_path("/").cleanpath
   end
 
   def get_title(pathname)
