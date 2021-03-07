@@ -13,12 +13,12 @@
     <h1 class="h5 d-inline">ページ</h1>
     <div class="collapse navbar-collapse" id="leftbarNav">
         <ul class="pagelist">
-            <% if @parent_page %>
+            <% if @page.parent %>
             <li>
-                <% if @parent_page.path == "/" %>
+                <% if @page.parent.path == "/" %>
                     <%= link_to "/", "/" %>
                 <% else %>
-                    <%= link_to @parent_page.title, @parent_page.path %>
+                    <%= link_to @page.parent.title, @page.parent.path %>
                 <% end %>
             <ul>
             <% end %>
@@ -43,7 +43,7 @@
                     <%= link_to page.title, page.path %>
                 </li>
                 <% end %>
-            <% if @parent_page %>
+            <% if @page.parent %>
                 </ul>
             </li>
             <% end %>
