@@ -31,8 +31,6 @@ export default () => {
             },
         })
         setTuiEditor(inst)
-        console.log(inst.minHeight())
-        console.log(inst.height())
         return () => {
             tuiEditor?.remove()
         }

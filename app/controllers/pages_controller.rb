@@ -77,6 +77,10 @@ class PagesController < ApplicationController
 
     @update_histories = @page.update_histories.order(created_at: :desc)
 
+    descendants = @page.self_and_descendants.pluck(:id)
+    @next_parent_pages = Page.accessible_by(current_ability, :read)
+      .where.not(id: descendants)
+
     @attached_files = []
     @page.files.each do |file|
        filename = file.blob.filename.to_s
@@ -150,18 +154,20 @@ class PagesController < ApplicationController
     end
     authorize! :write, @page
 
-    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
-    success_flag = @page.update(
+    page_params = params.require(:page).permit(:title, :content, :editable_group_id, :readable_group_id, :parent_page_id)
+    update_succeeded = @page.update(
       user: current_user,
+      title: page_params[:title],
       content: page_params[:content],
       readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
       editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
+      parent_id: page_params[:parent_page_id]
     )
     respond_to do |format|
-      if success_flag
+      if update_succeeded
         history = UpdateHistory.new(user: @page.user, content: @page.content)
         @page.update_histories << history
-        format.html { redirect_to path, notice: 'Page was successfully updated.' }
+        format.html { redirect_to @page.path, notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: path }
       else
         flash[:errors] = @page.errors.full_messages

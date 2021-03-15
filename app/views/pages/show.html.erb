@@ -1,38 +1,21 @@
 <%= render "pages/layout" do %>
     <%= render partial: "pages/pankuzu" %>
-    <div class="d-flex justify-content-between">
-        <h1><%= @page.title %></h1>
-        <div class="d-inline-flex">
-            <%= react_component("SaveButton", {
-                formId: "page-update-form"
-            }, {
-                style: "display: contents"
-            }) %>
-            <%= react_component("CancelButton", {}, {
-                style: "display: contents"
-            }) %>
-            <%= react_component("EditButton", {}, {
-                style: "display: contents"
-            }) %>
-            <% if @page.children.size == 0 && can?(:write, @page) %>
-                <%= form_with scope: :page, method: :delete, html: { style: "display: contents" } do %>
-                    <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に削除しますか" } do %>
-                        <%= octicon "trashcan" %>
-                    <% end %>
-                <% end %>
-            <% end %>
-        </div>
-    </div>
     <p>
         <%= render "update-timestamp", history: @page %>
     </p>
+    <%= form_with scope: :page, method: :delete, html: { id: "page-destroy-form", style: "display: none" }, data: { confirm: "本当に削除しますか" } do %>
+    <% end %>
     <%= form_with scope: :page, method: :put, html: { id: "page-update-form", style: "display: contents" } do |f| %>
         <%= react_component("MdEditor",
+            title: @page.title,
             markdown: @page.content,
             readable_group_id: @page.readable_group_id || 0,
             editable_group_id: @page.editable_group_id || 0,
-            editable: can?(:write, @page),
-            usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : []
+            is_editable: can?(:write, @page),
+            is_destroyable: @page.children.size == 0 && can?(:write, @page),
+            usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : [],
+            parent_page_id: @page.parent.nil? ? nil : @page.parent.id,
+            next_parent_pages: @next_parent_pages.map {|page| {:id => page.id, :path => page.path}}
         ) %>
     <% end %>
     <hr>
