@@ -3,8 +3,7 @@ FROM ruby:2.5
 
 # https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt update -qq && apt upgrade -y && apt install -y nodejs default-mysql-client && rm -rf /var/lib/apt/lists/*
-RUN gem update && gem update --system
+RUN apt update -qq && apt install -y nodejs default-mysql-client && rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
 
 WORKDIR /app
