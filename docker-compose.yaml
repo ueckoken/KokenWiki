@@ -1,11 +1,12 @@
 version: "3"
 services:
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     volumes:
       - ./init-mysql-docker-compose.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker-mysql.cnf:/etc/mysql/conf.d/docker-mysql.cnf
       - mysqlsockdir:/var/run/mysqld
     network_mode: none
   rails:
