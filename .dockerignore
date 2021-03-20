@@ -5,4 +5,9 @@ Dockerfile
 Dockerfile.dbmigrate
 docker-compose.yaml
 .devcontainer
+.gcloudignore
+app.yaml
+cloudbuild.yaml
+pukiwiki_migrate.log
+pukiwiki_migrate.rb
 README.md

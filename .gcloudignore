@@ -1,5 +1,16 @@
 .git
+.gitignore
 .github
+.devcontainer
+.rubocop.yml
+.ruby-version
 node_modules
+README.md
+docker-compose.yaml
+docker-mysql.cnf
+init-mysql-docker-compose.sql
+pukiwiki_migrate.log
+pukiwiki_migrate.rb
+Dockerfile
 
 !.keep
