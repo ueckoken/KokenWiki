@@ -5,12 +5,13 @@ FROM ruby:2.5
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt update -qq && apt install -y nodejs default-mysql-client && rm -rf /var/lib/apt/lists/*
 RUN npm install -g yarn
+RUN gem install bundler -v 2.1.4
 
 WORKDIR /app
 
 COPY ./Gemfile /app/Gemfile
 COPY ./Gemfile.lock /app/Gemfile.lock
-RUN bundle install
+RUN bundle install --frozen
 
 COPY ./package.json /app/package.json
 COPY ./yarn.lock /app/yarn.lock
