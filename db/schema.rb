@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_184637) do
+ActiveRecord::Schema.define(version: 2021_03_27_195731) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_184637) do
     t.text "content", size: :long, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["content"], name: "index_pages_on_content", type: :fulltext
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["readable_group_id"], name: "index_pages_on_readable_group_id"
