@@ -4,7 +4,7 @@ class CommentsController < ApplicationController
   def create
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
-    page = Page.find_by(path: path)
+    page = Page.find_by_pathname(pathname)
 
     if page == nil
       raise ActiveRecord::RecordNotFound
@@ -32,7 +32,7 @@ class CommentsController < ApplicationController
   def destroy
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
-    page = Page.find_by(path: path)
+    page = Page.find_by_pathname(pathname)
 
     if page == nil
       raise ActiveRecord::RecordNotFound

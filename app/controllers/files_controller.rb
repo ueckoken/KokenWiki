@@ -3,10 +3,9 @@ class FilesController < ApplicationController
 
   def show
     pathname = get_formal_pathname params[:pages]
-    parentPathname = pathname.parent
     # filename以外のpathを取得
     filename = pathname.basename.to_s + "." + params[:format]
-    page = Page.find_by(path: parentPathname.to_s)
+    page = Page.find_by_pathname(pathname.parent)
 
     if page == nil
       raise ActiveRecord::RecordNotFound
@@ -29,7 +28,7 @@ class FilesController < ApplicationController
   def create
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
-    page = Page.find_by(path: path)
+    page = Page.find_by_pathname(pathname)
 
     if page == nil
       raise ActiveRecord::RecordNotFound
@@ -68,8 +67,8 @@ class FilesController < ApplicationController
     pathname = get_formal_pathname params[:pages]
     # filename以外のpathを取得
     filename = pathname.basename.to_s + "." + params[:format]
-    parent_pathname = pathname.parent
-    page = Page.find_by(path: parent_pathname.to_s)
+    page_pathname = pathname.parent
+    page = Page.find_by_pathname(page_pathname)
 
     if page == nil
       raise ActiveRecord::RecordNotFound
@@ -84,7 +83,7 @@ class FilesController < ApplicationController
       file.purge
     end
 
-    redirect_to parent_pathname.to_s, notice: 'File was successfully destroyed.'
+    redirect_to page_pathname.to_s, notice: 'File was successfully destroyed.'
   end
 
   def is_valid_uri? filename

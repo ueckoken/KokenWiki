@@ -23,15 +23,12 @@ class PagesController < ApplicationController
     render "search"
   end
 
-  def render_pankuzu_list(page)
-    if page == nil
-      return Page.none
-    end
-    return render_pankuzu_list(page.parent) + [page]
+  def render_pankuzu_list
+    @pankuzu = @page.self_and_ancestors.reverse
   end
 
   def render_left
-    if is_root_path?(@pathname)
+    if @page.root?
       @brothers_pages = Page.none
     else
       @brothers_pages = Page.accessible_by(current_ability, :read).where(parent: @page.parent).where.not(id: @page.id).order(:title)
@@ -47,29 +44,29 @@ class PagesController < ApplicationController
   def render_right
     one_month_ago = Time.current.ago(1.month)
     current_timezone = Time.zone.formatted_offset
-    @updated_pages = Page.accessible_by(current_ability, :read).where("updated_at > ?", one_month_ago).order(updated_at: :desc).select("DATE(CONVERT_TZ(updated_at, 'UTC', '#{current_timezone}')) as updated_date, path").limit(50)
+    @updated_pages = Page.accessible_by(current_ability, :read).where("updated_at > ?", one_month_ago).order(updated_at: :desc).select("DATE(CONVERT_TZ(updated_at, 'UTC', '#{current_timezone}')) as updated_date, id, parent_id, title").limit(50)
   end
 
   # index
   def show_page
-    @pathname = get_formal_pathname params[:pages]
-    @path = @pathname.to_s
-    @page = Page.find_by(path: @path)
-    if @page.nil?
-      parent_pathname = @pathname.parent
-      parent = Page.find_by(path: parent_pathname.to_s)
+    pathname = get_formal_pathname params[:pages]
+    @page = Page.find_by_pathname(pathname)
 
-      if !is_root_path?(@pathname)
+    if @page.nil?
+      parent_pathname = pathname.parent
+      parent = Page.find_by_pathname(parent_pathname)
+
+      if !is_root_path?(pathname)
         if parent.nil?
           raise ActiveRecord::RecordNotFound
         end
         authorize! :write, parent
       end
 
-      @title = get_title @pathname
-      @pankuzu = render_pankuzu_list parent
-      @page = Page.new(title: @title, path: @path, parent: parent)
+      title = get_title pathname
+      @page = Page.new(title: title, parent: parent)
 
+      render_pankuzu_list
       render_left
       render_right
       render "new"
@@ -79,13 +76,15 @@ class PagesController < ApplicationController
     authorize! :read, @page
 
     @update_histories = @page.update_histories.order(created_at: :desc)
-    @title = @page.title
-    @pankuzu = render_pankuzu_list @page.parent
+
+    descendants = @page.self_and_descendants.pluck(:id)
+    @next_parent_pages = Page.accessible_by(current_ability, :read)
+      .where.not(id: descendants)
 
     @attached_files = []
     @page.files.each do |file|
        filename = file.blob.filename.to_s
-       path = (@pathname / filename).to_s
+       path = (pathname / filename).to_s
        escaped_path = WEBrick::HTTPUtils.escape(path)
        created_at = file.created_at
 
@@ -97,6 +96,7 @@ class PagesController < ApplicationController
        })
     end
 
+    render_pankuzu_list
     render_right
     render_left
     render "show"
@@ -113,15 +113,14 @@ class PagesController < ApplicationController
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
     parent_pathname = pathname.parent
-    parent = Page.find_by(path: parent_pathname.to_s)
+    parent = Page.find_by_pathname(parent_pathname)
     title = get_title pathname
 
-    if !Page.exists?(path: path) && (parent != nil || is_root_path?(pathname))
+    if Page.find_by_pathname(pathname).nil? && (parent != nil || is_root_path?(pathname))
       @page = Page.new(
         user: current_user,
         content: "new page",
         title: title,
-        path: path,
         parent: parent,
         )
     else
@@ -147,7 +146,7 @@ class PagesController < ApplicationController
   def update
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
-    @page = Page.find_by(path: path)
+    @page = Page.find_by_pathname(pathname)
 
     if @page == nil
       raise ActiveRecord::RecordNotFound
@@ -155,21 +154,24 @@ class PagesController < ApplicationController
     end
     authorize! :write, @page
 
-    page_params = params.require(:page).permit(:content, :editable_group_id, :readable_group_id)
-    success_flag = @page.update(
+    page_params = params.require(:page).permit(:title, :content, :editable_group_id, :readable_group_id, :parent_page_id)
+    update_succeeded = @page.update(
       user: current_user,
+      title: page_params[:title],
       content: page_params[:content],
       readable_group: current_user.usergroups.find_by(id: page_params[:readable_group_id]),
       editable_group: current_user.usergroups.find_by(id: page_params[:editable_group_id]),
+      parent_id: page_params[:parent_page_id]
     )
     respond_to do |format|
-      if success_flag
+      if update_succeeded
         history = UpdateHistory.new(user: @page.user, content: @page.content)
         @page.update_histories << history
-        format.html { redirect_to path, notice: 'Page was successfully updated.' }
+        format.html { redirect_to @page.path, notice: 'Page was successfully updated.' }
         format.json { render :show, status: :ok, location: path }
       else
-        format.html { render :show, alert: 'Page was not updated, something wrong' }
+        flash[:errors] = @page.errors.full_messages
+        format.html { redirect_back fallback_location: pathname.to_s, alert: 'Page was not updated, something wrong' }
         format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
@@ -181,7 +183,7 @@ class PagesController < ApplicationController
   def destroy
     pathname = get_formal_pathname params[:pages]
     path = pathname.to_s
-    page = Page.find_by(path: path)
+    page = Page.find_by_pathname(pathname)
 
     if page == nil
       raise ActiveRecord::RecordNotFound
