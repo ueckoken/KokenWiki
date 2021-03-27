@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_15_092442) do
+ActiveRecord::Schema.define(version: 2021_03_27_184637) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2021_03_15_092442) do
     t.bigint "parent_id"
     t.bigint "user_id"
     t.string "title", null: false
-    t.text "content", size: :long
+    t.text "content", size: :long, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2021_03_15_092442) do
   create_table "update_histories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "page_id"
     t.bigint "user_id"
-    t.text "content", size: :long
+    t.text "content", size: :long, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_update_histories_on_created_at"
