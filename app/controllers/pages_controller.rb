@@ -7,19 +7,14 @@ class PagesController < ApplicationController
   before_action :force_trailing_slash, only: [:show_page]
 
   def show_search
-    if params[:search] == ""
+    query = params[:q]
+    if query == ""
       @search_pages = Page.none
 
       render "search"
       return
     end
-    @search_pages = Page.accessible_by(current_ability, :read)
-
-    searchstr = params[:search].split
-    searchstr.each do |str|
-      @search_pages = @search_pages.search(str)
-    end
-
+    @search_pages = Page.accessible_by(current_ability, :read).search(query)
     render "search"
   end
 
