@@ -73,8 +73,11 @@ class PagesController < ApplicationController
     @update_histories = @page.update_histories.order(created_at: :desc)
 
     descendants = @page.self_and_descendants.pluck(:id)
-    @next_parent_pages = Page.accessible_by(current_ability, :read)
+    next_parent_pages = Page.accessible_by(current_ability, :read)
       .where.not(id: descendants)
+    # ActiveRecord だと path を参照するたびに内部的にクエリが呼ばれて良くない
+    # ActiveRecord を捨てる代わりに 単一のクエリで path を得る
+    @next_parents = Page.get_paths_by_ids(next_parent_pages.pluck(:id))
 
     @attached_files = []
     @page.files.each do |file|
