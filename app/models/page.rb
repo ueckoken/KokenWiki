@@ -19,7 +19,7 @@ class Page < ApplicationRecord
   validates :title, exclusion: { in: [""], message: "cannot be empty string" }, if: -> { ! parent.nil? }
   validates :content, exclusion: { in: [nil] }
 
-  scope :search, ->(query) { where("MATCH (content) AGAINST (? IN NATURAL LANGUAGE MODE)", query) if query.present? }
+  scope :search, ->(query) { where("MATCH (content) AGAINST (? IN BOOLEAN MODE)", query) if query.present? }
 
   def self.find_by_pathname(pathname)
     if pathname.root?
