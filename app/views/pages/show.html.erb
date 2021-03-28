@@ -15,7 +15,7 @@
             is_destroyable: @page.children.size == 0 && can?(:write, @page),
             usergroups: current_user != nil ? current_user.usergroups.select(:id, :name) : [],
             parent_page_id: @page.parent.nil? ? nil : @page.parent.id,
-            next_parent_pages: @next_parent_pages.map {|page| {:id => page.id, :path => page.path}}
+            next_parent_pages: @next_parents
         ) %>
     <% end %>
     <hr>

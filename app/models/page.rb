@@ -41,6 +41,23 @@ class Page < ApplicationRecord
     return page[0]
   end
 
+  def self.get_paths_by_ids(ids)
+    if ids.empty?
+      return []
+    end
+    sql = <<~SQL.squish
+    WITH RECURSIVE ancestors(id, source_id, parent_id, level, title) AS (
+        SELECT id, id AS source_id, parent_id, 0 AS level, title FROM #{Page.table_name} WHERE id IN (:ids)
+        UNION ALL
+        SELECT page.id, ancestors.source_id AS source_id, page.parent_id, ancestors.level + 1 AS level, page.title FROM #{Page.table_name} AS page, ancestors WHERE ancestors.parent_id = page.id
+    )
+    SELECT source_id AS id, GROUP_CONCAT(title ORDER BY level DESC SEPARATOR "/") AS path FROM ancestors GROUP BY source_id
+    SQL
+    sql = ActiveRecord::Base.sanitize_sql_array([sql, { ids: ids }])
+    pages = ActiveRecord::Base.connection.select_all(sql)
+    return pages
+  end
+
   def root?
     parent.nil? && title == ""
   end
