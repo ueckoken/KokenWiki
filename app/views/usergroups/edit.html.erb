@@ -1,25 +1,37 @@
 <%= render "settings/layout" do %>
     <h1>ユーザーグループ <%= @usergroup.name %>の編集</h1>
     <%= form_with url: @usergroup, scope: :usergroup, method: "put" do |form| %>
-        <p>グループに入れたいユーザーにチェックしてください</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>名前</th>
-                    <th>ユーザーID</th>
-                </tr>
-            </thead>
-            <% @users.each do |user| %>
-                <tr>
-                    <td>
-                        <%= form.check_box "user_ids", {:checked => @usergroup.users.include?(user), :multiple => true}, user.id.to_s, nil %>
-                    </td>
-                    <td><%= user.name %></td>
-                    <td><%= user.user_id %></td>
-                </tr>
-            <% end %>
-        </table>
+        <div class="form-group">
+            <%#
+                this hidden field allows to safely assume this field if no `user_ids` are selected
+                for details see below `collection_check_boxes`
+            %>
+            <input type="hidden" name="usergroup[user_ids][]" value="">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>名前</th>
+                        <th>ユーザーID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%#
+                        `collection_check_boxes` automatically generates hidden field
+                        but it is invalid inside <tbody>
+                        `include_hidden: false` disables this
+                        ref: https://api.rubyonrails.org/v6.0/classes/ActionView/Helpers/FormOptionsHelper.html#method-i-collection_check_boxes
+                    %>
+                    <%= form.collection_check_boxes(:user_ids, @users, :id, :name, { include_hidden: false }) do |b| %>
+                        <tr>
+                            <td><%= b.check_box(class: "form-check-input") %></td>
+                            <td><%= b.label { b.text } %></td>
+                            <td><%= b.object.user_id %></td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
 
         <%= form.submit "登録", :class => "btn btn-primary" %>
     <% end %>
