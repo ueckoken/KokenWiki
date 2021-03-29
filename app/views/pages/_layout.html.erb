@@ -1,8 +1,3 @@
-<% if flash[:errors] %>
-    <% flash[:errors].each do |message| %>
-        <p class="alert alert-danger"><%= message %></p>
-    <% end %>
-<% end %>
 <div id="page-container">
     <div id="left">
         <%= render partial: "pages/left" %>

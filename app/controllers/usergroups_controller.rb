@@ -1,59 +1,59 @@
 class UsergroupsController < ApplicationController
-  load_and_authorize_resource
-  skip_load_resource :only => :create
-
   def index
+    @usergroups = Usergroup.accessible_by(current_ability, :read).includes(:users)
     @users = User.all
   end
+
   def new
+    authorize! :create, Usergroup
     @users = User.all
   end
+
   def create
-    usergroup_param = params.require(:usergroup).permit(:name, user_ids: [])
-    name = usergroup_param[:name]
-    usergroup = Usergroup.new(
-      create_user: current_user,
-      name: name
-    )
-    users = User.where(id: usergroup_param[:user_ids])
-
-    authorize! :create, usergroup
-    if users.size === 0
-      raise ActiveRecord::RecordNotFound	
-    end
-
-    usergroup.users = users
-
+    authorize! :create, Usergroup
+    usergroup = current_user.create_groups.build(usergroup_params)
     respond_to do |format|
       if usergroup.save
         format.html { redirect_to usergroup, notice: 'Usergroup was successfully created.' }
         format.json { render :show, status: :created, location: usergroup }
       else
-        format.html { render :new }
+        flash[:errors] = usergroup.errors.full_messages
+        format.html { redirect_to new_usergroup_path }
         format.json { render json: usergroup.errors, status: :unprocessable_entity }
       end
     end
   end
+
   def show
+    @usergroup = Usergroup.find(params[:id])
+    authorize! :read, @usergroup
   end
+
   def edit
+    @usergroup = Usergroup.find(params[:id])
+    authorize! :write, @usergroup
     @users = User.all
   end
+
   def update
-    users = User.where(id: params[:usergroup][:user_ids])
-
-    if users.size == 0
-      raise ActiveRecord::RecordNotFound	
-    end
-
-    @usergroup.users = users
-
+    @usergroup = Usergroup.find(params[:id])
+    authorize! :write, @usergroup
+    update_succeeded = @usergroup.update(usergroup_params)
     respond_to do |format|
-      format.html { redirect_to @usergroup, notice: 'Usergroup was successfully updated.' }
-      format.json { render :show, status: :ok, location: @usergroup }
+      if update_succeeded
+        format.html { redirect_to @usergroup, notice: 'Usergroup was successfully updated.' }
+        format.json { render :show, status: :ok, location: @usergroup }
+      else
+        flash[:errors] = @usergroup.errors.full_messages
+        format.html { redirect_to edit_usergroup_path }
+        format.json { render json: @usergroup.errors, status: :unprocessable_entity }
+      end
     end
   end
+
   def destroy
+    @usergroup = Usergroup.find(params[:id])
+    authorize! :write, @usergroup
     @usergroup.destroy!
 
     respond_to do |format|
@@ -61,8 +61,9 @@ class UsergroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
   private
-    def update_params
-      params.require(:usergroup).permit(user_ids: [])
+    def usergroup_params
+      params.require(:usergroup).permit(:name, user_ids: [])
     end
 end
