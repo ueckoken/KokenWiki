@@ -8,5 +8,6 @@ class Usergroup < ApplicationRecord
                         foreign_key: "editable_group_id"
 
   validates :name, uniqueness: true, length: { in: 1..50 }
+  validates :users, presence: true
 
 end

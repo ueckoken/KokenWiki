@@ -21,6 +21,11 @@
                 <% if alert %>
                     <p class="alert alert-danger"><%= alert %></p>
                 <% end %>
+                <% if flash[:errors] %>
+                    <% flash[:errors].each do |message| %>
+                        <p class="alert alert-danger"><%= message %></p>
+                    <% end %>
+                <% end %>
                 <main>
                     <%= yield %>
                 </main>
