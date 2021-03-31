@@ -90,13 +90,6 @@ GEM
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
     coderay (1.1.2)
-    coffee-rails (4.2.2)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.12.2)
     concurrent-ruby (1.1.8)
     connection_pool (2.2.2)
     crass (1.0.6)
@@ -391,7 +384,6 @@ DEPENDENCIES
   cancancan
   capybara (>= 2.15)
   chromedriver-helper
-  coffee-rails (~> 4.2)
   devise
   devise-bootstrap-views
   google-cloud-storage (~> 1.8)
