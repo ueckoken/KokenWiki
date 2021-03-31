@@ -1,10 +1,9 @@
 import React, { FC } from "react"
-import { useSelector } from "react-redux"
-import type { State } from "../redux"
 import Markdown from "../Markdown"
+import { useTypedSelector } from "../redux"
 
 const MarkdownForMdEditor: FC<{}> = () => {
-    const markdown = useSelector<State>((state) => state.markdown)
+    const markdown = useTypedSelector((state) => state.markdown)
     return <Markdown markdown={markdown} />
 }
 

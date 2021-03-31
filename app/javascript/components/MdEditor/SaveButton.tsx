@@ -1,7 +1,11 @@
-import React from "react"
+import React, { FC } from "react"
 import { CheckIcon } from "@primer/octicons-react"
 
-const SaveButton = ({ disabled }) => (
+type Props = {
+    disabled: boolean
+}
+
+const SaveButton: FC<Props> = ({ disabled }) => (
     <button
         type="submit"
         disabled={disabled}

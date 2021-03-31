@@ -1,22 +1,22 @@
-import React, { Fragment } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import React, { ChangeEvent, Fragment } from "react"
+import { useDispatch } from "react-redux"
 import Markdown from "./Markdown"
 import Editor from "./Editor"
-import { actions, selectors } from "../redux"
+import { actions, selectors, useTypedSelector } from "../redux"
 import SaveButton from "./SaveButton"
 import CancelButton from "./CancelButton"
 import EditButton from "./EditButton"
 import DestroyButton from "./DestroyButton"
 
 const Header = () => {
-    const title = useSelector((state) => state.title)
-    const default_title = useSelector((state) => state.default_title)
+    const title = useTypedSelector((state) => state.title)
+    const default_title = useTypedSelector((state) => state.default_title)
     const is_title_editable = default_title !== ""
-    const is_editing = useSelector((state) => state.is_editing)
-    const is_destroyable = useSelector((state) => state.is_destroyable)
-    const is_changed = useSelector(selectors.isChanged)
+    const is_editing = useTypedSelector((state) => state.is_editing)
+    const is_destroyable = useTypedSelector((state) => state.is_destroyable)
+    const is_changed = useTypedSelector(selectors.isChanged)
     const dispatch = useDispatch()
-    const handleChangeTitle = (e) =>
+    const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) =>
         dispatch(actions.changeTitle(e.target.value))
     const handleOnClickEdit = () => dispatch(actions.onClickEdit())
     const handleOnClickCancel = () => dispatch(actions.onClickCancel())
@@ -46,13 +46,15 @@ const Header = () => {
 }
 
 const ParentPageSelector = () => {
-    const parent_page_id = useSelector((state) => state.parent_page_id)
-    const next_parent_pages = useSelector((state) => state.next_parent_pages)
+    const parent_page_id = useTypedSelector((state) => state.parent_page_id)
+    const next_parent_pages = useTypedSelector(
+        (state) => state.next_parent_pages
+    )
     const dispatch = useDispatch()
-    const handleChangeParentPage = (e) =>
+    const handleChangeParentPage = (e: ChangeEvent<HTMLSelectElement>) =>
         dispatch(actions.changeParentPage(Number(e.target.value)))
 
-    if (next_parent_pages.length === 0) {
+    if (parent_page_id === null || next_parent_pages.length === 0) {
         return null
     }
 
@@ -76,15 +78,19 @@ const ParentPageSelector = () => {
 }
 
 const MdEditor = () => {
-    const usergroups = useSelector((state) => state.usergroups)
-    const readable_group_id = useSelector((state) => state.readable_group_id)
-    const editable_group_id = useSelector((state) => state.editable_group_id)
-    const is_editing = useSelector((state) => state.is_editing)
+    const usergroups = useTypedSelector((state) => state.usergroups)
+    const readable_group_id = useTypedSelector(
+        (state) => state.readable_group_id
+    )
+    const editable_group_id = useTypedSelector(
+        (state) => state.editable_group_id
+    )
+    const is_editing = useTypedSelector((state) => state.is_editing)
 
     const dispatch = useDispatch()
-    const handleChangeReadableGroup = (e) =>
+    const handleChangeReadableGroup = (e: ChangeEvent<HTMLSelectElement>) =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
-    const handleChangeEditableGroup = (e) =>
+    const handleChangeEditableGroup = (e: ChangeEvent<HTMLSelectElement>) =>
         dispatch(actions.changeEditableGroup(Number(e.target.value)))
 
     if (!is_editing) {
