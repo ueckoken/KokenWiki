@@ -74,9 +74,9 @@ gem 'cancancan'
 
 gem "google-cloud-storage", "~> 1.8", require: false
 
-gem 'rubocop'
-gem 'rubocop-rails'
-gem 'rubocop-performance'
+gem 'rubocop', '~> 1.8.0'
+gem 'rubocop-rails', '~> 2.9.1'
+gem 'rubocop-performance', '~> 1.9.2'
 
 gem "mysql2", "~> 0.5.3"
 

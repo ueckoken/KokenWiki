@@ -81,17 +81,17 @@ class PagesController < ApplicationController
 
     @attached_files = []
     @page.files.each do |file|
-       filename = file.blob.filename.to_s
-       path = (pathname / filename).to_s
-       escaped_path = WEBrick::HTTPUtils.escape(path)
-       created_at = file.created_at
+      filename = file.blob.filename.to_s
+      path = (pathname / filename).to_s
+      escaped_path = WEBrick::HTTPUtils.escape(path)
+      created_at = file.created_at
 
-       @attached_files.append({
-         :filename => filename,
-         :path => path,
-         :escaped_path => escaped_path,
-         :created_at => created_at
-       })
+      @attached_files.append({
+        filename: filename,
+        path: path,
+        escaped_path: escaped_path,
+        created_at: created_at
+      })
     end
 
     render_pankuzu_list

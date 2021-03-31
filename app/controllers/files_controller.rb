@@ -86,7 +86,7 @@ class FilesController < ApplicationController
     redirect_to page_pathname.to_s, notice: 'File was successfully destroyed.'
   end
 
-  def is_valid_uri? filename
+  def is_valid_uri?(filename)
     begin
       parsable_filename = ERB::Util.url_encode filename
       URI.parse(parsable_filename)

@@ -1,5 +1,5 @@
 class UserlocksController < ApplicationController
-  authorize_resource :class => :userlock
+  authorize_resource class: :userlock
 
   def index
     @users = User.all.order("locked_at DESC")

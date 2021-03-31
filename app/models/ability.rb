@@ -39,7 +39,7 @@ class Ability
     # A user who is not logged in cannot do anything but logging in
     unless user.present?
       return
-    end 
+    end
 
     can :read, :setting
     can :read, Page, readable_group: nil
@@ -58,6 +58,5 @@ class Ability
       can :manage, :userlock
       can :manage, :admin_user
     end
-
   end
 end

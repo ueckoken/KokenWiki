@@ -9,5 +9,4 @@ class Usergroup < ApplicationRecord
 
   validates :name, uniqueness: true, length: { in: 1..50 }
   validates :users, presence: true
-
 end
