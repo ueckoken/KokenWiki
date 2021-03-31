@@ -157,10 +157,10 @@ Layout/SpaceInsideHashLiteralBraces:
 Layout/SpaceInsideParens:
   Enabled: true
 
-# # Check quotes usage according to lint rule below.
-# Style/StringLiterals:
-#   Enabled: true
-#   EnforcedStyle: double_quotes
+# Check quotes usage according to lint rule below.
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 # Detect hard tabs, no hard tabs.
 Layout/IndentationStyle:

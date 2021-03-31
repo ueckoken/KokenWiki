@@ -128,7 +128,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
-        format.html { redirect_back fallback_location: path, notice: 'Page was successfully created.' }
+        format.html { redirect_back fallback_location: path, notice: "Page was successfully created." }
         format.json { render :show, status: :created, location: @page }
       else
         format.html { render :new }
@@ -165,11 +165,11 @@ class PagesController < ApplicationController
       if update_succeeded
         history = UpdateHistory.new(user: @page.user, content: @page.content)
         @page.update_histories << history
-        format.html { redirect_to @page.path, notice: 'Page was successfully updated.' }
+        format.html { redirect_to @page.path, notice: "Page was successfully updated." }
         format.json { render :show, status: :ok, location: path }
       else
         flash[:errors] = @page.errors.full_messages
-        format.html { redirect_back fallback_location: pathname.to_s, alert: 'Page was not updated, something wrong' }
+        format.html { redirect_back fallback_location: pathname.to_s, alert: "Page was not updated, something wrong" }
         format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
@@ -196,7 +196,7 @@ class PagesController < ApplicationController
     page.destroy!
 
     respond_to do |format|
-      format.html { redirect_to path, notice: 'Page was successfully destroyed.' }
+      format.html { redirect_to path, notice: "Page was successfully destroyed." }
       format.json { head :no_content }
     end
   end

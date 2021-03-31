@@ -14,7 +14,7 @@ class UsergroupsController < ApplicationController
     usergroup = current_user.create_groups.build(usergroup_params)
     respond_to do |format|
       if usergroup.save
-        format.html { redirect_to usergroup, notice: 'Usergroup was successfully created.' }
+        format.html { redirect_to usergroup, notice: "Usergroup was successfully created." }
         format.json { render :show, status: :created, location: usergroup }
       else
         flash[:errors] = usergroup.errors.full_messages
@@ -41,7 +41,7 @@ class UsergroupsController < ApplicationController
     update_succeeded = @usergroup.update(usergroup_params)
     respond_to do |format|
       if update_succeeded
-        format.html { redirect_to @usergroup, notice: 'Usergroup was successfully updated.' }
+        format.html { redirect_to @usergroup, notice: "Usergroup was successfully updated." }
         format.json { render :show, status: :ok, location: @usergroup }
       else
         flash[:errors] = @usergroup.errors.full_messages
@@ -57,7 +57,7 @@ class UsergroupsController < ApplicationController
     @usergroup.destroy!
 
     respond_to do |format|
-      format.html { redirect_to usergroups_url, notice: 'Usergroup was successfully destroyed.' }
+      format.html { redirect_to usergroups_url, notice: "Usergroup was successfully destroyed." }
       format.json { head :no_content }
     end
   end

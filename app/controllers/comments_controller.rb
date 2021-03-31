@@ -20,10 +20,10 @@ class CommentsController < ApplicationController
     )
     respond_to do |format|
       if comment.save
-        format.html { redirect_to path, notice: 'Comment was successfully createed.' }
+        format.html { redirect_to path, notice: "Comment was successfully createed." }
         format.json { render :show, status: :ok, location: path }
       else
-        format.html { render :show, alert: 'Comment was not created, something wrong' }
+        format.html { render :show, alert: "Comment was not created, something wrong" }
         format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
@@ -48,7 +48,7 @@ class CommentsController < ApplicationController
 
     comment.destroy
     respond_to do |format|
-      format.html { redirect_to path, notice: 'Comment was successfully destroyed.' }
+      format.html { redirect_to path, notice: "Comment was successfully destroyed." }
       format.json { head :no_content }
     end
   end

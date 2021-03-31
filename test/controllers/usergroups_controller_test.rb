@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class UsergroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -16,7 +16,7 @@ class UsergroupsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create usergroup" do
-    assert_difference('Usergroup.count') do
+    assert_difference("Usergroup.count") do
       post usergroups_url, params: { usergroup: {} }
     end
 
@@ -39,7 +39,7 @@ class UsergroupsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy usergroup" do
-    assert_difference('Usergroup.count', -1) do
+    assert_difference("Usergroup.count", -1) do
       delete usergroup_url(@usergroup)
     end
 
