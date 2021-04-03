@@ -35,12 +35,6 @@ const Editor: FC<{}> = () => {
             tuiEditor?.remove()
         }
     }, [rootEl])
-    useEffect(() => {
-        if (tuiEditor === null) {
-            return
-        }
-        tuiEditor.setMarkdown(markdown)
-    }, [tuiEditor])
     return (
         <Fragment>
             <div ref={rootEl} />
