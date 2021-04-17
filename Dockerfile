@@ -1,5 +1,5 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:2.5
+FROM ruby:2.7
 
 # https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
