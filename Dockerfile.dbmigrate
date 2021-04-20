@@ -1,5 +1,5 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:2.5
+FROM ruby:2.7
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
