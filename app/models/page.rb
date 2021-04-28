@@ -14,7 +14,7 @@ class Page < ApplicationRecord
   has_many_attached :files
 
   validates :title, uniqueness: { scope: :parent_id }
-  validates :title, exclusion: { in: [nil] }, format: { with: /\A[^?\.]*\z/ }
+  validates :title, exclusion: { in: [nil] }, format: { with: /\A[^?.]*\z/ }
   validates :title, inclusion: { in: [""], message: "of root page must be empty string" }, if: -> { parent.nil? }
   validates :title, exclusion: { in: [""], message: "cannot be empty string" }, if: -> { ! parent.nil? }
   validates :content, exclusion: { in: [nil] }
@@ -36,7 +36,7 @@ class Page < ApplicationRecord
     )
     SELECT * FROM #{Page.table_name} WHERE id = (SELECT id FROM pages_with_path LIMIT 1) LIMIT 1;
     SQL
-    page = Page.find_by_sql([sql, { :title => pathname.basename.to_s, :path => pathname.to_s }])
+    page = Page.find_by_sql([sql, { title: pathname.basename.to_s, path: pathname.to_s }])
     # page must be single
     return page[0]
   end
@@ -92,7 +92,7 @@ class Page < ApplicationRecord
     if self.root?
       return "/"
     end
-    ancestors_titles = self.self_and_ancestors.map &:title
+    ancestors_titles = self.self_and_ancestors.map(&:title)
     # 最後の要素は必ず root (＝titleが空文字列 "") のため除外
     ancestors_titles.pop
     path = ancestors_titles.reverse.join("/")

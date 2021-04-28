@@ -18,9 +18,9 @@ class FilesController < ApplicationController
       raise ActiveRecord::RecordNotFound
     else
       if file.blob.image? || file.blob.audio? || file.blob.video?
-        send_data file.blob.download, type: file.blob.content_type, disposition: 'inline'
+        send_data file.blob.download, type: file.blob.content_type, disposition: "inline"
       else
-        send_data file.blob.download, type: file.blob.content_type, disposition: 'attachment'
+        send_data file.blob.download, type: file.blob.content_type, disposition: "attachment"
       end
     end
   end
@@ -54,10 +54,10 @@ class FilesController < ApplicationController
     end
     respond_to do |format|
       if success_flag
-        format.html { redirect_to path, notice: 'Files were successfully uploaded.' }
+        format.html { redirect_to path, notice: "Files were successfully uploaded." }
         format.json { render :show, status: :ok, location: path }
       else
-        format.html { redirect_to path, alert: 'Files were not updated, something wrong' }
+        format.html { redirect_to path, alert: "Files were not updated, something wrong" }
         format.json { render json: page.errors, status: :unprocessable_entity }
       end
     end
@@ -83,10 +83,10 @@ class FilesController < ApplicationController
       file.purge
     end
 
-    redirect_to page_pathname.to_s, notice: 'File was successfully destroyed.'
+    redirect_to page_pathname.to_s, notice: "File was successfully destroyed."
   end
 
-  def is_valid_uri? filename
+  def is_valid_uri?(filename)
     begin
       parsable_filename = ERB::Util.url_encode filename
       URI.parse(parsable_filename)

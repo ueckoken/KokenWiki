@@ -1,5 +1,5 @@
 class AdminSettingsController < ApplicationController
-  authorize_resource :class => :admin_user
+  authorize_resource class: :admin_user
 
   def index
     @users = User.all.order("is_admin DESC")

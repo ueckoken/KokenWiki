@@ -1,9 +1,8 @@
 require "uri"
 require "pathname"
-require "webrick/httputils"
 
 def is_file?(request)
-  parsable_url = WEBrick::HTTPUtils.escape(URI.decode(request.url))
+  parsable_url = WEBrick::HTTPUtils.escape(CGI.unescape(request.url))
   url = URI.parse(parsable_url)
   path = Pathname.new(url.path)
   return path.extname != ""
@@ -104,10 +103,10 @@ class CommentConstraint
 end
 
 Rails.application.routes.draw do
-  scope '/setting' do
+  scope "/setting" do
     devise_for :user, controllers: {
-      registrations: 'users/registrations',
-      sessions: 'users/sessions'
+      registrations: "users/registrations",
+      sessions: "users/sessions"
     }
 
     resources :usergroups
@@ -119,37 +118,37 @@ Rails.application.routes.draw do
   end
 
 
-  get 'rails/' =>  "application#render_404"
-  get 'rails/*some' =>  "application#render_404"
-  post 'rails/' =>  "application#render_404"
-  post 'rails/*some' =>  "application#render_404"
+  get "rails/" =>  "application#render_404"
+  get "rails/*some" =>  "application#render_404"
+  post "rails/" =>  "application#render_404"
+  post "rails/*some" =>  "application#render_404"
   # のちに使いたいかもしれない
 
-  root to: 'pages#show_page', constraints: PageConstraint
-  get '/' => 'files#show', constraints: FileConstraint
+  root to: "pages#show_page", constraints: PageConstraint
+  get "/" => "files#show", constraints: FileConstraint
 
-  get '/search' => 'pages#show_search'
+  get "/search" => "pages#show_search"
 
   # get    '/new'        => 'pages#new'
   # get    '/edit'       => 'pages#edit'
-  post   '/'           => 'pages#create', constraints: PageConstraint
-  post   '/'           => 'files#create', constraints: FileConstraint
-  post   '/'           => 'comments#create', constraints: CommentConstraint
-  put    '/'           => 'pages#update'
-  delete '/'           => 'pages#destroy', constraints: PageConstraint
-  delete '/'           => 'files#destroy', constraints: FileConstraint
-  delete '/'           => 'comments#destroy', constraints: CommentConstraint
+  post   "/"           => "pages#create", constraints: PageConstraint
+  post   "/"           => "files#create", constraints: FileConstraint
+  post   "/"           => "comments#create", constraints: CommentConstraint
+  put    "/"           => "pages#update"
+  delete "/"           => "pages#destroy", constraints: PageConstraint
+  delete "/"           => "files#destroy", constraints: FileConstraint
+  delete "/"           => "comments#destroy", constraints: CommentConstraint
   # get    '*pages/new'  => 'pages#new'
   # get    '*pages/edit' => 'pages#edit'
-  get    '*pages/'     => 'pages#show_page', constraints: PageConstraint
-  get    '*pages/'     => 'files#show', constraints: FileConstraint
-  post   '*pages/'     => 'pages#create', constraints: PageConstraint
-  post   '*pages/'     => 'files#create', constraints: FileConstraint
-  post   '*pages/'     => 'comments#create', constraints: CommentConstraint
-  put    '*pages/'     => 'pages#update'
-  delete '*pages/'     => 'pages#destroy', constraints: PageConstraint
-  delete '*pages/'     => 'files#destroy', constraints: FileConstraint
-  delete '*pages/'     => 'comments#destroy', constraints: CommentConstraint
+  get    "*pages/"     => "pages#show_page", constraints: PageConstraint
+  get    "*pages/"     => "files#show", constraints: FileConstraint
+  post   "*pages/"     => "pages#create", constraints: PageConstraint
+  post   "*pages/"     => "files#create", constraints: FileConstraint
+  post   "*pages/"     => "comments#create", constraints: CommentConstraint
+  put    "*pages/"     => "pages#update"
+  delete "*pages/"     => "pages#destroy", constraints: PageConstraint
+  delete "*pages/"     => "files#destroy", constraints: FileConstraint
+  delete "*pages/"     => "comments#destroy", constraints: CommentConstraint
 
   # resources :usergroups
   # devise_for :users
