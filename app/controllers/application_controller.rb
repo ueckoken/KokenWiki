@@ -30,15 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def basic_auth
-    if !ENV["BASIC_AUTH"] then return end
-    authenticate_or_request_with_http_basic do |username, password|
-      (username == Rails.application.credentials.basic_auth_user && password == Rails.application.credentials.basic_auth_password)
-
-      # username == "user" && password == "pass"
-    end
-  end
-
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:user_id, :email, :password, :password_confirmation, :name])
     devise_parameter_sanitizer.permit(:sign_in, keys: [:user_id, :email, :password, :remember_me])

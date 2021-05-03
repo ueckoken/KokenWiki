@@ -3,7 +3,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
-  before_action :basic_auth, only: [:new, :create]
   # GET /resource/sign_up
   def new
     super
@@ -11,6 +10,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
+    token = params[:user][:invitation_token]
+
+    if User.count != 0
+      if token.blank?
+        redirect_to new_registration_path(:user), alert: "Invitation token required"
+        return
+      end
+
+      invitation_token = InvitationToken.find_by(token: token)
+
+      if invitation_token.nil?
+        redirect_to new_registration_path(:user), alert: "Invalid invitation token"
+        return
+      elsif invitation_token.expired?
+        redirect_to new_registration_path(:user, t: invitation_token), alert: "Invitation token expired"
+        return
+      end
+    end
+
     build_resource(sign_up_params)
 
     if resource.save

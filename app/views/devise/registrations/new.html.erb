@@ -31,6 +31,7 @@
             <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
         </div>
 
+        <%= f.text_field :invitation_token, value: params[:t], hidden: true %>
         <%= f.submit "登録", class: "btn btn-primary btn-block" %>
     <% end %>
 

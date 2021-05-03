@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :pages
   has_many :comments
   has_many :update_histories
+  has_many :invitation_tokens, class_name: "InvitationToken", foreign_key: "created_by"
 
   has_one_attached :image
 

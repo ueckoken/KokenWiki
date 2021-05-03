@@ -1,0 +1,72 @@
+<%= render "settings/layout" do %>
+    <h1>招待トークン</h1>
+
+    <%= form_with(scope: :invitation_token, local: true) do |form| %>
+        <%= form.submit "生成", class: "btn btn-primary" %>
+    <% end %>
+
+    <table class="table" id="invitation-token-table">
+        <thead>
+            <tr>
+                <th>トークン</th>
+                <th>状態</th>
+                <th>失効日</th>
+                <th>作成日時</th>
+                <th>作成者</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% @invitation_tokens.each do |invitation_token| %>
+                <% if invitation_token.expired? %>
+                <tr class="table-secondary">
+                <% else %>
+                <tr>
+                <% end %>
+                    <td>
+                        <code><%= invitation_token.token %></code>
+                        <%= link_to invitation_token.registration_path do %>
+                            招待リンク
+                            <span
+                                role="button"
+                                class="material-icons text-dark"
+                                data-id="copy-to-clipboard-button"
+                                title="クリップボードにコピー"
+                                aria-label="クリップボードにコピー"
+                            >
+                                content_copy
+                            </span>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if invitation_token.expired? %>
+                            失効
+                        <% else %>
+                            有効
+                        <% end %>
+                    </td>
+                    <td>
+                        <%= invitation_token.expired_at %>
+                    </td>
+                    <td><%= invitation_token.created_at %></td>
+                    <td><%= invitation_token.created_by.name %></td>
+                    <td><%= link_to "破棄", invitation_token, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <script>
+        const table = document.getElementById("invitation-token-table")
+        for (const tbody of table.tBodies) {
+            for (const row of tbody.rows) {
+                const copyButton = row.querySelector("[data-id=copy-to-clipboard-button]")
+                const url = copyButton.parentElement.href
+                copyButton.addEventListener("click", e => {
+                    e.preventDefault()
+                    navigator.clipboard.writeText(url)
+                })
+            }
+        }
+    </script>
+<% end %>
