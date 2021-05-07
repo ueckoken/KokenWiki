@@ -26,9 +26,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
         createuser = User.find_by(email: userparam[:email])
         # 一人目の登録はadminに設定,2人目からは登録時にロックする
-        if User.count >= 2
-          createuser.lock_access!
-        else
+        if User.count == 1
           createuser.update(is_admin: true)
         end
       else
