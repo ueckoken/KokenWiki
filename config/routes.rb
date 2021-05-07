@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       sessions: "users/sessions"
     }
 
+    resources :invitation_tokens, only: [:index, :create, :destroy]
     resources :usergroups
     get "/userlock" => "userlocks#index"
     put "/userlock" => "userlocks#update"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_195731) do
+ActiveRecord::Schema.define(version: 2021_04_13_010159) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -41,6 +41,15 @@ ActiveRecord::Schema.define(version: 2021_03_27_195731) do
     t.datetime "updated_at", null: false
     t.index ["page_id"], name: "index_comments_on_page_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "invitation_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "token", null: false
+    t.datetime "expired_at"
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id"], name: "index_invitation_tokens_on_created_by_id"
   end
 
   create_table "pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -119,4 +128,5 @@ ActiveRecord::Schema.define(version: 2021_03_27_195731) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "invitation_tokens", "users", column: "created_by_id"
 end
