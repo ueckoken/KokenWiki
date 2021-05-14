@@ -1,7 +1,7 @@
 runtime: ruby27
 entrypoint: bundle exec rails server -e production -p $PORT
 service: kokenwiki
-instance_class: F1
+instance_class: F2
 automatic_scaling:
   min_instances: 0
   max_instances: 1
