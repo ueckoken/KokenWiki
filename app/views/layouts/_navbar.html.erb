@@ -5,8 +5,8 @@
             <button
                 class="navbar-toggler"
                 type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
                 aria-controls="navbarNav"
                 aria-expanded="false"
                 aria-label="Toggle navigation"
@@ -31,7 +31,7 @@
                     </div>
                 </form>
 
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ms-auto">
                     <% if !user_signed_in? %>
                         <li class="nav-item">
                             <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
@@ -51,15 +51,15 @@
                                 class="nav-link dropdown-toggle"
                                 href="#"
                                 role="button"
-                                data-target="#navbarDropdown"
-                                data-toggle="dropdown"
+                                data-bs-target="#navbarDropdown"
+                                data-bs-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
                             >
                                 <%= current_user.name %>
                             </a>
                             <div
-                                class="dropdown-menu dropdown-menu-right"
+                                class="dropdown-menu dropdown-menu-end"
                                 aria-labelledby="navbarDropdown"
                             >
                                 <%= link_to "プロフィール", edit_user_registration_path, class: "dropdown-item" %>
