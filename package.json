@@ -10,7 +10,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@popperjs/core": "^2.9.2",
     "@primer/octicons-react": "^10.0.0",
-    "@rails/webpacker": "^5.1.1",
+    "@rails/webpacker": "5.4.0",
     "@reduxjs/toolkit": "^1.5.0",
     "@toast-ui/editor": "^2.3.0",
     "acorn": "^7.1.1",
@@ -27,7 +27,9 @@
     "react-redux": "^7.1.3",
     "react_ujs": "^2.6.0",
     "redux": "^4.0.5",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "@types/dompurify": "^2.0.4",
