@@ -117,7 +117,6 @@ class PagesController < ApplicationController
     if Page.find_by_pathname(pathname).nil? && (parent != nil || is_root_path?(pathname))
       @page = Page.new(
         user: current_user,
-        content: "new page",
         title: title,
         parent: parent,
         )
