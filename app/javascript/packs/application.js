@@ -22,7 +22,7 @@ var ReactRailsUJS = require("react_ujs")
 ReactRailsUJS.useContext(componentRequireContext)
 
 // 「クロップボードにコピーされました」を出す
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("turbolinks:load", () => {
     const $toast = document.getElementById("clipboard-copy-toast")
     const toast = new Toast($toast)
     document.addEventListener("clipboard-copy", () => {
