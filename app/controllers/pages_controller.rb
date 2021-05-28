@@ -77,7 +77,7 @@ class PagesController < ApplicationController
       .where.not(id: descendants)
     # ActiveRecord だと path を参照するたびに内部的にクエリが呼ばれて良くない
     # ActiveRecord を捨てる代わりに 単一のクエリで path を得る
-    @next_parents = Page.get_paths_by_ids(next_parent_pages.pluck(:id))
+    @next_parents = Page.get_paths_by_ids(next_parent_pages.pluck(:id)).sort_by { |page| page["path"] }
 
     @attached_files = []
     @page.files.each do |file|
