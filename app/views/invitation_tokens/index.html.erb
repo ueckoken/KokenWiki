@@ -26,18 +26,16 @@
                 <% end %>
                     <td>
                         <code><%= invitation_token.token %></code>
-                        <%= link_to invitation_token.registration_path do %>
-                            招待リンク
-                            <span
-                                role="button"
-                                class="material-icons text-dark"
-                                data-id="copy-to-clipboard-button"
-                                title="クリップボードにコピー"
-                                aria-label="クリップボードにコピー"
-                            >
-                                content_copy
-                            </span>
-                        <% end %>
+                        <%= link_to "招待リンク", invitation_token.registration_path, { id: "link-to-#{invitation_token.id}" } %>
+                        <clipboard-copy
+                            role="button"
+                            class="material-icons text-dark"
+                            title="クリップボードにコピー"
+                            aria-label="クリップボードにコピー"
+                            for="link-to-<%= invitation_token.id %>"
+                        >
+                            content_copy
+                        </clipboard-copy>
                     </td>
                     <td>
                         <% if invitation_token.expired? %>
@@ -56,17 +54,4 @@
             <% end %>
         </tbody>
     </table>
-    <script>
-        const table = document.getElementById("invitation-token-table")
-        for (const tbody of table.tBodies) {
-            for (const row of tbody.rows) {
-                const copyButton = row.querySelector("[data-id=copy-to-clipboard-button]")
-                const url = copyButton.parentElement.href
-                copyButton.addEventListener("click", e => {
-                    e.preventDefault()
-                    navigator.clipboard.writeText(url)
-                })
-            }
-        }
-    </script>
 <% end %>

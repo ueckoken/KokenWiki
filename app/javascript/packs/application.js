@@ -16,6 +16,16 @@
 //console.log('Hello World from Webpacker')
 // Support component names relative to this directory:
 import "bootstrap"
+import { Toast } from "bootstrap"
 var componentRequireContext = require.context("components", true)
 var ReactRailsUJS = require("react_ujs")
 ReactRailsUJS.useContext(componentRequireContext)
+
+// 「クロップボードにコピーされました」を出す
+document.addEventListener("DOMContentLoaded", () => {
+    const $toast = document.getElementById("clipboard-copy-toast")
+    const toast = new Toast($toast)
+    document.addEventListener("clipboard-copy", () => {
+        toast.show()
+    })
+})
