@@ -15,10 +15,20 @@
 // const imagePath = (name) => images(name, true)
 //console.log('Hello World from Webpacker')
 // Support component names relative to this directory:
+import Rails from "@rails/ujs"
+import Turbolinks from "turbolinks"
+import * as ActiveStorage from "@rails/activestorage"
+import "channels"
+
 import "bootstrap"
 import { Toast } from "bootstrap"
 var componentRequireContext = require.context("components", true)
 var ReactRailsUJS = require("react_ujs")
+
+Rails.start()
+Turbolinks.start()
+ActiveStorage.start()
+
 ReactRailsUJS.useContext(componentRequireContext)
 
 // 「クロップボードにコピーされました」を出す
