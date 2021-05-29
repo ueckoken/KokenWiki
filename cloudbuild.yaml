@@ -3,9 +3,10 @@ steps:
     name: gcr.io/cloud-builders/gcloud
     entrypoint: 'bash'
     args: [ '-c', 'gcloud secrets versions access latest --secret=${_MASTER_KEY_ID} > config/master.key' ]
-  - id: deploy
-    name: 'gcr.io/cloud-builders/gcloud'
-    args: ['app', 'deploy']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args: ['-c', 'gcloud config set app/cloud_build_timeout 1200 && gcloud app deploy']
+    timeout: '1200s'
     waitFor:
       - prepare-master-key
   - id: prepare-gcp-sa-key
