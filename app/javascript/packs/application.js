@@ -31,6 +31,14 @@ ActiveStorage.start()
 
 ReactRailsUJS.useContext(componentRequireContext)
 
+// ref: https://github.com/reactjs/react-rails#event-handling
+// If Turbolinks is imported via Webpacker (and thus not available globally),
+// ReactRailsUJS will be unable to locate it.
+// To fix this, you can temporarily add it to the global namespace:
+globalThis.Turbolinks = Turbolinks
+ReactRailsUJS.detectEvents()
+delete globalThis.Turbolinks
+
 // 「クロップボードにコピーされました」を出す
 document.addEventListener("turbolinks:load", () => {
     const $toast = document.getElementById("clipboard-copy-toast")
