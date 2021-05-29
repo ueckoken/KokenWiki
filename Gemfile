@@ -11,6 +11,10 @@ gem "rails", "~> 6.1.3"
 # Use Puma as the app server
 gem "puma", "~> 4.3"
 # Use SCSS for stylesheets
+# Do not upgrade to 6.0
+# sass-rails 6.0 uses libsass and take a long time to compile. It cause timeout error in automated deploy
+# App Engine will time out in 10 min. Cannot increase timeout in App Engine SE.
+# ref: https://cloud.google.com/cloud-build/docs/deploying-builds/deploy-appengine?hl=ja#configuring_the_deployment
 gem "sass-rails", "~> 5.0"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier", ">= 1.3.0"
