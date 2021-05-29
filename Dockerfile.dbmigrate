@@ -25,4 +25,4 @@ RUN gcloud config set project $PROJECT_ID && gcloud auth activate-service-accoun
 
 COPY . /app
 
-CMD bundle exec rails appengine:exec -- bundle exec rails db:migrate
+CMD rails appengine:exec -- bundle exec rails db:migrate
