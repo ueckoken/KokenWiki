@@ -45,9 +45,15 @@
                         <% end %>
                     </td>
                     <td>
-                        <%= invitation_token.expired_at %>
+                        <time datetime="<%= invitation_token.expired_at.iso8601 %>">
+                            <%= invitation_token.expired_at.to_s(:jp) %>
+                        </local-time>
                     </td>
-                    <td><%= invitation_token.created_at %></td>
+                    <td>
+                        <time datetime="<%= invitation_token.created_at.iso8601 %>">
+                            <%= invitation_token.created_at.to_s(:jp) %>
+                        </time>
+                    </td>
                     <td><%= invitation_token.created_by.name %></td>
                     <td><%= link_to "破棄", invitation_token, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %></td>
                 </tr>
