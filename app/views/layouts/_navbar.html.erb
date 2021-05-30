@@ -38,10 +38,7 @@
                         </li>
                     <% else %>
                         <li class="nav-item d-md-none">
-                            <%= link_to current_user.name, edit_user_registration_path, class: "dropdown-item" %>
-                        </li>
-                        <li class="nav-item d-md-none">
-                            <%= link_to "設定", settings_path, class: "dropdown-item" %>
+                            <%= link_to "設定", edit_user_registration_path, class: "dropdown-item" %>
                         </li>
                         <li class="nav-item d-md-none">
                             <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
@@ -62,8 +59,7 @@
                                 class="dropdown-menu dropdown-menu-end"
                                 aria-labelledby="navbarDropdown"
                             >
-                                <%= link_to "プロフィール", edit_user_registration_path, class: "dropdown-item" %>
-                                <%= link_to "設定", settings_path, class: "dropdown-item" %>
+                                <%= link_to "設定", edit_user_registration_path, class: "dropdown-item" %>
                                 <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
                             </div>
                         </li>
