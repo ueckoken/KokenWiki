@@ -1,5 +1,5 @@
 <header class="d-contents">
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">KokenWiki</a>
             <button
@@ -14,22 +14,24 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form
-                    class="form-inline my-2 my-lg-0"
-                    name="searchform"
-                    action="/search"
-                    method="get"
-                >
-                    <div class="input-group">
-                        <input
-                            class="form-control"
-                            type="text"
-                            placeholder="Search wiki"
-                            aria-label="Search"
-                            name="q"
-                        />
-                    </div>
-                </form>
+                <% if can? :read, Page %>
+                    <form
+                        class="form-inline my-2 my-lg-0"
+                        name="searchform"
+                        action="/search"
+                        method="get"
+                    >
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                type="text"
+                                placeholder="Search wiki"
+                                aria-label="Search"
+                                name="q"
+                            />
+                        </div>
+                    </form>
+                <% end %>
 
                 <ul class="navbar-nav ms-auto">
                     <% if !user_signed_in? %>
