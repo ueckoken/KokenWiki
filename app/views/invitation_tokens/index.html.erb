@@ -29,12 +29,11 @@
                         <%= link_to "招待リンク", invitation_token.registration_path, { id: "link-to-#{invitation_token.id}" } %>
                         <clipboard-copy
                             role="button"
-                            class="material-icons text-dark"
                             title="クリップボードにコピー"
                             aria-label="クリップボードにコピー"
                             for="link-to-<%= invitation_token.id %>"
                         >
-                            content_copy
+                            <%= octicon "clippy" %>
                         </clipboard-copy>
                     </td>
                     <td>
