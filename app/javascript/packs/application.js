@@ -35,9 +35,8 @@ ReactRailsUJS.useContext(componentRequireContext)
 // If Turbolinks is imported via Webpacker (and thus not available globally),
 // ReactRailsUJS will be unable to locate it.
 // To fix this, you can temporarily add it to the global namespace:
-globalThis.Turbolinks = Turbolinks
 ReactRailsUJS.detectEvents()
-delete globalThis.Turbolinks
+// Do not `delete globalThis.Turbolinks`. It breaks remote form.
 
 // 「クロップボードにコピーされました」を出す
 document.addEventListener("turbolinks:load", () => {
