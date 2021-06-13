@@ -1,7 +1,7 @@
 <%= render "settings/layout" do %>
     <h1>招待トークン</h1>
 
-    <%= form_with scope: :invitation_token  do |form| %>
+    <%= form_with model: InvitationToken.new do |form| %>
         <%= form.submit "生成", class: "btn btn-primary" %>
     <% end %>
 
