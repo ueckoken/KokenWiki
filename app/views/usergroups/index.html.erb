@@ -6,6 +6,7 @@
             <tr>
                 <th>グループ名</th>
                 <th>人数</th>
+                <th>ページ数</th>
             </tr>
         </thead>
         <% @usergroups.each do |a_usergroup| %>
@@ -15,6 +16,9 @@
                 </td>
                 <td>
                     <%= a_usergroup.users.size %>
+                </td>
+                <td>
+                    <%= (a_usergroup.readable_pages | a_usergroup.editable_pages).size %>
                 </td>
             </tr>
         <% end %>
