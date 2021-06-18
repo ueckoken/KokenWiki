@@ -72,7 +72,7 @@ gem "webpacker"
 gem "devise"
 gem "devise-bootstrap-views"
 
-gem "cancancan"
+gem "cancancan", ">= 3.2.1"
 
 gem "google-cloud-storage", "~> 1.8", require: false
 
