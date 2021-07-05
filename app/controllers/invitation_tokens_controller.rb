@@ -9,9 +9,8 @@ class InvitationTokensController < ApplicationController
   # POST /invitation_tokens.json
   def create
     ttl = 6.months
-    raw_token = SecureRandom.urlsafe_base64(32)
     expired_at = Time.now + ttl
-    @invitation_token = current_user.invitation_tokens.build(token: raw_token, expired_at: expired_at)
+    @invitation_token = current_user.invitation_tokens.build(expired_at: expired_at)
 
     respond_to do |format|
       if @invitation_token.save
