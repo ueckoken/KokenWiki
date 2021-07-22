@@ -20,6 +20,24 @@
         ) %>
     <% end %>
     <hr>
+    <h2>リンク</h2>
+    <ol class="linked-page-list">
+        <% @page.links.each do |page| %>
+            <li>
+                <div class="card" style="height: 100%">
+                    <div class="card-body">
+                        <p class="card-title">
+                            <%= link_to page.path, page.path %>
+                        </p>
+                        <p class="card-text small">
+                            <%= page.plain_text_content[0, 100] %>
+                        </p>
+                    </div>
+                </div>
+            </li>
+        <% end %>
+    </ol>
+    <hr>
     <!--こめんと-->
     <h2 class="h3">コメント</h2>
     <div class="list-group">

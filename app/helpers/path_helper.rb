@@ -19,4 +19,11 @@ module PathHelper
   def is_root_path?(pathname)
     return pathname.root?
   end
+
+  def is_path?(pathname)
+    Pathname.new(pathname)
+    return true
+  rescue ArgumentError
+    return false
+  end
 end
