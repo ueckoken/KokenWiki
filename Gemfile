@@ -85,3 +85,5 @@ gem "mysql2", "~> 0.5.3"
 gem "appengine", "~> 0.5.0"
 
 gem "octicons_helper", "~> 10.0"
+
+gem "commonmarker", "~> 0.22.0"

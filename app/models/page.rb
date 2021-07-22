@@ -1,4 +1,10 @@
+require "commonmarker"
+
 class Page < ApplicationRecord
+  include MarkdownHelper
+  include UriHelper
+  include PathHelper
+
   belongs_to :user
   belongs_to :editable_group, class_name: "Usergroup", optional: true
   belongs_to :readable_group, class_name: "Usergroup", optional: true
@@ -100,4 +106,37 @@ class Page < ApplicationRecord
     path = ancestors_titles.reverse.join("/")
     return "/" + path
   end
+
+  def links
+    anchor_nodes = []
+    doc_of_content.walk do |node|
+      if (node.type != :link) || is_uri?(node.url) || !is_path?(node.url)
+        next
+      end
+      # wiki internal link only here
+      anchor_nodes << node
+    end
+    paths = anchor_nodes.map do |node|
+      pathname = Pathname.new(node.url.force_encoding("UTF-8")).cleanpath
+      if !pathname.absolute?
+        base_path = self.root? ? self.path : self.path + "/"
+        pathname = pathname.expand_path(base_path)
+      end
+      pathname
+    end
+    link_pages = paths
+      .map { |path| Page.find_by_pathname(path) }
+      .compact
+    return link_pages
+  end
+
+  def plain_text_content
+    return render_plain_text(doc_of_content)
+  end
+
+  private
+    def doc_of_content
+      @doc ||= CommonMarker.render_doc(self.content, :DEFAULT, [:table])
+      return @doc
+    end
 end

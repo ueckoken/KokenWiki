@@ -18,7 +18,7 @@
                 <span class="text-muted">
                     <%= page.updated_at.strftime("%Y/%m/%d") %>
                 </span>
-                - <%= page.content[0, 500] %>
+                - <%= page.plain_text_content.truncate(500) %>
             </p>
         </article>
     <% end %>
