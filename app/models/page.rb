@@ -110,7 +110,7 @@ class Page < ApplicationRecord
   def links
     anchor_nodes = []
     doc_of_content.walk do |node|
-      if (node.type != :link) || is_uri?(node.url) || !is_path?(node.url)
+      if (node.type != :link) || is_external_uri?(node.url) || !is_path?(node.url)
         next
       end
       # wiki internal link only here
