@@ -1,7 +1,7 @@
 <%= render "pages/layout" do %>
     <%= render partial: "pages/pankuzu" %>
     <h1><%= @page.title %></h1>
-    <%= form_with scope: :page, method: :post do |form| %>
+    <%= form_with scope: :page, method: :post, local: false do |form| %>
         <%= form.submit "新規作成", class: "btn btn-primary" %>
     <% end %>
 <% end %>

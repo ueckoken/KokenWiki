@@ -4,9 +4,9 @@
     <p>
         <%= render "update-timestamp", history: @page %>
     </p>
-    <%= form_with scope: :page, method: :delete, html: { id: "page-destroy-form", style: "display: none" }, data: { confirm: "本当に削除しますか" } do %>
+    <%= form_with scope: :page, method: :delete, local: false, html: { id: "page-destroy-form", style: "display: none" }, data: { confirm: "本当に削除しますか" } do %>
     <% end %>
-    <%= form_with scope: :page, method: :put, html: { id: "page-update-form", style: "display: contents" } do |f| %>
+    <%= form_with scope: :page, method: :put, local: false, html: { id: "page-update-form", style: "display: contents" } do |f| %>
         <%= react_component("MdEditor",
             title: @page.title,
             markdown: @page.content,
@@ -56,7 +56,7 @@
                             <button class="btn btn-light btn-sm rounded-circle dropdown-toggle" id="dropdownButtonForComment<%= comment.id %>" aria-controls="dropdownForComment<%= comment.id %>" data-toggle="dropdown" aria-label="もっと見る" aria-haspopup="true" aria-expanded="false"></button>
                             <menu class="dropdown-menu" id="dropdownForComment<%= comment.id %>" aria-labelledby="dropdownButtonForComment<%= comment.id %>">
                                 <li role="menuitem">
-                                    <%= form_with scope: "comment", method: :delete do |form| %>
+                                    <%= form_with scope: "comment", method: :delete, local: false do |form| %>
                                         <%= form.hidden_field "comment_id", value: comment.id %>
                                         <%= form.submit "削除", { class: "dropdown-item text-danger", data: { confirm: "本当に削除しますか" } } %>
                                     <% end %>
@@ -69,7 +69,7 @@
             </article>
         <% end %>
     </div>
-    <%= form_with scope: :comment, method: :post, url: URI.encode(@page.path) do |form| %>
+    <%= form_with scope: :comment, method: :post, url: URI.encode(@page.path), local: false do |form| %>
         <%= form.text_area :content, class: "form-control", placeholder: "新しいコメント" %>
         <p class="text-right">
             <%= form.submit "投稿", class: "btn btn-primary" %>
@@ -84,7 +84,7 @@
                     <span class="text-muted" style="font-size: 0.75rem"><%= render "shared/relative-time", timestamp: file[:created_at] %></span>
                 </p>
                 <% if can? :write, @page %>
-                    <%= form_with url: file[:escaped_path], method: :delete, html: { style: "display: contents" }, remote: true do |form| %>
+                    <%= form_with url: file[:escaped_path], method: :delete, html: { style: "display: contents" }, local: false do |form| %>
                         <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に"+file[:filename]+"を削除しますか" } do %>
                             <%= octicon "trashcan" %>
                         <% end %>

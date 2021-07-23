@@ -22,21 +22,14 @@ import "channels"
 
 import "bootstrap"
 import { Toast } from "bootstrap"
-var componentRequireContext = require.context("components", true)
-var ReactRailsUJS = require("react_ujs")
 
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
+const componentRequireContext = require.context("components", true)
+const ReactRailsUJS = require("react_ujs")
 ReactRailsUJS.useContext(componentRequireContext)
-
-// ref: https://github.com/reactjs/react-rails#event-handling
-// If Turbolinks is imported via Webpacker (and thus not available globally),
-// ReactRailsUJS will be unable to locate it.
-// To fix this, you can temporarily add it to the global namespace:
-ReactRailsUJS.detectEvents()
-// Do not `delete globalThis.Turbolinks`. It breaks remote form.
 
 // 「クロップボードにコピーされました」を出す
 document.addEventListener("turbolinks:load", () => {

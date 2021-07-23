@@ -1,6 +1,6 @@
 <%= render "settings/layout" do %>
     <h1>ユーザーグループ <%= @usergroup.name %>の編集</h1>
-    <%= form_with model: @usergroup do |form| %>
+    <%= form_with model: @usergroup, local: false do |form| %>
         <div class="form-group">
             <%= form.label "グループ名" %>
             <%= form.text_field "name", class: "form-control" %>
