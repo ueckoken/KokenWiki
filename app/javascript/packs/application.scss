@@ -1,20 +1,5 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- *= require codemirror/lib/codemirror.css
- *= require @toast-ui/editor/dist/toastui-editor.css
- */
+@import "codemirror/lib/codemirror.css";
+@import "@toast-ui/editor/dist/toastui-editor.css";
 
 $link-decoration: initial;
 
@@ -110,4 +95,37 @@ a:hover {
 }
 .tui-editor-contents {
     font-family: initial !important;
+}
+
+// pages
+@media (min-width: 992px) {
+  #page-container {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 196px 1fr 256px;
+    grid-template-areas: "left center right";
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  #page-container {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: minmax(30%, 256px) 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "left center"
+      "right center"
+    ;
+  }
+}
+
+#left {
+  grid-area: left;
+}
+#center {
+  grid-area: center;
+}
+#right {
+  grid-area: right;
 }
