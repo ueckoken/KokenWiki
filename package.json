@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "check": "tsc --noEmit",
-    "prettier": "prettier --tab-width 4 --no-semi --write \"app/**/*.{js,jsx,ts,tsx}\""
+    "prettier": "prettier --tab-width 4 --no-semi --write \"app/javascript/**/*.{js,jsx,ts,tsx,scss}\""
   },
   "dependencies": {
     "@babel/preset-react": "^7.8.3",
