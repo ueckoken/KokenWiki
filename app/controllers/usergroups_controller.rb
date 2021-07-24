@@ -1,7 +1,6 @@
 class UsergroupsController < ApplicationController
   def index
     @usergroups = Usergroup.accessible_by(current_ability, :read).includes(:users)
-    @users = User.all
   end
 
   def new
