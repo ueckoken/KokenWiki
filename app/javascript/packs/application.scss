@@ -10,6 +10,31 @@ $link-decoration: initial;
     --bs-font-sans-serif: sans-serif;
 }
 
+.search-input-wrapper {
+    @extend .border;
+    @extend .rounded-pill;
+    display: flex;
+    background-color: white;
+    align-items: center;
+    padding-left: 12px;
+    overflow: hidden;
+}
+
+.search-input-icon {
+    fill: $gray-600;
+}
+
+.search-input {
+    border: none;
+    // outline: none;
+    background-color: transparent;
+
+    &:focus {
+        // outline: none;
+        box-shadow: none;
+    }
+}
+
 .pagelist {
     @extend .w-100;
     overflow-wrap: break-word;
