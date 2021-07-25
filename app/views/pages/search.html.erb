@@ -1,10 +1,25 @@
 <% content_for :title do %>
-    <%= params[:q] %> の検索結果
+    <%= @search.query %> の検索結果
 <% end %>
+
 <div class="mx-auto" style="max-width: 1024px">
     <h1 class="font-weight-normal">
-        <strong><%= params[:q] %></strong>の検索結果
+        <strong><%= @search.query %></strong>の検索結果
     </h1>
+    <div class="search-options-row d-inline-flex">
+        <%= render "options-like-dropdown", options: [
+            ["期間指定なし", -1],
+            ["1週間以内", 1.week],
+            ["1か月以内", 1.month],
+            ["1年以内", 1.year]
+        ], name: "period", selected: @search.period_duration %>
+        <%= render "options-like-dropdown", options: [
+            ["関連度順", "best_match"],
+            ["最終更新が新しい順", "updated_at_desc"],
+            ["最終更新が古い順", "updated_at_asc"]
+        ], name: "order", selected: @search.order %>
+    </div>
+    <hr>
     <p class="text-muted"><%= @search_pages.count %>件</p>
     <% @search_pages.each do |page| %>
         <article class="mb-4">

@@ -2,6 +2,7 @@ require "uri"
 
 class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_search
 
   # rescue_from StandardError, with: :render_500
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
@@ -34,5 +35,13 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:user_id, :email, :password, :password_confirmation, :name])
     devise_parameter_sanitizer.permit(:sign_in, keys: [:user_id, :email, :password, :remember_me])
     devise_parameter_sanitizer.permit(:account_update, keys: [:user_id, :email, :password, :password_confirmation, :current_password, :name])
+  end
+
+  def set_search
+    @search = PageSearchForm.new(search_params)
+  end
+
+  def search_params
+    params.permit(:q, :order, :period)
   end
 end

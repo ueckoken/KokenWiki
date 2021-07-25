@@ -1,0 +1,16 @@
+<%# similar interface with builtin `options_for_select` %>
+<% current_option = options.find {|option| option[1] === selected} %>
+<% toggle_id = "#{name}-dropdown-menu" %>
+<div class="dropdown">
+    <button class="dropdown-toggle" type="button" id="<%= toggle_id %>" data-bs-toggle="dropdown" aria-expanded="false">
+        <%= current_option[0] %>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="<%= toggle_id %>">
+        <% options.each do |option| %>
+            <% text, value = option %>
+            <li>
+                <%= link_to text, sort_link(Hash[name, value]), class: option === current_option ? "dropdown-item active" : "dropdown-item" %>
+            </li>
+        <% end %>
+    </ul>
+</div>
