@@ -35,6 +35,13 @@ $link-decoration: initial;
     }
 }
 
+.search-options-row {
+    .dropdown-toggle {
+        border: none;
+        background-color: transparent;
+    }
+}
+
 .pagelist {
     @extend .w-100;
     overflow-wrap: break-word;

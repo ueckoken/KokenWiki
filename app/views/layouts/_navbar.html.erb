@@ -15,12 +15,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <% if can? :read, Page %>
-                    <%= form_with url: search_path, method: :get, class: "form-inline my-w my-lg-0" do |f| %>
+                    <%= form_with model: @search, scope: "", url: search_path, method: :get, class: "form-inline my-w my-lg-0" do |f| %>
                         <div class="search-input-wrapper">
                             <div class="lh-1">
                                 <%= octicon "search", height: 20, class: "search-input-icon" %>
                             </div>
-                            <%= f.search_field :q, value: search_params[:q], class: "form-control search-input", placeholder: "Search Wiki", "aria-label": "Search" %>
+                            <%= f.search_field :q, class: "form-control search-input", placeholder: "Search Wiki", "aria-label": "Search" %>
+                            <%= f.hidden_field :order %>
+                            <%= f.hidden_field :period %>
                         </div>
                     <% end %>
                 <% end %>

@@ -5,16 +5,32 @@ class PagesController < ApplicationController
   include PathHelper
   # before_action :set_page, only: [:show, :edit, :update, :destroy]
   before_action :force_trailing_slash, only: [:show_page]
+  helper_method :sort_link
 
   def show_search
-    query = params[:q]
-    if query == ""
-      @search_pages = Page.none
-
-      render "search"
-      return
+    if @search.invalid?
+      if @search.errors.include?(:order)
+        redirect_to search_path(sort_link(order: "best_match"))
+        return
+      elsif @search.errors.include?(:period)
+        redirect_to search_path(sort_link(period: -1))
+        return
+      end
     end
-    @search_pages = Page.accessible_by(current_ability, :read).search(query)
+
+    @search_pages = @search.query.blank? ? Page.none : Page.accessible_by(current_ability, :read).search(@search.query)
+
+    if @search.period != -1
+      end_datetime = Time.now
+      start_datetime = end_datetime.ago(@search.period)
+      @search_pages = @search_pages.where(updated_at: start_datetime...end_datetime)
+    end
+    case @search.order
+    when "updated_at_asc"
+      @search_pages = @search_pages.order(updated_at: :asc)
+    when "updated_at_desc"
+      @search_pages = @search_pages.order(updated_at: :desc)
+    end
     render "search"
   end
 
@@ -198,6 +214,13 @@ class PagesController < ApplicationController
       format.html { redirect_to path, notice: "Page was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  # add new params to current params
+  # build new params
+  def sort_link(params_to_add)
+    # .attributes works like .to_hash
+    return @search.attributes.with_indifferent_access.merge(params_to_add)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
