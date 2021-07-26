@@ -42,7 +42,17 @@ $link-decoration: initial;
     }
 }
 
-.pagelist {
+.page-internal-link-list {
+    list-style-type: none;
+    @extend .mb-0;
+    padding-left: 0;
+
+    li {
+        @extend .mb-1;
+    }
+}
+
+.page-hierarchy-list {
     @extend .w-100;
     overflow-wrap: break-word;
 
@@ -134,7 +144,7 @@ a:hover {
     #page-container {
         display: grid;
         grid-gap: 15px;
-        grid-template-columns: 196px 1fr 256px;
+        grid-template-columns: 256px 1fr 256px;
         grid-template-areas: "left center right";
     }
 }

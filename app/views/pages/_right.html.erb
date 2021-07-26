@@ -1,4 +1,4 @@
-<nav class="navbar-expand-sm navbar-light p-3">
+<nav class="navbar-expand-sm navbar-light px-3 py-1">
     <button
         class="navbar-toggler"
         type="button"
@@ -10,7 +10,7 @@
     >
         <span class="navbar-toggler-icon"></span>
     </button>
-    <h1 class="h5 d-inline">更新履歴</h1>
+    <h1 class="h5 d-inline d-sm-block">更新履歴</h1>
     <div class="collapse navbar-collapse" id="rightbarNav">
         <dl>
             <% @updated_pages.group_by {|page| page.updated_date}.each do |updated_date, pages| %>
