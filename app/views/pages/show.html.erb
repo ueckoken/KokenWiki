@@ -37,6 +37,23 @@
             </li>
         <% end %>
     </ol>
+    <h2>被リンク</h2>
+    <ul class="linked-page-list">
+        <% @page.backlinks.accessible_by(current_ability, :read).each do |page| %>
+            <li>
+                <div class="card" style="height: 100%">
+                    <div class="card-body">
+                        <p class="card-title">
+                            <%= link_to page.path, page.path %>
+                        </p>
+                        <p class="card-text small">
+                            <%= page.plain_text_content[0, 100] %>
+                        </p>
+                    </div>
+                </div>
+            </li>
+        <% end %>
+    </ul>
     <hr>
     <!--こめんと-->
     <h2 class="h3">コメント</h2>
