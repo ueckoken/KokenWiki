@@ -128,7 +128,8 @@ class Page < ApplicationRecord
       .uniq
       .map { |path| Page.find_by_pathname(path) }
       .compact
-    return link_pages
+    link_page_ids = link_pages.pluck(:id)
+    return Page.where(id: link_page_ids)
   end
 
   def plain_text_content
