@@ -28,6 +28,7 @@ class Page < ApplicationRecord
   attribute :content, default: "new page"
 
   scope :search, ->(query) { where("MATCH (content) AGAINST (? IN BOOLEAN MODE)", query) if query.present? }
+  scope :stricter_slow_search, ->(query) { where("content LIKE ?", "%#{query}%") if query.present? }
 
   def self.find_by_pathname(pathname)
     if pathname.root?
@@ -107,7 +108,11 @@ class Page < ApplicationRecord
     return "/" + path
   end
 
-  def links
+  def pathname
+    return Pathname.new(path)
+  end
+
+  def link_paths
     anchor_nodes = []
     doc_of_content.walk do |node|
       if (node.type != :link) || is_external_uri?(node.url) || !is_path?(node.url)
@@ -124,12 +129,24 @@ class Page < ApplicationRecord
       end
       pathname
     end
-    link_pages = paths
-      .uniq
+    return paths.uniq
+  end
+
+  def links
+    link_pages = link_paths
       .map { |path| Page.find_by_pathname(path) }
       .compact
     link_page_ids = link_pages.pluck(:id)
     return Page.where(id: link_page_ids)
+  end
+
+  def backlinks
+    # Markdownのリンク記法 [text](path) の ](path) を手掛かりに検索
+    # パス末尾のスラッシュ / ありなしどちらも対応
+    path_included_pages = Page.stricter_slow_search("](#{self.path})").or(Page.stricter_slow_search("](#{self.path}/)"))
+    backlink_pages = path_included_pages.filter { |page| page.link_paths.include?(pathname) }
+    backlink_page_ids = backlink_pages.pluck(:id)
+    return Page.where(id: backlink_page_ids)
   end
 
   def plain_text_content
