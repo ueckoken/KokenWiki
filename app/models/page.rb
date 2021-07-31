@@ -125,6 +125,7 @@ class Page < ApplicationRecord
       pathname
     end
     link_pages = paths
+      .uniq
       .map { |path| Page.find_by_pathname(path) }
       .compact
     return link_pages
