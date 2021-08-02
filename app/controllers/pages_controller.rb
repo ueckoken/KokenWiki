@@ -179,7 +179,7 @@ class PagesController < ApplicationController
     respond_to do |format|
       if update_succeeded
         history = UpdateHistory.new(user: @page.user, content: @page.content)
-        if @page.changed?
+        if @page.saved_changes?
           @page.update_histories << history
         end
         format.html { redirect_to @page.path, notice: "Page was successfully updated." }
