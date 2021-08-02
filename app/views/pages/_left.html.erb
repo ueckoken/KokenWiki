@@ -10,34 +10,31 @@
     >
         <span class="navbar-toggler-icon"></span>
     </button>
-    <h1 class="h5 d-inline d-sm-block">ページ内リンク</h1>
+    <h1 class="h5 d-inline d-sm-block">リンク</h1>
     <div class="collapse navbar-collapse" id="page-link-nav">
-        <ul class="page-internal-link-list">
-            <% @page.links.each do |page| %>
-                <li><%= link_to page.path, page.path %></li>
-            <% end %>
-        </ul>
-    </div>
-</nav>
-<nav class="navbar-expand-sm navbar-light px-3 py-1">
-    <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#backlink-nav"
-        aria-controls="backlink-nav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-    >
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <h1 class="h5 d-inline d-sm-block">被リンク</h1>
-    <div class="collapse navbar-collapse" id="backlink-nav">
-        <ul class="page-internal-link-list">
-            <% @page.backlinks.accessible_by(current_ability, :read).each do |page| %>
-                <li><%= link_to page.path, page.path %></li>
-            <% end %>
-        </ul>
+        <div>
+            <p class="h6">ページ内リンク</p>
+            <ul class="page-internal-link-list">
+                <% @page.links.each do |page| %>
+                    <li><%= link_to page.path, page.path %></li>
+                <% end %>
+            </ul>
+            <p class="h6">2ホップリンク</p>
+            <dl class="page-internal-link-list">
+                <% @page.links.each do |page| %>
+                    <dt><%= link_to page.title, page.path %></dt>
+                    <% page.backlinks.accessible_by(current_ability, :read).where.not(id: @page.id).each do |backlink_page| %>
+                        <dd><%= link_to backlink_page.path, backlink_page.path %></dd>
+                    <% end %>
+                <% end %>
+            </dl>
+            <p class="h6">被リンク</p>
+            <ul class="page-internal-link-list">
+                <% @page.backlinks.accessible_by(current_ability, :read).each do |page| %>
+                    <li><%= link_to page.path, page.path %></li>
+                <% end %>
+            </ul>
+        </div>
     </div>
 </nav>
 <nav class="navbar-expand-sm navbar-light px-3 py-1">
