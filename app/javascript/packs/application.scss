@@ -44,7 +44,6 @@ $link-decoration: initial;
 
 .page-internal-link-list {
     list-style-type: none;
-    @extend .mb-0;
     padding-left: 0;
 
     li {
@@ -103,29 +102,6 @@ a:hover {
     }
     &:disabled {
         @extend .text-muted;
-    }
-}
-
-.linked-page-list {
-    display: grid;
-    grid-auto-rows: 160px;
-    grid-template-columns: repeat(auto-fill, 150px);
-    grid-row-gap: 1rem;
-    grid-column-gap: 1rem;
-    list-style-type: none;
-    padding-left: 0;
-
-    .card {
-        height: 100%;
-    }
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-    .card-text {
-        column-count: 1; // hacky way to per-line text overflow
-        overflow: hidden;
     }
 }
 
