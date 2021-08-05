@@ -16,13 +16,11 @@ class FilesController < ApplicationController
     file = page.files.joins(:blob).find_by(active_storage_blobs: { filename: filename })
     if file == nil
       raise ActiveRecord::RecordNotFound
-    else
-      if file.blob.image? || file.blob.audio? || file.blob.video?
-        send_data file.blob.download, type: file.blob.content_type, disposition: "inline"
-      else
-        send_data file.blob.download, type: file.blob.content_type, disposition: "attachment"
-      end
     end
+
+    # rails_storage_redirect_path と同じ
+    # 最終的に短時間だけパブリックアクセス可能なURLにリダイレクトされる
+    redirect_to file
   end
 
   def create
