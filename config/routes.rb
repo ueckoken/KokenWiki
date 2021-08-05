@@ -16,6 +16,10 @@ def is_comment_upload?(request)
   return request.request_parameters[:comment].present?
 end
 
+def is_rails_predefined_routes?(request)
+  return request.path.start_with?("/rails/")
+end
+
 class PageConstraint
   def self.get(request)
     if is_file?(request)
@@ -45,6 +49,9 @@ class PageConstraint
   end
 
   def self.matches?(request)
+    if is_rails_predefined_routes?(request)
+      return false
+    end
     if request.get?
       return self.get(request)
     end
@@ -71,6 +78,9 @@ class FileConstraint
   end
 
   def self.matches?(request)
+    if is_rails_predefined_routes?(request)
+      return false
+    end
     if request.get?
       return self.get(request)
     end
@@ -93,6 +103,9 @@ class CommentConstraint
   end
 
   def self.matches?(request)
+    if is_rails_predefined_routes?(request)
+      return false
+    end
     if request.post?
       return self.post(request)
     end
@@ -118,12 +131,6 @@ Rails.application.routes.draw do
     get "/" => redirect("/setting/user/edit")
   end
 
-
-  get "rails/" =>  "application#render_404"
-  get "rails/*some" =>  "application#render_404"
-  post "rails/" =>  "application#render_404"
-  post "rails/*some" =>  "application#render_404"
-  # のちに使いたいかもしれない
 
   root to: "pages#show_page", constraints: PageConstraint
   get "/" => "files#show", constraints: FileConstraint
