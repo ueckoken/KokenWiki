@@ -18,6 +18,10 @@
             ["最終更新が新しい順", "updated_at_desc"],
             ["最終更新が古い順", "updated_at_asc"]
         ], name: "order", selected: @search.order %>
+        <%= render "options-like-dropdown", options: [
+            ["本文", "content"],
+            ["タイトル", "title"]
+        ], name: "target", selected: @search.target %>
     </div>
     <hr>
     <p class="text-muted"><%= @search_pages.count %>件</p>

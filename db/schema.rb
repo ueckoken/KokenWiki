@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_29_220844) do
+ActiveRecord::Schema.define(version: 2021_08_08_172636) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2021_05_29_220844) do
     t.index ["editable_group_id"], name: "index_pages_on_editable_group_id"
     t.index ["parent_id"], name: "index_pages_on_parent_id"
     t.index ["readable_group_id"], name: "index_pages_on_readable_group_id"
+    t.index ["title"], name: "fulltext_index_pages_on_title", type: :fulltext
     t.index ["title"], name: "index_pages_on_title"
     t.index ["updated_at"], name: "index_pages_on_updated_at_and_path"
     t.index ["user_id"], name: "index_pages_on_user_id"

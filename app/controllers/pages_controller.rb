@@ -15,10 +15,13 @@ class PagesController < ApplicationController
       elsif @search.errors.include?(:period)
         redirect_to search_path(sort_link(period: -1))
         return
+      elsif @search.errors.include?(:target)
+        redirect_to search_path(sort_link(target: "content"))
+        return
       end
     end
 
-    @search_pages = @search.query.blank? ? Page.none : Page.accessible_by(current_ability, :read).search(@search.query)
+    @search_pages = @search.query.blank? ? Page.none : Page.accessible_by(current_ability, :read).search(@search.target, @search.query)
 
     if @search.period != -1
       end_datetime = Time.now
