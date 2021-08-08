@@ -27,8 +27,8 @@ class Page < ApplicationRecord
 
   attribute :content, default: "new page"
 
-  scope :search, ->(query) { where("MATCH (content) AGAINST (? IN BOOLEAN MODE)", query) if query.present? }
-  scope :stricter_slow_search, ->(query) { where("content LIKE ?", "%#{query}%") if query.present? }
+  scope :search, ->(column, query) { where("MATCH (#{Page.connection.quote_column_name(column)}) AGAINST (? IN BOOLEAN MODE)", query) if query.present? }
+  scope :stricter_slow_search, ->(column, query) { where("#{Page.connection.quote_column_name(column)} LIKE ?", "%#{query}%") if query.present? }
 
   def self.find_by_pathname(pathname)
     if pathname.root?
@@ -143,7 +143,7 @@ class Page < ApplicationRecord
   def backlinks
     # Markdownのリンク記法 [text](path/to/title) の title) を手掛かりに検索
     # パス末尾のスラッシュ / ありなしどちらも対応
-    path_included_pages = Page.stricter_slow_search(title + ")").or(Page.stricter_slow_search(title + "/)"))
+    path_included_pages = Page.stricter_slow_search(:content, title + ")").or(Page.stricter_slow_search(:content, title + "/)"))
     backlink_pages = path_included_pages.filter { |page| page.link_paths.include?(pathname) }
     backlink_page_ids = backlink_pages.pluck(:id)
     return Page.where(id: backlink_page_ids)
