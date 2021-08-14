@@ -84,6 +84,7 @@
     <h2 class="h3">更新履歴</h2>
     <ol style="list-style-type: none; padding-left: 0">
         <% @update_histories.limit(10).each_cons(2) do |newHist, oldHist| %>
+            <% next if newHist.content == oldHist.content %>
             <li>
                 <details>
                     <summary>
