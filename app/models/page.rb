@@ -143,7 +143,14 @@ class Page < ApplicationRecord
   def backlinks
     # Markdownのリンク記法 [text](path/to/title) の title) を手掛かりに検索
     # パス末尾のスラッシュ / ありなしどちらも対応
-    path_included_pages = Page.stricter_slow_search(:content, title + ")").or(Page.stricter_slow_search(:content, title + "/)"))
+    if root?
+      path_included_pages = Page.stricter_slow_search(:content, "](/)")
+        .or(Page.stricter_slow_search(:content, "..)"))
+        .or(Page.stricter_slow_search(:content, "../)"))
+    else
+      path_included_pages = Page.stricter_slow_search(:content, title + ")")
+        .or(Page.stricter_slow_search(:content, title + "/)"))
+    end
     backlink_pages = path_included_pages.filter { |page| page.link_paths.include?(pathname) }
     backlink_page_ids = backlink_pages.pluck(:id)
     return Page.where(id: backlink_page_ids)
