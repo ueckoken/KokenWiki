@@ -48,8 +48,8 @@ const Markdown: FC<Props> = ({ markdown }) => {
             // type for customHTMLRenderer is wrong
             // ref: https://github.com/nhn/tui.editor/issues/1064
             customHTMLRenderer: {
-                image: customImageRenderer
-            } as any
+                image: customImageRenderer,
+            } as any,
         })
         setViewerInst(inst)
         return () => {
