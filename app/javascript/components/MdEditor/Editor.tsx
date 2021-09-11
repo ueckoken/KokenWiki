@@ -29,6 +29,11 @@ const Editor: FC<{}> = () => {
                     handleChangeText(newMarkdownText)
                 },
             },
+            hooks: {
+                addImageBlobHook() {
+                    alert("この機能は使えません")
+                },
+            },
         })
         setTuiEditor(inst)
         return () => {
