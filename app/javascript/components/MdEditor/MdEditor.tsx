@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Fragment } from "react"
+import React, { ChangeEvent, Fragment, useCallback, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import Markdown from "./Markdown"
 import Editor from "./Editor"
@@ -86,12 +86,25 @@ const MdEditor = () => {
         (state) => state.editable_group_id
     )
     const is_editing = useTypedSelector((state) => state.is_editing)
+    const is_changed = useTypedSelector(selectors.isChanged)
 
     const dispatch = useDispatch()
     const handleChangeReadableGroup = (e: ChangeEvent<HTMLSelectElement>) =>
         dispatch(actions.changeReadableGroup(Number(e.target.value)))
     const handleChangeEditableGroup = (e: ChangeEvent<HTMLSelectElement>) =>
         dispatch(actions.changeEditableGroup(Number(e.target.value)))
+
+    const warnUnsavedChage = useCallback((e: BeforeUnloadEvent) => {
+        if (!is_changed) {
+            return
+        }
+        e.preventDefault()
+        e.returnValue = "" // non-standard but required by Chrome
+    }, [is_changed])
+    useEffect(() => {
+        window.addEventListener("beforeunload", warnUnsavedChage)
+        return () => window.removeEventListener("beforeunload", warnUnsavedChage)
+    }, [warnUnsavedChage])
 
     if (!is_editing) {
         return (
