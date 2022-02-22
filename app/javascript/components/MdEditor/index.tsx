@@ -2,6 +2,7 @@ import React, { FC, useEffect } from "react"
 import { Provider } from "react-redux"
 import { store, actions, State } from "../redux"
 import MdEditor from "./MdEditor"
+import WarnUnsavedChange from "./WarnUnsavedChange"
 
 type Props = Pick<
     State,
@@ -53,6 +54,7 @@ const MdEditorApp: FC<Props> = ({
     ])
     return (
         <Provider store={store}>
+            <WarnUnsavedChange />
             <MdEditor />
         </Provider>
     )
