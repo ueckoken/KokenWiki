@@ -18,10 +18,22 @@ class PagesController < ApplicationController
       elsif @search.errors.include?(:target)
         redirect_to search_path(sort_link(target: "content"))
         return
+      elsif @search.errors.include?(:mode)
+        redirect_to search_path(sort_link(mode: "natural_language"))
+        return
       end
     end
 
-    @search_pages = @search.query.blank? ? Page.none : Page.accessible_by(current_ability, :read).search(@search.target, @search.query)
+    if @search.query.blank?
+      @search_pages = Page.none
+    else
+      case @search.mode
+      when "natural_language"
+        @search_pages = Page.accessible_by(current_ability, :read).search(@search.target, @search.query)
+      when "slower_stricter"
+        @search_pages = Page.accessible_by(current_ability, :read).stricter_slow_search(@search.target, @search.query)
+      end
+    end
 
     if @search.period != -1
       end_datetime = Time.now

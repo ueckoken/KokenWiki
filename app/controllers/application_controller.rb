@@ -42,6 +42,6 @@ class ApplicationController < ActionController::Base
   end
 
   def search_params
-    params.permit(:q, :order, :period, :target)
+    params.permit(:q, :order, :period, :target, :mode)
   end
 end
