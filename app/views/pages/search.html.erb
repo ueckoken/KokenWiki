@@ -22,6 +22,10 @@
             ["本文", "content"],
             ["タイトル", "title"]
         ], name: "target", selected: @search.target %>
+        <%= render "options-like-dropdown", options: [
+            ["自然言語", "natural_language"],
+            ["厳密（低速）", "slower_stricter"]
+        ], name: "mode", selected: @search.mode %>
     </div>
     <hr>
     <p class="text-muted"><%= @search_pages.count %>件</p>
