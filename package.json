@@ -6,6 +6,8 @@
     "prettier": "prettier --tab-width 4 --no-semi --write \"app/javascript/**/*.{js,jsx,ts,tsx,scss}\""
   },
   "dependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.8.3",
     "@babel/preset-typescript": "^7.10.4",
     "@popperjs/core": "^2.9.2",
@@ -16,6 +18,7 @@
     "@reduxjs/toolkit": "^1.7.2",
     "@toast-ui/editor": "^2.3.0",
     "acorn": "^7.1.1",
+    "babel-loader": "^8.2.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap": "^5.0.1",
     "dompurify": "^2.0.17",
