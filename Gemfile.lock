@@ -196,6 +196,8 @@ GEM
     io-like (0.3.1)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
+    jsbundling-rails (1.0.2)
+      railties (>= 6.0.0)
     jwt (2.2.1)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -383,6 +385,7 @@ DEPENDENCIES
   devise-bootstrap-views
   google-cloud-storage (~> 1.8)
   jbuilder (~> 2.5)
+  jsbundling-rails
   listen (>= 3.0.5)
   mysql2 (~> 0.5.3)
   octicons_helper (~> 10.0)
