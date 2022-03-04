@@ -68,10 +68,6 @@ GEM
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     ast (2.4.2)
-    babel-source (5.8.35)
-    babel-transpiler (0.7.0)
-      babel-source (>= 4.0, < 6)
-      execjs (~> 2.0)
     bcrypt (3.1.13)
     bindex (0.8.1)
     binding_of_caller (0.8.0)
@@ -96,7 +92,6 @@ GEM
     coderay (1.1.2)
     commonmarker (0.22.0)
     concurrent-ruby (1.1.9)
-    connection_pool (2.2.2)
     crass (1.0.6)
     debug_inspector (0.0.3)
     declarative (0.0.10)
@@ -110,7 +105,6 @@ GEM
     devise-bootstrap-views (1.1.0)
     digest-crc (0.5.1)
     erubi (1.10.0)
-    execjs (2.7.0)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.12.2)
@@ -275,12 +269,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    react-rails (2.6.1)
-      babel-transpiler (>= 0.7.0)
-      connection_pool
-      execjs
-      railties (>= 3.2)
-      tilt
     regexp_parser (1.8.2)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -339,7 +327,6 @@ GEM
     stackdriver-core (1.4.0)
       google-cloud-core (~> 1.2)
     thor (1.2.1)
-    tilt (2.0.10)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -384,7 +371,6 @@ DEPENDENCIES
   pry-byebug
   puma (~> 4.3)
   rails (~> 6.1.4)
-  react-rails
   rubocop (~> 1.8.0)
   rubocop-performance (~> 1.9.2)
   rubocop-rails (~> 2.9.1)
