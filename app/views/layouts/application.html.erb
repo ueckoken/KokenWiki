@@ -10,8 +10,8 @@
         <%= csrf_meta_tags %>
         <%= csp_meta_tag %>
         <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-        <%= javascript_pack_tag 'application', 'data-turbolnks-track': 'reloaded' %>
-        <%= stylesheet_pack_tag 'application', 'data-turbolnks-track': 'reloaded' %>
+        <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
         <%= favicon_link_tag 'koken.ico' %>
         <meta name="robots" content="noindex, nofollow, noarchive">
         <script src="https://cdn.jsdelivr.net/npm/@github/time-elements@3.1.2/dist/index.min.js" type="module" async></script>
