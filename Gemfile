@@ -58,8 +58,7 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # gem "actionpack-action_caching"
-gem "react-rails"
-gem "webpacker"
+gem "jsbundling-rails"
 
 gem "devise"
 gem "devise-bootstrap-views"

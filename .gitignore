@@ -42,3 +42,6 @@ pukiwiki_migrate.log
 /config/database.yml
 
 keyfile.json
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

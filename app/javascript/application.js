@@ -18,18 +18,20 @@
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
-import "channels"
+import "./channels"
 
 import "bootstrap"
 import { Toast } from "bootstrap"
+
+import "./application.scss"
+
+import * as ReactIntegration from "./react-integration"
 
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
-const componentRequireContext = require.context("components", true)
-const ReactRailsUJS = require("react_ujs")
-ReactRailsUJS.useContext(componentRequireContext)
+ReactIntegration.start()
 
 // 「クロップボードにコピーされました」を出す
 document.addEventListener("turbolinks:load", () => {
