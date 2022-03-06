@@ -107,7 +107,6 @@ const MdEditor = () => {
             <div>
                 <ParentPageSelector />
             </div>
-            <Editor />
             <div>
                 <label>閲覧可能グループ</label>
                 <select
@@ -142,6 +141,7 @@ const MdEditor = () => {
                     ))}
                 </select>
             </div>
+            <Editor />
         </div>
     )
 }
