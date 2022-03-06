@@ -117,7 +117,7 @@ const MdEditor = () => {
                     onChange={handleChangeReadableGroup}
                 >
                     <option key={0} value={0}>
-                        部員全員
+                        全員
                     </option>
                     {usergroups.map((usergroup, i) => (
                         <option value={usergroup.id} key={i + 1}>
@@ -134,7 +134,7 @@ const MdEditor = () => {
                     className="form-control"
                     onChange={handleChangeEditableGroup}
                 >
-                    <option value={0}>部員全員</option>
+                    <option value={0}>全員</option>
                     {usergroups.map((usergroup, i) => (
                         <option value={usergroup.id} key={i + 1}>
                             {usergroup.name}
