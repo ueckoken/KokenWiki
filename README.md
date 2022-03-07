@@ -1,24 +1,28 @@
-# README
+# KokenWiki
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+KokenWiki is a Markdown wiki system built on top of Ruby on Rails
 
-Things you may want to cover:
+## Software stack
 
-* Ruby version
+- Ruby 2.7
+  - Rails 6.1
+- Node.js 12
+  - React + TypeScript
+- MySQL 8.0
 
-* System dependencies
+## Development
 
-* Configuration
+Docker and docker compose are recommended to setup your development environment
 
-* Database creation
+1. Start services
+   - `docker compose up`
+1. Intialize database
+   - `docker compose exec rails rails db:create`
+   - `docker compose exec rails rails db:migrate`
+1. build JavaScript and CSS
+   - `docker compose exec rails rails javascript:build`
+1. visit local development server localhost:3000
 
-* Database initialization
+## License
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+MIT
