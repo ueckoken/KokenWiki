@@ -77,4 +77,4 @@ gem "appengine", "~> 0.5.0"
 
 gem "octicons_helper", "~> 10.0"
 
-gem "commonmarker", "~> 0.22.0"
+gem "commonmarker", "~> 0.23.4"
