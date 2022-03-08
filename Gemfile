@@ -44,6 +44,10 @@ group :development do
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "pry-byebug"
+
+  gem "rubocop", "~> 1.8.0"
+  gem "rubocop-rails", "~> 2.9.1"
+  gem "rubocop-performance", "~> 1.9.2"
 end
 
 group :test do
@@ -66,10 +70,6 @@ gem "devise-bootstrap-views"
 gem "cancancan", ">= 3.2.1"
 
 gem "google-cloud-storage", "~> 1.8", require: false
-
-gem "rubocop", "~> 1.8.0"
-gem "rubocop-rails", "~> 2.9.1"
-gem "rubocop-performance", "~> 1.9.2"
 
 gem "mysql2", "~> 0.5.3"
 
