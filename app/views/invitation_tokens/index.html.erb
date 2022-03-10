@@ -54,7 +54,7 @@
                         </time>
                     </td>
                     <td><%= invitation_token.created_by.name %></td>
-                    <td><%= link_to "破棄", invitation_token, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %></td>
+                    <td><%= button_to "破棄", invitation_token, method: :delete, remote: true, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %></td>
                 </tr>
             <% end %>
         </tbody>
