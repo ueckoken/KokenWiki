@@ -124,10 +124,11 @@ Rails.application.routes.draw do
 
     resources :invitation_tokens, only: [:index, :create, :destroy]
     resources :usergroups
-    get "/userlock" => "userlocks#index"
-    put "/userlock" => "userlocks#update"
-    get "/admin" => "admin_settings#index"
-    put "/admin" => "admin_settings#update"
+    get "/users" => "users#index"
+    post "/users/:user_id/privilege" => "userprivileges#create", as: :user_privilege
+    post "/users/:user_id/unprivilege" => "userprivileges#delete", as: :user_unprivilege
+    post "/users/:user_id/lock" => "userlocks#create", as: :user_lock
+    post "/users/:user_id/unlock" => "userlocks#delete", as: :user_unlock
     get "/" => redirect("/setting/user/edit")
   end
 

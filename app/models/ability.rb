@@ -57,7 +57,7 @@ class Ability
       can :manage, User
       can :manage, InvitationToken
       can :manage, :userlock
-      can :manage, :admin_user
+      can :manage, :userprivilege
     end
   end
 end

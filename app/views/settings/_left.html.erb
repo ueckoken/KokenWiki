@@ -6,15 +6,12 @@
             <%= link_to "プロフィール変更", edit_user_registration_path, class: "list-group-item list-group-item-action" %>
         </div>
     </div>
-    <% if can?(:manage, :userlock) || can?(:manage, :admin_user) || can?(:manage, InvitationToken) %>
+    <% if can?(:manage, :userlock) || can?(:manage, :userprivilege) || can?(:manage, InvitationToken) %>
         <div class="admin-setting-nav border rounded mt-3">
             <p class="list-group-heading mb-0">管理者設定</p>
             <div class="list-group list-group-flush list-group-dense">
-                <% if can? :manage, :userlock %>
-                    <%= link_to "ユーザーのロック", userlock_path, class: "list-group-item list-group-item-action" %>
-                <% end %>
-                <% if can? :manage, :admin_user %>
-                    <%= link_to "管理者の変更", admin_path, class: "list-group-item list-group-item-action" %>
+                <% if can?(:manage, :userlock) || can?(:manage, :userprivilege) %>
+                    <%= link_to "ユーザー管理", users_path, class: "list-group-item list-group-item-action" %>
                 <% end %>
                 <% if can? :manage, InvitationToken %>
                     <%= link_to "招待トークン", invitation_tokens_path, class: "list-group-item list-group-item-action" %>
