@@ -1,0 +1,67 @@
+<%= render "settings/layout" do %>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>名前</td>
+                <td>ユーザーID</td>
+                <td>メールアドレス</td>
+                <td>役割</td>
+                <td>凍結</td>
+                <td></td>
+            </tr>
+        </thead>
+        <% @users.each do |user| %>
+            <tr>
+                <td><%= user.name %></td>
+                <td><%= user.user_id %></td>
+                <td><%= user.email %></td>
+                <td>
+                    <% if user.is_admin %>
+                        <%= octicon "star" %>
+                        管理者
+                    <% else %>
+                        <%= octicon "person" %>
+                        一般ユーザー
+                    <% end %>
+                </td>
+                <td>
+                    <% if user.access_locked? %>
+                        <%= octicon "lock" %>
+                        凍結中
+                    <% else%>
+                        -
+                    <% end %>
+                </td>
+                <td>
+                    <% if user != current_user %>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="user<%= user.id %>-action-dropdown-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <%= octicon "gear" %>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="user<%= user.id %>-action-dropdown-btn">
+                                <% if can? :manage, :userlock %>
+                                    <li>
+                                        <% if user.access_locked? %>
+                                            <%= button_to "解凍", user_unlock_path(user.id), remote: true, class: "dropdown-item" %>
+                                        <% else %>
+                                            <%= button_to "凍結", user_lock_path(user.id), remote: true, class: "dropdown-item" %>
+                                        <% end %>
+                                    </li>
+                                <% end %>
+                                <% if can? :manage, :userprivilege %>
+                                    <li>
+                                        <% if user.is_admin %>
+                                            <%= button_to "管理者から外す", user_unprivilege_path(user.id), remote: true, class: "dropdown-item" %>
+                                        <% else %>
+                                            <%= button_to "特権昇格", user_privilege_path(user.id), remote: true, class: "dropdown-item" %>
+                                        <% end %>
+                                    </li>
+                                <% end %>
+                            </ul>
+                        </div>
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </table>
+<% end %>
