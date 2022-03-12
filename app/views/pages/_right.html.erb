@@ -15,9 +15,7 @@
         <dl>
             <% @updated_pages.group_by {|page| page.updated_date}.each do |updated_date, pages| %>
                 <dt>
-                    <time class="text-muted" style="font-size: 0.8rem" datetime="<%= updated_date.iso8601 %>">
-                        <%= updated_date.to_s(:short) %>
-                    </time><br>
+                    <%= time_tag updated_date, format: :default, class: "text-muted", style: "font-size: 0.8rem" %>
                 </dt>
                 <% pages.each do |page| %>
                     <dd>

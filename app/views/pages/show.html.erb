@@ -30,7 +30,7 @@
                         <b><%= if comment.user != nil then comment.user.name else "???" end %></b>
                         <span class="text-muted">
                             commented
-                            <%= render "shared/relative-time", timestamp: comment.created_at %>
+                            <%= relative_time_tag comment.created_at %>
                         </span>
                     </div>
                     <% if can?(:write, @page) || can?(:write, comment) %>
@@ -63,7 +63,7 @@
             <li class="list-group-item d-flex justify-content-between">
                 <p class="m-0">
                     <%= link_to file[:filename], file[:path] %><br>
-                    <span class="text-muted" style="font-size: 0.75rem"><%= render "shared/relative-time", timestamp: file[:created_at] %></span>
+                    <%= relative_time_tag file[:created_at], class: "text-muted", style: "font-size: 0.75rem" %>
                 </p>
                 <% if can? :write, @page %>
                     <%= form_with url: file[:escaped_path], method: :delete, html: { style: "display: contents" }, local: false do |form| %>
