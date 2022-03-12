@@ -258,6 +258,9 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
+    rails-i18n (6.0.0)
+      i18n (>= 0.7, < 2)
+      railties (>= 6.0.0, < 7)
     railties (6.1.4.6)
       actionpack (= 6.1.4.6)
       activesupport (= 6.1.4.6)
@@ -371,6 +374,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 4.3)
   rails (~> 6.1.4)
+  rails-i18n (~> 6.0)
   rubocop (~> 1.8.0)
   rubocop-performance (~> 1.9.2)
   rubocop-rails (~> 2.9.1)
