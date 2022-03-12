@@ -58,23 +58,43 @@
         </p>
     <% end %>
     <h2 class="h3">ファイル</h2>
-    <ul class="list-group">
-        <% @attached_files.each do |file| %>
-            <li class="list-group-item d-flex justify-content-between">
-                <p class="m-0">
-                    <%= link_to file[:filename], file[:path] %><br>
-                    <%= relative_time_tag file[:created_at], class: "text-muted", style: "font-size: 0.75rem" %>
-                </p>
-                <% if can? :write, @page %>
-                    <%= form_with url: file[:escaped_path], method: :delete, html: { style: "display: contents" }, local: false do |form| %>
-                        <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に"+file[:filename]+"を削除しますか" } do %>
-                            <%= octicon "trashcan" %>
-                        <% end %>
+    <table class="table" style="vertical-align: middle">
+        <% @page.files.each do |file| %>
+            <%
+                filename = file.blob.filename.to_s
+                escaped_filename = WEBrick::HTTPUtils.escape(filename)
+            %>
+            <tr>
+                <td style="width: 24px">
+                    <% if file.blob.image? %>
+                        <%= octicon "file-media", width: 16 %>
+                    <% elsif ["application/zip", "application/gzip", "application/bzip", "application/bzip2"].include? file.blob.content_type %>
+                        <%= octicon "file-zip" %>
+                    <% else %>
+                        <%= octicon "file" %>
                     <% end %>
+                </td>
+                <td>
+                    <%= link_to filename, filename %>
+                </td>
+                <td class="text-muted" style="font-size: 0.75rem; line-height: 1">
+                    <%= relative_time_tag file.created_at %>
+                </td>
+                <td class="text-muted" style="font-size: 0.75rem; line-height: 1">
+                    <%= number_to_human_size(file.byte_size) %>
+                </td>
+                <% if can? :write, @page %>
+                    <td style="text-align: right">
+                        <%= form_with url: escaped_filename, method: :delete, html: { style: "display: contents" }, local: false do |form| %>
+                            <%= button_tag type: "submit", class: "btn btn-danger btn-icon", data: { confirm: "本当に#{filename}を削除しますか" } do %>
+                                <%= octicon "trashcan" %>
+                            <% end %>
+                        <% end %>
+                    </td>
                 <% end %>
-            </li>
+            </tr>
         <% end %>
-    </ul>
+    </table>
     <% if can? :write, @page %>
         <%= form_with scope: :file, method: :post do |form| %>
             <%= form.file_field :files, :multiple => true %>

@@ -110,21 +110,6 @@ class PagesController < ApplicationController
     # ActiveRecord を捨てる代わりに 単一のクエリで path を得る
     @next_parents = Page.get_paths_by_ids(next_parent_pages.pluck(:id)).sort_by { |page| page["path"] }
 
-    @attached_files = []
-    @page.files.each do |file|
-      filename = file.blob.filename.to_s
-      path = (pathname / filename).to_s
-      escaped_path = WEBrick::HTTPUtils.escape(path)
-      created_at = file.created_at
-
-      @attached_files.append({
-        filename: filename,
-        path: path,
-        escaped_path: escaped_path,
-        created_at: created_at
-      })
-    end
-
     render_pankuzu_list
     render_right
     render_left
