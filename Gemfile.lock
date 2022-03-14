@@ -103,6 +103,8 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
+    devise-i18n (1.9.4)
+      devise (>= 4.7.1)
     digest-crc (0.5.1)
     erubi (1.10.0)
     faraday (1.0.1)
@@ -365,6 +367,7 @@ DEPENDENCIES
   commonmarker (~> 0.23.4)
   devise
   devise-bootstrap-views
+  devise-i18n
   google-cloud-storage (~> 1.8)
   jbuilder (~> 2.5)
   jsbundling-rails

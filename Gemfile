@@ -80,3 +80,4 @@ gem "octicons_helper", "~> 10.0"
 gem "commonmarker", "~> 0.23.4"
 
 gem "rails-i18n", "~> 6.0"
+gem "devise-i18n"
