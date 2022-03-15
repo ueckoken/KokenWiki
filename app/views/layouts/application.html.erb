@@ -18,7 +18,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@github/clipboard-copy-element@1.1.2/dist/index.umd.min.js" async></script>
     </head>
     <body>
-        <%= render partial: "layouts/navbar" %>
+        <%= render "layouts/navbar" %>
         <div class="container-fluid">
             <div class="mt-3">
                 <% if notice %>
@@ -33,11 +33,11 @@
                     <% end %>
                 <% end %>
                 <main>
-                    <%= yield %>
+                    <%= content_for?(:content) ? yield(:content) : yield %>
                 </main>
             </div>
         </div>
-        <%= render partial: "layouts/footer" %>
+        <%= render "layouts/footer" %>
         <div class="toast position-absolute bottom-0 start-50 translate-middle-x mb-3" role="status" id="clipboard-copy-toast" data-bs-delay="1000" aria-live="polite" aria-atomic="true">
             <p class="toast-body mb-0">
                 クリップボードにコピーされました

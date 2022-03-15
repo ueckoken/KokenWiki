@@ -1,4 +1,5 @@
 class UserlocksController < ApplicationController
+  layout "settings"
   authorize_resource class: :userlock
 
   def create

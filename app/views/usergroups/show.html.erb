@@ -1,29 +1,27 @@
-<%= render "settings/layout" do %>
-    <h1><%= @usergroup.name %></h1>
-    <div class="btn-toolbar justify-content-between">
-        <% if can? :update, @usergroup %>
-            <div class="btn-group">
-                <%= link_to "編集", edit_usergroup_path(@usergroup), :class => "btn btn-default" %>
-            </div>
-        <% end %>
-        <% if can? :destroy, @usergroup %>
-            <div class="btn-group">
-                <%= button_to "削除", {:action => "destroy"}, :class => "btn btn-danger", :method => :delete %>
-            </div>
-        <% end %>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <td>名前</td>
-                <td>ユーザーID</td>
-            </tr>
-        </thead>
-        <% @usergroup.users.each do |user| %>
-            <tr>
-                <td><%= user.name %></td>
-                <td><%= user.user_id %></td>
-            </tr>
-        <% end %>
-    </table>
-<% end %>
+<h1><%= @usergroup.name %></h1>
+<div class="btn-toolbar justify-content-between">
+    <% if can? :update, @usergroup %>
+        <div class="btn-group">
+            <%= link_to "編集", edit_usergroup_path(@usergroup), class: "btn btn-default" %>
+        </div>
+    <% end %>
+    <% if can? :destroy, @usergroup %>
+        <div class="btn-group">
+            <%= button_to "削除", { action: "destroy" }, class: "btn btn-danger", method: :delete, remote: true %>
+        </div>
+    <% end %>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <td>名前</td>
+            <td>ユーザーID</td>
+        </tr>
+    </thead>
+    <% @usergroup.users.each do |user| %>
+        <tr>
+            <td><%= user.name %></td>
+            <td><%= user.user_id %></td>
+        </tr>
+    <% end %>
+</table>

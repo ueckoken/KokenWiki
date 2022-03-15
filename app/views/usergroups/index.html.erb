@@ -1,26 +1,24 @@
-<%= render "settings/layout" do %>
-    <h1>ユーザーグループ設定</h1>
-    <%= link_to "新規作成", new_usergroup_path, class: "btn btn-primary" %>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>グループ名</th>
-                <th>人数</th>
-                <th>ページ数</th>
-            </tr>
-        </thead>
-        <% @usergroups.each do |a_usergroup| %>
-            <tr>
-                <td>
-                    <%= link_to a_usergroup.name, a_usergroup %>
-                </td>
-                <td>
-                    <%= a_usergroup.users.size %>
-                </td>
-                <td>
-                    <%= (a_usergroup.readable_pages | a_usergroup.editable_pages).size %>
-                </td>
-            </tr>
-        <% end %>
-    </table>
-<% end %>
+<h1>ユーザーグループ設定</h1>
+<%= link_to "新規作成", new_usergroup_path, class: "btn btn-primary" %>
+<table class="table">
+    <thead>
+        <tr>
+            <th>グループ名</th>
+            <th>人数</th>
+            <th>ページ数</th>
+        </tr>
+    </thead>
+    <% @usergroups.each do |a_usergroup| %>
+        <tr>
+            <td>
+                <%= link_to a_usergroup.name, a_usergroup %>
+            </td>
+            <td>
+                <%= a_usergroup.users.size %>
+            </td>
+            <td>
+                <%= (a_usergroup.readable_pages | a_usergroup.editable_pages).size %>
+            </td>
+        </tr>
+    <% end %>
+</table>
