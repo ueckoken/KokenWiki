@@ -1,4 +1,6 @@
 class UsergroupsController < ApplicationController
+  layout "settings"
+
   def index
     @usergroups = Usergroup.accessible_by(current_ability, :read).includes(:users)
   end

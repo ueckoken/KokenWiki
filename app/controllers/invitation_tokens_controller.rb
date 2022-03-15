@@ -1,4 +1,6 @@
 class InvitationTokensController < ApplicationController
+  layout "settings"
+
   # GET /invitation_tokens
   # GET /invitation_tokens.json
   def index

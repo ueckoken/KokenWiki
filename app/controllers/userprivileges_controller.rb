@@ -1,4 +1,5 @@
 class UserprivilegesController < ApplicationController
+  layout "settings"
   authorize_resource class: :userprivilege
 
   def create
