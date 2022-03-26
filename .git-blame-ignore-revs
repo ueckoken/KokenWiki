@@ -1,0 +1,5 @@
+# .git-blame-ignore-revs
+# Changed newline from crlf to lf
+d1788c78d7190ed6b91cb4651ca8a4cbba145feb
+# Changed file permission from 755 to 644
+6338fd961adc582d442ec317ea264a00f92c30dc
