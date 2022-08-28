@@ -23,7 +23,7 @@ class Page < ApplicationRecord
   validates :title, exclusion: { in: [nil] }, format: { with: /\A[^?.]*\z/ }
   validates :title, inclusion: { in: [""], message: "of root page must be empty string" }, if: -> { parent.nil? }
   validates :title, exclusion: { in: [""], message: "cannot be empty string" }, if: -> { ! parent.nil? }
-  validates :content, exclusion: { in: [nil] }
+  validates :content, presence: true
 
   attribute :content, default: "new page"
 
