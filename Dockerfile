@@ -13,7 +13,7 @@ RUN apt-get update -qq \
     npm \
     && rm -rf /var/lib/apt/lists/*
 RUN gem install bundler -v 2.1.4
-RUN npm install -g yarn webpack-cli
+RUN npm install -g yarn
 WORKDIR /app
 
 COPY ./Gemfile ./Gemfile.lock /app/
