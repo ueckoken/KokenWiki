@@ -45,3 +45,4 @@ keyfile.json
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+compose.override.yml
