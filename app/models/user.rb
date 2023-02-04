@@ -17,8 +17,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :lockable, :trackable
-
+         :recoverable, :rememberable, :validatable, :lockable, :trackable,
+         :omniauthable, omniauth_providers: %i[keycloakopenid]
   def email_required?
     false
   end

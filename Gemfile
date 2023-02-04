@@ -34,6 +34,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "ruby-lsp", "~> 0.3.8"
 end
 
 group :development do
@@ -64,7 +65,7 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # gem "actionpack-action_caching"
 gem "jsbundling-rails"
 
-gem "devise"
+gem "devise", ">= 4.8.0"
 gem "devise-bootstrap-views"
 
 gem "cancancan", ">= 3.2.1"
@@ -81,3 +82,7 @@ gem "commonmarker", "~> 0.23.4"
 
 gem "rails-i18n", "~> 6.0"
 gem "devise-i18n"
+
+gem 'omniauth', ">= 2.0"
+gem 'omniauth-keycloak'
+gem 'omniauth-rails_csrf_protection'
