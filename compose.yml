@@ -29,10 +29,10 @@ services:
     build: .
     volumes:
       - mysqlsockdir:/var/run/mysqld
-      # - webpack:/app/assets/build
       - ./app:/app/app:ro
       - ./bin:/app/bin:ro
       - ./config:/app/config:ro
+      - ./public:/app/public:ro
     ports:
       - "3000:3000"
     network_mode: bridge
