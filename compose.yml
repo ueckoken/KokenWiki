@@ -5,21 +5,42 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     volumes:
       - mysqlsockdir:/var/run/mysqld
+      - mysqlvol:/var/lib/mysql
     configs:
       - source: init_sql
         target: /docker-entrypoint-initdb.d/init-mysql-docker-compose.sql
       - source: mysql_cnf
         target: /etc/mysql/conf.d/docker-mysql.cnf
     network_mode: none
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+  rails-init-db:
+    build: .
+    volumes:
+      - mysqlsockdir:/var/run/mysqld
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: ["/app/bin/init"]
   rails:
     build: .
     volumes:
       - mysqlsockdir:/var/run/mysqld
+      - ./app:/app/app:ro
+      - ./bin:/app/bin:ro
+      - ./config:/app/config:ro
+      - ./public:/app/public:ro
     ports:
       - "3000:3000"
     network_mode: bridge
     depends_on:
-      - mysql
+      rails-init-db:
+        condition: service_completed_successfully
+    command: rails s -p 3000 -b 0.0.0.0
+
 configs:
   init_sql:
     file: init-mysql-docker-compose.sql
@@ -27,3 +48,4 @@ configs:
     file: docker-mysql.cnf
 volumes:
   mysqlsockdir:
+  mysqlvol:

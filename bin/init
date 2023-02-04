@@ -1,0 +1,5 @@
+#!/bin/bash
+set -x
+set -o pipefail
+rails db:create
+rails db:migrate RAILS_ENV=${RAILS_ENV:=development}

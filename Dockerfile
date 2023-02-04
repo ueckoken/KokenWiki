@@ -1,21 +1,22 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:2.7
-
-# https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
+FROM ruby:2.7.3 AS base
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt update -qq && apt install -y nodejs default-mysql-client && rm -rf /var/lib/apt/lists/*
-RUN npm install -g yarn
+RUN apt-get update -qq \
+    && apt-get install -y \
+    ca-certificates \
+    default-mysql-client \
+    nodejs \
+    && rm -rf /var/lib/apt/lists/*
 RUN gem install bundler -v 2.1.4
-
+RUN npm install -g yarn
 WORKDIR /app
-
-COPY ./Gemfile /app/Gemfile
-COPY ./Gemfile.lock /app/Gemfile.lock
+COPY ./Gemfile ./Gemfile.lock /app/
 RUN bundle install --frozen
 
-COPY ./package.json /app/package.json
-COPY ./yarn.lock /app/yarn.lock
+COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile
+COPY app/javascript/ /app/javascript/
+RUN rails javascript:build
 
 COPY . /app
 
