@@ -1,4 +1,4 @@
-runtime: ruby27
+runtime: ruby30
 entrypoint: bundle exec rails server -e production -p $PORT
 service: kokenwiki
 instance_class: F2
