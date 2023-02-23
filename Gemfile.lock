@@ -83,7 +83,7 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     coderay (1.1.2)
-    commonmarker (0.23.4)
+    commonmarker (0.23.7)
     concurrent-ruby (1.2.0)
     crass (1.0.6)
     date (3.3.3)
@@ -399,7 +399,7 @@ DEPENDENCIES
   byebug
   cancancan (>= 3.2.1)
   capybara (>= 2.15)
-  commonmarker (~> 0.23.4)
+  commonmarker (~> 0.23.7)
   devise (~> 4.9.0)
   devise-bootstrap-views
   devise-i18n
