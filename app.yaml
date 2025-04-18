@@ -2,6 +2,11 @@ runtime: ruby30
 entrypoint: bundle exec rails server -e production -p $PORT
 service: kokenwiki
 instance_class: F2
+handlers:
+- url: .*
+  script: auto
+  secure: always
+  redirect_http_response_code: 301
 automatic_scaling:
   min_instances: 0
   max_instances: 1
