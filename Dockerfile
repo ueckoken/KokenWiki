@@ -1,5 +1,5 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:3.4 AS base
+FROM ruby:3.3 AS base
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update -qq \
     && apt-get install -y \
