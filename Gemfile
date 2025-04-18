@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "~> 3.0.0"
+ruby "~> 3.4.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 6.1.7"
@@ -21,6 +21,11 @@ gem "jbuilder", "~> 2.5"
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem "bcrypt", "~> 3.1.7"
+
+gem "base64", "~> 0.2.0"
+gem "bigdecimal", "~> 3.1.9"
+gem "mutex_m", "~> 0.3.0"
+gem 'concurrent-ruby', '1.3.4'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -43,6 +48,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
+  gem "pry", "~> 0.15.2"
   gem "pry-byebug"
 
   gem "rubocop", "~> 1.8.0"
@@ -80,3 +86,5 @@ gem "commonmarker", "~> 0.23.4"
 
 gem "rails-i18n", "~> 6.0"
 gem "devise-i18n"
+
+gem "webrick", "~> 1.9"

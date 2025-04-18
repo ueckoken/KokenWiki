@@ -1,23 +1,22 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:3.0 AS base
+FROM ruby:3.4 AS base
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update -qq \
     && apt-get install -y \
     ca-certificates \
     default-mysql-client \
     nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
-RUN gem install bundler -v 2.2.26
+RUN gem install bundler
 RUN npm install -g yarn
 WORKDIR /app
 COPY ./Gemfile ./Gemfile.lock /app/
-RUN bundle _2.2.26_ install
+RUN bundle install
 
 COPY package.json yarn.lock /app/
 RUN yarn install --pure-lockfile
-COPY app/javascript/ /app/javascript/
 RUN rails javascript:build
-
 COPY . /app
 
 EXPOSE 3000
