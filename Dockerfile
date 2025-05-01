@@ -1,6 +1,13 @@
-# https://docs.docker.com/compose/rails/
+FROM node:23 AS node
+WORKDIR /app
+
+COPY package.json yarn.lock /app/
+RUN yarn install --pure-lockfile
+
+COPY . /app
+RUN yarn build
+
 FROM ruby:3.3 AS base
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update -qq \
     && apt-get install -y \
     ca-certificates \
@@ -14,10 +21,8 @@ WORKDIR /app
 COPY ./Gemfile ./Gemfile.lock /app/
 RUN bundle install
 
-COPY package.json yarn.lock /app/
-RUN yarn install --pure-lockfile
-
 COPY . /app
+COPY --from=node /app/javascript/application.js /app/javascript/application.js
 
 RUN rails javascript:build
 
