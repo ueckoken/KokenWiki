@@ -12,19 +12,14 @@ RUN apt-get update -qq \
     && apt-get install -y \
     ca-certificates \
     default-mysql-client \
-    nodejs \
-    npm \
     && rm -rf /var/lib/apt/lists/*
 RUN gem install bundler -v 2.6.8
-RUN npm install -g yarn
 WORKDIR /app
 COPY ./Gemfile ./Gemfile.lock /app/
 RUN bundle install
 
 COPY . /app
-COPY --from=node /app/javascript/application.js /app/javascript/application.js
-
-RUN rails javascript:build
+COPY --from=node /app/app/assets/builds /app/app/assets/builds
 
 EXPOSE 3000
 CMD rails s -p 3000 -b 0.0.0.0
