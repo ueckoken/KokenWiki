@@ -1,5 +1,5 @@
 import React, { ComponentType } from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 
 async function mountReactComponent(entrypointElement: HTMLElement) {
     const componentName = entrypointElement.dataset.componentName
@@ -19,13 +19,20 @@ async function mountReactComponent(entrypointElement: HTMLElement) {
     ).default
     const rawProps = entrypointElement.dataset.props
     const params = rawProps === undefined ? {} : JSON.parse(rawProps)
-    ReactDOM.render(<Component {...params} />, entrypointElement)
+    const root = createRoot(entrypointElement)
+    root.render(<Component {...params} />)
+    return root
 }
 
 function integrateReactComponent(entrypointElement: HTMLElement) {
-    mountReactComponent(entrypointElement)
+    const rootRef = { current: null as any }
+    mountReactComponent(entrypointElement).then(root => {
+        rootRef.current = root
+    })
     document.addEventListener("turbolinks:before-render", () => {
-        ReactDOM.unmountComponentAtNode(entrypointElement)
+        if (rootRef.current) {
+            rootRef.current.unmount()
+        }
     })
 }
 

@@ -29,10 +29,7 @@ services:
     build: .
     volumes:
       - mysqlsockdir:/var/run/mysqld
-      - ./app:/app/app:ro
-      - ./bin:/app/bin:ro
-      - ./config:/app/config:ro
-      - ./public:/app/public:ro
+      - .:/app:cached
     ports:
       - "3000:3000"
     network_mode: bridge

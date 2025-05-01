@@ -53,7 +53,7 @@ const Markdown: FC<Props> = ({ markdown }) => {
         })
         setViewerInst(inst)
         return () => {
-            viewerInst?.remove()
+            viewerInst?.destroy()
         }
     }, [rootEl])
     useEffect(() => {

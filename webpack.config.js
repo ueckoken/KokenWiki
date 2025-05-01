@@ -3,8 +3,10 @@ const webpack = require("webpack")
 // Extracts CSS into .css file
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
+const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+
 module.exports = {
-  mode: "production",
+  mode,
   devtool: "source-map",
   entry: {
     application: "./app/javascript/application.js",
