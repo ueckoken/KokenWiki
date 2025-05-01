@@ -4,9 +4,9 @@ KokenWiki is a Markdown wiki system built on top of Ruby on Rails
 
 ## Software stack
 
-- Ruby 3.0
+- Ruby 3.3
   - Rails 6.1
-- Node.js 12
+- Node.js 23
   - React + TypeScript
 - MySQL 8.0
 
