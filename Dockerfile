@@ -8,7 +8,7 @@ RUN apt-get update -qq \
     nodejs \
     npm \
     && rm -rf /var/lib/apt/lists/*
-RUN gem install bundler
+RUN gem install bundler -v 2.6.8
 RUN npm install -g yarn
 WORKDIR /app
 COPY ./Gemfile ./Gemfile.lock /app/
