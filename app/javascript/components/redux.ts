@@ -3,8 +3,8 @@ import {
     configureStore,
     PayloadAction,
     Selector,
-} from "@reduxjs/toolkit"
-import { useSelector, TypedUseSelectorHook } from "react-redux"
+} from '@reduxjs/toolkit'
+import { useSelector, TypedUseSelectorHook } from 'react-redux'
 
 type UserGroup = {
     id: string | number

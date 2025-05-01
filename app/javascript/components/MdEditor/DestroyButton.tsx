@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TrashcanIcon } from "@primer/octicons-react"
+import { TrashIcon } from "@primer/octicons-react"
 
 const DestroyButton: FC = () => (
     <button
@@ -7,7 +7,7 @@ const DestroyButton: FC = () => (
         className="btn btn-danger btn-icon"
         form="page-destroy-form"
     >
-        <TrashcanIcon />
+        <TrashIcon />
     </button>
 )
 
