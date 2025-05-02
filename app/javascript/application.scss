@@ -105,11 +105,10 @@ a:hover {
 }
 
 // override Toast UI styles
-.tui-editor .CodeMirror,
-.tui-editor-contents {
+.toastui-editor-contents {
     font-family: initial !important;
 }
-.tui-editor-contents {
+.toastui-editor-contents {
     // DO NOT LET USERS USE DEPRECATED HTML TAGS AND ATTRIBUTES!
     // a derivative of REVENGE.CSS (https://github.com/Heydon/REVENGE.CSS) by Heydon Pickering under CC-BY 3.0
 
