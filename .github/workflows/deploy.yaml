@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+
+jobs:
+  deploy:
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        workload_identity_provider: 'projects/334933612020/locations/global/workloadIdentityPools/kokenwiki-actions/providers/kokenwiki-oidc'
+        service_account: 'kokenwiki-deployer@kokenwiki-actions.iam.gserviceaccount.com'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+
+    - name: 'gcloud auth list'
+      run: 'gcloud auth list'
