@@ -25,3 +25,9 @@ resource "google_cloud_run_v2_service" "kokenwiki" {
     service_account = google_service_account.kokenwiki-cloudrun.email
   }
 }
+
+resource "google_project_iam_member" "kokenwiki-deployer" {
+    project = var.project_id
+    role = "roles/run.developer"
+    member = "serviceAccount:${google_service_account.kokenwiki-deployer.email}"
+}
