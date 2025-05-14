@@ -43,7 +43,8 @@ jobs:
 
     - name: 'get commit 10-letter commit hash'
       id: 'commit_hash'
-      run: 'echo "commit_hash=$(git rev-parse --short=10 HEAD | tr -d '\n')" >> $GITHUB_OUTPUT'
+      run: |
+        echo "commit_hash=$(git rev-parse --short=10 HEAD | tr -d '\n')" >> $GITHUB_OUTPUT
 
     - name: "build and push"
       uses: docker/build-push-action@v3
