@@ -33,9 +33,7 @@ resource "google_iam_workload_identity_pool_provider" "workload_identity_pool_pr
   display_name                       = "Name of provider"
   description                        = "GitHub Actions identity pool provider"
   attribute_condition                = <<EOT
-    attribute.repository == "${local.repository}" &&
-    assertion.ref == "refs/heads/master" &&
-    assertion.ref_type == "branch"
+    attribute.repository == "${local.repository}"
 EOT
   attribute_mapping = {
     "google.subject"       = "assertion.sub"
