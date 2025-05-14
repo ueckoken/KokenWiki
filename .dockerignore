@@ -3,7 +3,9 @@ vendor
 tmp
 Dockerfile
 Dockerfile.dbmigrate
-docker-compose.yaml
+compose.yml
+tf
+bootstrap
 .devcontainer
 cloudbuild.yaml
 pukiwiki_migrate.log
