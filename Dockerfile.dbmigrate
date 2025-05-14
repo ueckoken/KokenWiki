@@ -1,22 +1,36 @@
 # https://docs.docker.com/compose/rails/
-FROM ruby:3.3
+FROM node:23 AS node
+WORKDIR /app
+
+COPY package.json yarn.lock /app/
+RUN yarn install --pure-lockfile
+
+COPY . /app
+RUN yarn build
+
+FROM ruby:3.3 AS base
+RUN apt-get update -qq \
+    && apt-get install -y \
+    ca-certificates \
+    default-mysql-client \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 RUN apt update -qq && apt install -y default-mysql-client google-cloud-sdk && rm -rf /var/lib/apt/lists/*
+
 RUN gem install bundler -v 2.6.8
-
 WORKDIR /app
-
-COPY ./Gemfile /app/Gemfile
-COPY ./Gemfile.lock /app/Gemfile.lock
+COPY ./Gemfile ./Gemfile.lock /app/
 RUN bundle install
 
 ARG PROJECT_ID
 
+
+COPY . /app
+COPY --from=node /app/app/assets/builds /app/app/assets/builds
+
 COPY GCP_SA_KEY.json /app/GCP_SA_KEY.json
 RUN gcloud config set project $PROJECT_ID && gcloud auth activate-service-account --key-file GCP_SA_KEY.json
 
-COPY . /app
-
-CMD ["rails", "appengine:exec[bundle exec rails db:migrate --trace]"]
+CMD ["rails", "appengine:exec[bundle exec rails db:migrate]", "--trace"]
