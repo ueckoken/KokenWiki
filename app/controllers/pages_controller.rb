@@ -181,6 +181,7 @@ class PagesController < ApplicationController
         history = UpdateHistory.new(user: @page.user, content: @page.content)
         if @page.saved_changes?
           @page.update_histories << history
+          Rails.logger.info "Page #{@page.id} was updated by #{current_user.name}, or #{@page.user.name}. Webhook will be triggered."
         end
         format.html { redirect_to @page.path, notice: "Page was successfully updated." }
         format.json { render :show, status: :ok, location: path }

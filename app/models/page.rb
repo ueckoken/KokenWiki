@@ -27,6 +27,8 @@ class Page < ApplicationRecord
 
   attribute :content, default: "new page"
 
+  after_update :notify_webhook, if: :saved_change_to_content?
+
   scope :search, ->(column, query) { where("MATCH (#{Page.connection.quote_column_name(column)}) AGAINST (? IN BOOLEAN MODE)", query) if query.present? }
   scope :stricter_slow_search, ->(column, query) { where("#{Page.connection.quote_column_name(column)} LIKE ?", "%#{query}%") if query.present? }
 
@@ -164,5 +166,9 @@ class Page < ApplicationRecord
     def doc_of_content
       @doc ||= CommonMarker.render_doc(self.content, :DEFAULT, [:table])
       return @doc
+    end
+    
+    def notify_webhook
+      WebhookJob.perform_later(id, user_id)
     end
 end
