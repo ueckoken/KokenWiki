@@ -5,8 +5,24 @@ resource "google_cloud_run_v2_service" "kokenwiki" {
   invoker_iam_disabled = true
   deletion_protection  = false
   template {
+    service_account = google_service_account.kokenwiki-cloudrun.email
+    volumes {
+      name = "cloudsql"
+      cloud_sql_instance {
+        instances = [google_sql_database_instance.kokenwiki.connection_name]
+      }
+    }
     containers {
         image = "gcr.io/google-samples/hello-app:1.0"
+
+      ports {
+        container_port = 3000
+      }
+
+      volume_mounts {
+        name       = "cloudsql"
+        mount_path = "/cloudsql"
+      }
 
       env {
         name = "RAILS_MASTER_KEY"
@@ -21,13 +37,15 @@ resource "google_cloud_run_v2_service" "kokenwiki" {
         name  = "RAILS_ENV"
         value = "production"
       }
+      env {
+        name = "RAILS_LOG_TO_STDOUT"
+        value = "true"
+      }
     }
-    service_account = google_service_account.kokenwiki-cloudrun.email
   }
-}
-
-resource "google_project_iam_member" "kokenwiki-deployer" {
-    project = var.project_id
-    role = "roles/run.developer"
-    member = "serviceAccount:${google_service_account.kokenwiki-deployer.email}"
+  lifecycle {
+    ignore_changes = [
+        template[0].containers[0].image,
+    ]
+  }
 }

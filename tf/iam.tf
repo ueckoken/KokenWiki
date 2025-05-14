@@ -3,6 +3,12 @@ resource "google_service_account" "kokenwiki-cloudrun" {
   display_name = "Kokenwiki Cloud Run Service Account"
 }
 
+resource "google_project_iam_member" "kokenwiki-cloudrun-iam" {
+  project = var.project_id
+  role = "roles/cloudsql.client"
+  member = "serviceAccount:${google_service_account.kokenwiki-cloudrun.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "kokenwiki" {
   secret_id = google_secret_manager_secret.kokenwiki-master-key.id
   role      = "roles/secretmanager.secretAccessor"
@@ -13,6 +19,12 @@ resource "google_service_account" "kokenwiki-deployer" {
   project      = var.project_id
   account_id   = "kokenwiki-deployer"
   display_name = "Kokenwiki Deployer Service Account for GitHub Actions"
+}
+
+resource "google_project_iam_member" "kokenwiki-deployer" {
+    project = var.project_id
+    role = "roles/run.developer"
+    member = "serviceAccount:${google_service_account.kokenwiki-deployer.email}"
 }
 
 resource "google_iam_workload_identity_pool" "workload_identity_pool" {
