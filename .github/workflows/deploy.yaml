@@ -6,7 +6,7 @@ on:
 env:
   RAILS_ENV: production
   DOCKER_IMAGE: us-central1-docker.pkg.dev/uec-koken/kokenwiki/kokenwiki
-  SERVICE_ACCOUNT: kokenwiki-deployer@kokenwiki-actions.iam.gserviceaccount.com
+  SERVICE_ACCOUNT: kokenwiki-deployer@uec-koken.iam.gserviceaccount.com
   REGION: us-central1
   PROJECT_ID: uec-koken
   WORKLOAD_IDENTITY_PROVIDER: projects/334933612020/locations/global/workloadIdentityPools/kokenwiki-actions/providers/kokenwiki-oidc
@@ -44,12 +44,14 @@ jobs:
         echo "commit_hash=$(git rev-parse --short=10 HEAD | tr -d '\n')" >> $GITHUB_OUTPUT
 
     - name: "build and push"
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v6
       with:
         context: .
         file: Dockerfile
         push: true
         tags: ${{ env.DOCKER_IMAGE }}:${{ steps.commit_hash.outputs.commit_hash }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max,name=kokenwiki-${{ steps.commit_hash.outputs.commit_hash }}
 
     - name: 'Deploy to Cloud Run'
       uses: google-github-actions/deploy-cloudrun@v2
