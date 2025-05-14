@@ -3,6 +3,15 @@ name: Deploy
 on:
   push:
 
+env:
+  RAILS_ENV: production
+  DOCKER_IMAGE: us-central1-docker.pkg.dev/uec-koken/kokenwiki/kokenwiki
+  SERVICE_ACCOUNT: kokenwiki-deployer@kokenwiki-actions.iam.gserviceaccount.com
+  REGION: us-central1
+  PROJECT_ID: uec-koken
+  WORKLOAD_IDENTITY_PROVIDER: projects/334933612020/locations/global/workloadIdentityPools/kokenwiki-actions/providers/kokenwiki-oidc
+  CLOUD_SQL_INSTANCE: kokenwiki-mysql8
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,11 +26,58 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        workload_identity_provider: 'projects/334933612020/locations/global/workloadIdentityPools/kokenwiki-actions/providers/kokenwiki-oidc'
-        service_account: 'kokenwiki-deployer@kokenwiki-actions.iam.gserviceaccount.com'
+        workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ env.SERVICE_ACCOUNT }}
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
     - name: 'gcloud auth list'
       run: 'gcloud auth list'
+
+    - name: 'gcloud auth configure-docker'
+      run: 'gcloud auth configure-docker'
+
+    - name: 'Set up Docker Buildx'
+      uses: docker/setup-buildx-action@v3
+
+    - name: 'get commit 10-letter commit hash'
+      id: 'commit_hash'
+      run: 'git rev-parse --short=10 HEAD'
+
+    - name: "build and push"
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ env.DOCKER_IMAGE }}:${{ steps.commit_hash.outputs.commit_hash }}
+
+    - name: 'Deploy to Cloud Run'
+      uses: google-github-actions/deploy-cloud-run@v2
+      with:
+        service: kokenwiki
+        image: ${{ env.DOCKER_IMAGE }}:${{ steps.commit_hash.outputs.commit_hash }}
+        region: ${{ env.REGION }}
+        project_id: ${{ env.PROJECT_ID }}
+
+    - name: "get rails master key from secret manager"
+      id: 'secrets'
+      uses: 'google-github-actions/get-secretmanager-secrets@v2'
+      with:
+        secrets: |-
+          key:uec-koken/kokenwiki-master-key
+
+    - name: "apply migration"
+      run: |
+        gcloud run jobs create db-migrate \
+          --region ${{ env.REGION }} \
+          --service-account ${{ env.SERVICE_ACCOUNT }} \
+          --image ${{ env.DOCKER_IMAGE }}:${{ steps.commit_hash.outputs.commit_hash }} \
+          --set-cloudsql-instances ${{ env.PROJECT_ID }}:${{ env.REGION }}:${{ env.CLOUD_SQL_INSTANCE }} \
+          --set-env-vars RAILS_MASTER_KEY=${{ steps.secrets.outputs.key }},RAILS_ENV=${{ env.RAILS_ENV }} \
+          --command bundle \
+          --args exec,rails,db:migrate \
+          --execute-now \
+          --wait && \
+          gcloud run jobs delete db-migrate --region ${{ env.REGION }} -q
