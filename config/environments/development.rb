@@ -77,7 +77,8 @@ host: "localhost", port: 3000 }
   config.web_console.whitelisted_ips = [
     "127.0.0.0/8",
     "::1",
-    "192.168.0.0/20"
+    "192.168.0.0/20",
+    "0.0.0.0/0"
   ]
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
