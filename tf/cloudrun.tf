@@ -35,7 +35,7 @@ resource "google_cloud_run_v2_service" "kokenwiki" {
       }
       env {
         name  = "RAILS_ENV"
-        value = "development"
+        value = "production"
       }
       env {
         name = "RAILS_LOG_TO_STDOUT"
