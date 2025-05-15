@@ -14,9 +14,12 @@ KokenWiki is a Markdown wiki system built on top of Ruby on Rails
 
 Docker and docker compose are recommended to setup your development environment
 
-1. Start services
+1. build frontend
+   - `yarn install && yarn build`
+   - or delete volume mount `./:/app` in `compose.yml`, this mount is overwriting frontend artifacts
+2. Start services
    - `docker compose up`
-1. visit local development server localhost:3000
+3. visit local development server localhost:3000
 
 ## License
 
