@@ -22,4 +22,4 @@ COPY . /app
 COPY --from=node /app/app/assets/builds /app/app/assets/builds
 
 EXPOSE 3000
-CMD rails s -p 3000 -b 0.0.0.0
+CMD rails s -p 3000 -b 0.0.0.0 --log-to-stdout
