@@ -87,4 +87,9 @@ gem "commonmarker", "~> 0.23.4"
 gem "rails-i18n", "~> 6.0"
 gem "devise-i18n"
 
+gem 'devise_token_auth', "~>1.2.5"
+gem 'omniauth', "~>2.1.4"
+gem "hashie", "~>5.0.0"
+gem 'rack-protection', "~>3.2.0"
+
 gem "webrick", "~> 1.9"

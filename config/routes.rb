@@ -132,6 +132,12 @@ Rails.application.routes.draw do
     get "/" => redirect("/setting/user/edit")
   end
 
+  namespace :api do
+    scope :v1 do
+      mount_devise_token_auth_for 'User', at: 'auth'
+    end
+  end
+
 
   root to: "pages#show_page", constraints: PageConstraint
   get "/" => "files#show", constraints: FileConstraint
